@@ -1,2 +1,17 @@
 # Folder
 .idea/
+
+# Files
+.DS_Store
+chapters/*.aux
+*.aux
+*.maf
+*.log
+*.mtc*
+*.nlo
+*.lof
+*.out
+*.gz
+*.lot
+*.toc
+*.pdf

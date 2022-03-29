@@ -1,0 +1,53 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper, 11pt, twoside]{StyleThese}
+\usepackage{psl-cover}
+\DeclareGraphicsExtensions{.pdf, .jpeg, .png}
+\include{format_def}
+
+
+\begin{document}
+\dominitoc
+
+% frontmatter
+\input{personalize}
+%\maketitle{}
+\frontmatter
+%\input{abstract-fr}
+%\input{abstract-en}
+%\input{thanks}
+
+\cleardoublepage
+\tableofcontents
+
+\cleardoublepage
+\listoffigures \addcontentsline{toc}{chapter}{\listfigurename} \adjustmtc
+\listoftables \addcontentsline{toc}{chapter}{\listtablename} \adjustmtc
+
+% include each chapter...
+\mainmatter
+
+\setcounter{chapter}{0}  % start chapter numbering at 0
+
+\include{chapters/introduction}
+\include{chapters/chapter_1}
+\include{chapters/chapter_2}
+\include{chapters/chapter_3}
+\include{chapters/chapter_4}
+\include{chapters/chapter_5}
+\include{chapters/conclusion}
+
+%\begin{appendix}
+%    \include{chapters/appendix/appendix_A}
+%\end{appendix}
+
+% backmatter
+\backmatter
+
+\clearpage
+
+\bibliographystyle{lemieuxdumonde.bst}
+\bibliography{references}
+
+\end{document}
