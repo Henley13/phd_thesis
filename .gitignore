@@ -1,5 +1,6 @@
 # Folder
 .idea/
+external_ressources/
 
 # Files
 .DS_Store
@@ -16,3 +17,4 @@
 *.pdf
 *.bbl
 *.blg
+reports.tex
