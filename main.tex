@@ -4,8 +4,8 @@
 \documentclass[a4paper, 11pt, twoside]{StyleThese}
 \usepackage{psl-cover}
 \DeclareGraphicsExtensions{.pdf, .jpeg, .png}
-\include{format_def}
-
+\include{acronyms}
+\include{formatdef}
 
 \begin{document}
 \dominitoc
@@ -25,17 +25,17 @@
 \listoffigures \addcontentsline{toc}{chapter}{\listfigurename} \adjustmtc
 \listoftables \addcontentsline{toc}{chapter}{\listtablename} \adjustmtc
 
-% include each chapter...
+% mainmatter
 \mainmatter
 
 \setcounter{chapter}{0}  % start chapter numbering at 0
 
 \include{chapters/introduction}
-\include{chapters/chapter_1}
-\include{chapters/chapter_2}
-\include{chapters/chapter_3}
-\include{chapters/chapter_4}
-\include{chapters/chapter_5}
+\include{chapters/chapter1}
+\include{chapters/chapter2}
+\include{chapters/chapter3}
+\include{chapters/chapter4}
+\include{chapters/chapter5}
 \include{chapters/conclusion}
 
 %\begin{appendix}
@@ -47,7 +47,7 @@
 
 \clearpage
 
-\bibliographystyle{lemieuxdumonde.bst}
+\bibliographystyle{lemieuxdumonde}
 \bibliography{references}
 
 \end{document}

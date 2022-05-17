@@ -3,7 +3,6 @@
 
 # Files
 .DS_Store
-chapters/*.aux
 *.aux
 *.maf
 *.log
@@ -15,3 +14,5 @@ chapters/*.aux
 *.lot
 *.toc
 *.pdf
+*.bbl
+*.blg

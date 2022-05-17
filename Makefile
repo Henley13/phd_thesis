@@ -1,5 +1,4 @@
 clean:
-	rm .DS_Store
 	rm chapters/*.aux
 	rm *.aux
 	rm *.maf
@@ -11,3 +10,5 @@ clean:
 	rm *.gz
 	rm *.lot
 	rm *.toc
+	rm *.bbl
+	rm *.blg
