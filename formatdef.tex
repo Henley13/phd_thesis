@@ -27,6 +27,39 @@
 \setlength{\nomitemsep}{-\parsep}
 \setlength{\nomitemsep}{0.05pt}
 
+% python code
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{red}{rgb}{0.698, 0.1333, 0.1333}
+\definecolor{green}{rgb}{0.1333, 0.5451, 0.1333}
+\definecolor{blue}{rgb}{0.275, 0.51, 0.706}
+\definecolor{gray}{rgb}{0.45, 0.45, 0.45}
+\definecolor{lightgray}{rgb}{0.97, 0.97, 0.97}
+\definecolor{black}{rgb}{0, 0, 0}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{lightgray},
+    commentstyle=\color{gray},
+    keywordstyle=\color{green},
+    numberstyle=\color{black},
+    stringstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize,
+	rulecolor=\color{black},
+	frame=single,
+    breakatwhitespace=false,
+    breaklines=false,
+    captionpos=b,
+    keepspaces=true,
+    numbers=none,
+    numbersep=0pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4
+}
+\lstset{style=mystyle}
+
+\usepackage{wrapfig}
+
 %----------------------------------------------
 
 \setcounter{secnumdepth}{2}
