@@ -66,14 +66,57 @@ It thus requires a robust approach to tackle this problem and extract accurate c
 %RNA levels and/or RNA locali- zation requires custom-written code (Stoeger et al. 2015; Samacoits et al. 2018).
 
 % general review
+\cite{lagache_statistical_2015}
+\cite{ruusuvuori_evaluation_2010}
+\cite{smal_quantitative_2010}
+
 % reference blob detection (scikit-image)
+\cite{walt_scikit-image_2014}
+
 % reference Astropy
+\cite{bertin_sextractor_1996}
+\cite{}
+
+% general pipeline
+\cite{mcquin_cellprofiler_2018}
+\cite{mueller_fish-quant_2013}
+\cite{de_chaumont_icy_2012}
+\cite{ershov_bringing_2021} % trackmate
+\cite{ljosa_introduction_2009}
+\cite{stoeger_computer_2015}
+\cite{perkel_starfish_2019}
+\cite{noauthor_mammalian_2020}
+\cite{eng_transcriptome-scale_2019}
+\cite{kamenova_co-translational_2019}
+\cite{liao_rna_2019}
+\cite{xia_spatial_2019}
+\cite{tsanov_smifish_2016}
+\cite{samacoits_computational_2018}
+\cite{battich_image-based_2013}
+\cite{savulescu_interrogating_2021}
+\cite{battich_control_2015}
+
+% unknown
+\cite{shariff_automated_2010}
+\cite{laux_interactive_2020}
+\cite{das_intracellular_2021}
+
 % reference RS-FISH
+\cite{bahry_rs-fish_2021}
+
 
 \subsection{Learning to spot} \label{subsec:detection_dl}
 
+
 % reference DeepSpot
+\cite{bouilhol_deepspot_2022}
+
 % reference DeepBlink
+\cite{eichenberger_deepblink_2021}
+
+% other
+\cite{khater_caveolae_2019}
+
 
 \section{Scaling \ac{mRNA} detection} \label{sec:method}
 
@@ -138,7 +181,6 @@ If, by chance, a spot has several identical pixels at its peak, we only keep one
 
 \paragraph{Thresholding}
 
-% partially copy paste from paper supplementary (Imbert et al, 2022)
 At this stage, actual spots and noisy fluorescent blobs (autofluorescence, of-site binding of oligos, etc.) are both detected.
 From all previously detected local peaks, we only keep those above a specific threshold.
 A first limitation of spot detection algorithm appears with the choice of this threshold.
@@ -165,7 +207,8 @@ Even if this plateau is less pronounced with a high level of noise, an abrupt ch
 This difference of slope describes a clear separation between the regimes of overdetection and underdetection.
 
 In order to automatically set an optimal threshold, we geometrically find the plateau of the elbow curve in~\ref{fig:elbow_detection}.
-We select the threshold at where the tangent's slope equals the average slope of the curve.\\
+We select the threshold where the tangent's slope equals the average slope of the curve.
+Additional elbow curves can be observed in~\ref{sec:appendix_detection}, with different conditioning.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -238,7 +281,7 @@ The decomposition process consists in populating our candidate regions by simula
 Starting with an empty image, we iteratively add a new simulated spot in the region until we minimize the residual sum of square (RSS):
 
 \begin{equation}
-	{\displaystyle \operatorname {RSS} =\sum _{x, y}(\hat{f}(x, y) - f(x, y))^{2}}
+	{\displaystyle \operatorname{RSS} =\sum _{x, y}(\hat{f}(x, y) - f(x, y))^{2}}
 \end{equation}
 
 \noindent
@@ -324,9 +367,10 @@ spots_subpixel = detection.fit_subpixel(
   \label{fig:elbow_colocalization}
 \end{wrapfigure}
 
-Another method requested by the community is the possibility to detect spots in two different channels then match their coordinates.
+Another method requested by the community is the possibility to detect adjacent spots in different channels then match their coordinates.
+Our implementation is based on the one developed in the recent work from\cite{CORNES_2022}.
 This could be the same \ac{RNA} detected with two different fluorescent probes or techniques.
-For example in the figure~\ref{fig:elbow_colocalization} we detect colocalized spots between a sample of spots detected with a pixel accuracy and the same sample with a subpixel accuracy.
+As an example, in the figure~\ref{fig:elbow_colocalization}, we detect colocalized spots between a sample of spots detected with a pixel accuracy and the same sample with a subpixel accuracy.
 
 First we compute the euclidean distance matrix between the two sets of spot coordinates, then we solve a linear sum assignment problem\cite{crouse_linear_assignment_2016, 2020SciPy-NMeth}.
 We obtain an matching between the two sets of spots, for each spots, that minimize the overall euclidean distance between assigned pairs.
@@ -349,146 +393,147 @@ import bigfish.multistack as multistack
 
 \section{Evaluation with simulated spots} \label{sec:detection_evaluation}
 
-This section describes how we evaluate the performance of \emph{bigfish.detection}.
+Finally we describe our evaluation of \emph{bigfish.detection}.
 In addition to qualitative assessment of spot detection throughout our studies, we quantify the accuracy errors with simulated images.
-These simulations are produced with the \emph{simfish} package.
+Performances for both spot and cluster detections are measured with different qualities of images.
 
-\subsection{Simulation} \label{subsec:simulation}
+\subsection{Simulations} \label{subsec:simulation}
 
 To measure the error of a spot detection we need a ground truth.
 A manual annotation of a regular 3D \ac{smFISH} image is intractable.
 It would be time-consuming and prone to human error.
 The alternative is to simulate realistic images of spots, under different conditions to stress the performances of our algorithms.
-To this end, \emph{simfish} allows us to precisely control the level of noise and the number of spots we want to simulate in the image.
+To this end, we use the \emph{simfish} package that allows us to precisely control the level of noise and the number of spots we want to simulate in the image.
 
-\paragraph{Spot simulations}
+\paragraph{Spot simulation}
 
-
+The simulation process aims to return both an image and the ground truth coordinates of the spots we simulated.
 
 \noindent
 Our images are generated with three main steps:
 
 \begin{enumerate}
-	\item We randomly draw the number of spots and their localization in 3D.
-	The number of spots is sampled from a Poisson distribution and the localizations from an uniform distribution all over the frame.
+	\item We randomly draw the number of spots and their localization.
+	This is our ground truth.
+	The number of spots is sampled from a Poisson distribution and the localizations from an Uniform distribution all over the frame.
 	Alternatively the number of spots can be set manually.
-	The user can also decide to simulate clusters.
-	In this case, the number of clusters and the number of spots per cluster are drawn from a Poisson distribution,
-	\item
-	\item
-	\item
+	\item For each spot in the image we simulate its pixel intensity.
+	Instead of directly sample the intensity value from a Gaussian distribution, we reuse the simulation process from~\cite{bahry_rs-fish_2021}.
+	With a Gaussian distribution centered on every spots, we simulate the average number of photon collected by each pixel in the image.
+	The amplitude and the standard deviation of this Gaussian signals are manually or randomly predetermined.
+	The final intensity of every pixel is then sampled from a Poisson distribution with the number of photons as expectation.
+	\item (Optional) We add a background white noise to the entire image.
+	It follows a Normal distribution centered around a predefined noise level.
 \end{enumerate}
 
-\paragraph{\ac{Cluster}}
+% add a schema of the cluster simulation process if necessary
 
+The process detailed above generate spots with a pixel accuracy.
+A simulation with a subpixel accuracy follows the same steps, but with a larger image (4 to 20 times larger).
+Before saving the image and the ground truth, we downsize it by local averaging.
+The ground truth coordinates are adapted accordingly.
+
+In order to produce a noisier image we can decrease the ratio between the spot amplitudes and the background noise.
+A second option is to increase the variance of the different parameters: spot standard deviation and amplitude, background noise standard deviations.
 
 \paragraph{\ac{SNR}}
 
+We can tune the different parameters mentioned to simulate spots with an increasing level of difficulty to detect.
+To quantify the noise of an image and graduate the challenge it offers in term of detection, we compute its \ac{SNR} for every spots.
 
-- snr
-- spots
-- noise
-- cluster
-- subpixel
+\noindent
+For a 2D image, we define the $\operatorname{SNR}$ of an image as the median of the $\operatorname{SNR_i}$ we compute for each spot $i$, such that:
 
-- random distribution
-- poisson distribution
+\begin{equation}
+	{\displaystyle \operatorname{SNR_i} = \frac{\max(a(x, y)) - \mu(b(x, y))}{\sigma(b(x, y))}}
+\end{equation}
 
+\noindent
+with $\mu(.)$ the mean function, $\sigma(.)$ the standard deviation, $a(x, y)$ the spot image cropped and $b(x, y)$ the spot background (a crop twice larger than the spot image).
 
-In order to create ground-truth datasets for assessing localization performance,
-we generated images simulating diffraction-limited spots in the following way: (𝑥, 𝑦, 𝑧) spot
-positions were randomly assigned within the z-stack chosen dimensions, and each
-spot was assigned a brightness picked from a normal distribution. We computed
-the intensity 𝐼(𝑥, 𝑦, 𝑧) generated by each spot as follows: we first computed
-the predicted average number of photons received by each pixel 𝐼*+,#
-user-defined lateral and axial extensions. We then simulated the actual intensity
-collected at each pixel using a Poisson-distributed value with mean 𝐼*+,#
-gaussian-distributed noise to each pixel of the image.
+In consequence, our measure of noise is based on the spot coordinates.
+We quantify how distinct the spot is from its background.
+A spot with a low amplitude or a noisy background will decrease the \ac{SNR} of the image.
+To correctly quantify the image noise during our evaluation, we use the ground truth coordinates of the spots to compute the \ac{SNR}.
+Indeed, a noisy image would impact the detection and bias the measure of noise itself.
+We simulate different images with a range of \ac{SNR} between 2 and 26.
+The higher the \ac{SNR} is, the better.
 
-%Simulated images to validate spot detection algorithms
-
-%To evaluate our spot detection algorithm, we simulated 3D images with spots
-%mimicking the smFISH signal produced by RNA molecules.
-
-
-
-
-# get spots coordinates
-scale_z = None
-if ndim == 3:
-	spots_scale_z = sigma[0] / voxel_size[0]
-	scale_z = spots_scale_z * 0.2 * nb_spots_cluster
-spots_scale_yx = sigma[-1] / voxel_size[-1]
-scale_yx = spots_scale_yx * 0.2 * nb_spots_cluster
-if ndim == 3:
-	rho_z = np.abs(np.random.normal(
-		loc=0.0, scale=scale_z, size=nb_spots_cluster))
-	rho_yx = np.abs(np.random.normal(
-		loc=0.0, scale=scale_yx, size=nb_spots_cluster))
-	theta = np.random.uniform(0, np.pi, nb_spots_cluster)
-	phi = np.random.uniform(0, 2 * np.pi, nb_spots_cluster)
-	z = center_cluster_z[i] + rho_z * np.cos(theta)
-	positions_z.append(z)
-	y = center_cluster_y[i] + rho_yx * np.sin(phi) * np.sin(theta)
-	positions_y.append(y)
-	x = center_cluster_x[i] + rho_yx * np.cos(phi) * np.sin(theta)
-	positions_x.append(x)
-
-else:
-	rho_yx = np.random.normal(
-		loc=0.0, scale=scale_yx, size=nb_spots_cluster)
-	phi = np.random.uniform(-np.pi, np.pi, nb_spots_cluster)
-	y = center_cluster_y[i] + rho_yx * np.sin(phi)
-	positions_y.append(y)
-	x = center_cluster_x[i] + rho_yx * np.cos(phi)
-	positions_x.append(x)
-
-
-
-
-
-These images are obtained with three main steps:
-
-%1. We randomly draw the number of spots (this parameter can also be predetermined)
-%and their localization in three dimensions.
-
-%2. For each spot we simulate a 3D Gaussian signal with a predefined amplitude and sigma.
-%The final intensity of every pixel is sampled from a Poisson distribution with the gaussian simulated value as expectation.
-
-%3. We simulate a background white noise over all the image, following a normal
-%distribution centered around a predefined noise level.
-
-figure~\ref{fig:spot_detection_high_noise}
+For example, in figure~\ref{fig:spot_detection_high_noise} we simulate an extreme case with a highly noisy image (\ac{SNR} below 5).
+On the right panel we can observe some contrasted background blobs misdetected as spot.
+Despite a small amount of false positives, the detection remains correct in this badly conditioned image.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figures/chapter2/plot_spot_detection}
-    \caption{Detection of highly noisy spots}
+    \caption{Detected (red) and actual (white) highly noisy spots}
     \label{fig:spot_detection_high_noise}
 \end{figure}
 
+\paragraph{Cluster simulation}
 
+The user can also decide to simulate clusters.
+In this case, the first step of our simulation process is adapted.
+First the number of clusters and the number of spots per cluster are drawn from a Poisson distribution (or manually set).
+The cluster centers are then localized like spots, with a Uniform distribution over the entire image, or fixed at the center of the frame.
+Finally, different spot localizations are randomly generated around the centers, using polar coordinates.
+The result can be observed in figure~\ref{fig:dense_decomposition} which is actually a simulated cluster.
+In addition, several simulations are available in appendix~\ref{sec:appendix_simulations}, with different conditioning.\\
 
+\begin{minipage}{0.9\textwidth}
+\begin{lstlisting}[language=Python]
+import simfish as sim
 
-To evaluate detection in imaging conditions with different noise levels,
-we varied the parameters to simulate images. Signal quality was evaluated
-with the Signal-To-Noise ratio (SNR). SNR is calculated for each spot, where
-we define the background as a region surrounding its center and a radius
-twice the size of the spot radius, with the following equation:
-
-% equation
+# image simulation
+image, ground_truth = sim.simulate_image(
+	ndim=3,
+	n_spots=100,
+	image_shape=(128, 128),
+	voxel_size=(100, 100, 100),  # in nanometer
+	sigma=(150, 150, 150),  # in nanometer
+	amplitude=5000,
+	noise_level=300)
+\end{lstlisting}
+\end{minipage}
 
 \subsection{Results} \label{subsec:detection_results}
 
+We simulated batches of 100 images with high, medium and low noise levels (roughly, with a \ac{SNR} below 5, between 5 and 15 and above 15).
 
-% impact of SNR
+\paragraph{Impact of noise}
+
+Our method is overall pretty robust.
+If the image quality deteriorates, with a lower \ac{SNR} for example, our algorithms can return a moderate overestimation of detected spots.
+This overestimation is estimated below 5\% and 10\% for images with a low or medium \ac{SNR} value, respectively.
+
+These measures are illustrated on the left panel of figure~\ref{fig:detection_error}.
+We compared the number of spots detected with the actual number of spots simulated.
+Each dot corresponds to one image.
+For each noise regime, 100 images are generated.
+Above the plain line, the detection overestimates the number of spots.
+Logically, these overestimations increase with the noise level (and decrease with the \ac{SNR}).
+
+On the right panel, we summarize the impact of noise with our detection technique.
+Each dot represents again an image, with 100 simulated spots and a varying level of noise.
+Below a \ac{SNR} of 5, with poorly contrasted spots, a fully automated detection might remain challenging.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figures/chapter2/fused_spot_detection_noise}
-    \caption{Spot detection evaluation}
+    \caption{Impact of noise on automated detection}
     \label{fig:detection_error}
 \end{figure}
+
+\paragraph{Accuracy of the cluster detection}
+
+We simulate images with an unique cluster in order to test the performance of our method to decompose the dense regions and detect the clusters.
+Such images can be observed in appendix~\ref{sec:appendix_simulations}.
+In figure~\ref{fig:cluster_results} we report the number of spots we estimate in the clusters.
+Each dot represent an image with a cluster.
+Our decomposition is quite robust with the noise level, even with the lower \ac{SNR} values.
+However, for the largest clusters, with 15 spots or more, we tend to slightly underestimate the number of spots.
+In this case, the average error is 1.6.
+In comparison, with 5 spots and 10 spots per cluster, we measure an average error of 0.83 and 0.82, respectively.
 
 \begin{figure}[h]
     \centering
@@ -497,32 +542,37 @@ twice the size of the spot radius, with the following equation:
     \label{fig:cluster_results}
 \end{figure}
 
+\subsection{What if the \ac{PSF} is not Gaussian?} \label{subsec:psf}
 
-\subsection{What if the \ac{PSF} is not a gaussian?} \label{subsec:psf}
+In this chapter we assume our \ac{mRNA} spots can be modelled with a Gaussian signal.
+This simplification was relevant during my PhD and did not lead to exaggerated errors in our different analysis.
+However, it is always possible to exploit a more complex \ac{PSF} to fit with a specific spot signal.
+To this end, the former \emph{psf} package\footnote{\url{https://github.com/cgohlke/psf/}} allows to generate more complex \ac{PSF} for specific fluorescent microscopic experiments.
+Letting the user choose between different \ac{PSF} is an improvement that could be implemented in in a future version of \emph{bigfish.detection} and \emph{simfish}.
+In particular, this would modify the way we generate spot signal in our image simulations or in the decomposition of dense regions.
 
+Eventually, if the \ac{PSF} differs greatly from a Gaussian signal, the spot detection itself could be impacted.
+Indeed, two \ac{PSF}s from close spots could interfere and make the local peaks less distinct.
 
+% potential references in PSF
+% Electromagnetic diffraction in optical systems. II. Structure of the image field in an aplanatic system. B Richards and E Wolf. Proc R Soc Lond A, 253 (1274), 358-379, 1959.
+% Focal volume optics and experimental artifacts in confocal fluorescence correlation spectroscopy. S T Hess, W W Webb. Biophys J (83) 2300-17, 2002.
+% Electromagnetic description of image formation in confocal fluorescence microscopy. T D Viser, S H Wiersma. J Opt Soc Am A (11) 599-608, 1994.
+% Photon counting histogram: one-photon excitation. B Huang, T D Perroud, R N Zare. Chem Phys Chem (5), 1523-31, 2004. Supporting information: Calculation of the observation volume profile.
+% Gaussian approximations of fluorescence microscope point-spread function models. B Zhang, J Zerubia, J C Olivo-Marin. Appl. Optics (46) 1819-29, 2007.
+% The SVI-wiki on 3D microscopy, deconvolution, visualization and analysis. https://svi.nl/NyquistRate
+% Theory of Confocal Microscopy: Resolution and Contrast in Confocal Microscopy. http://www.olympusfluoview.com/theory/resolutionintro.html
 
 \section{Conclusion} \label{sec:detection_conclusion}
 
-The detection subpackage implements the methods re- quired to detect spots in
-2D or 3D images (Figs. 2, 3A–E). An important aspect of the detection subpackage
-is its abil- ity to detect spots without setting any pixel intensity thresh- old.
-We implemented a method to automatically infer this threshold from the image.
-The curve describing the num- ber of detected spots as a function of the
-intensity threshold (Fig. 3A,B) has an elbow shape, resulting from the superposition
-of the fast decreasing false positive de- tections (low intensity noise) and the
-slowly decreasing true positives. The threshold selected corresponds to the kink
-in the elbow, and corresponds thus to the highest threshold outside the high-noise
-regime. In order to val- idate this approach, we simulated real- istic smFISH images
-with varying noise levels (Fig. 3A,B; Supplemental Note 1). We found that our method
-only leads to a moderate over-estimation of detected spots (<5%–10%) for images with
-moderate to high SNR values (>5). Such automatization over- comes human intervention
-and allows scaling to large data sets, such that the subpackage can process thousands
-of images. While initially designed to detect individual mRNAs, the same methods
-can also be used to detect other spot-like structures (Safieddine et al. 2021),
-such as centrosomes, P- bodies, etc (Fig. 3E).This subpackage further permits us
-to perform localiza- tion of RNAs with subpixel accuracy by using a Gaussian
-fitting (Mueller et al. 2013). Lastly, we provide the pos- sibility to perform
-a colocalization analysis between spot detection per- formed in multiple channels (Cornes et al. 2021).
+This chapter presents different methods from \emph{bigfish.detection} subpackage to perform a spot detection on \ac{FISH} images.
+Based on the first version of FISH-quant, the main contribution of these algorithms are their ability to detect spots without tuning any pixel intensity threshold.
+We evaluate the performance on simulated images and find the detection robust enough to be applied on a high content screening experiment.
+Our method currently overcomes human intervention and makes the processing of thousands different images possible.
+
+Of course, several improvements are still possible.
+We can expand the \ac{PSF} options as explained in~\ref{subsec:psf}.
+Some alternative detection techniques claim a better accuracy or faster runs like~\cite{bahry_rs-fish_2021}.
+A Python implementation of these methods, coupled with our thresholding heuristic to scale the detection, might be valuable for the community.
 
 % https://github.com/PreibischLab/RS-FISH/tree/master/documents/tool_comparison_for_paper

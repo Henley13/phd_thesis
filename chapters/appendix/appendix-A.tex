@@ -1,40 +1,71 @@
 %!TEX root = ../../main.tex
 
-\graphicspath{{../../figures/chapter2/}}
+\graphicspath{{../../figures/appendix/}}
 
+\chapter{Simulation and detection} \label{ch:appendix_simulation_detection}
 
-\chapter{\ac{SNR}} \label{chap:appendix_snr}
+\newpage
 
+\section{Spots and cluster simulations} \label{sec:appendix_simulations}
 
-\chapter{Spot simulations} \label{chap:appendix_simulation}
+\vfill
+
+Figure~\ref{fig:spots_mosaic} is a sample of simulated images of spots.
+We modulate the number of spots and the intensity of the noise for each image.
+
+\vfill
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{figures/chapter2/spots_mosaic}
-    \caption{Blablabla}
+    \includegraphics[width=\textwidth]{figures/appendix/spots_mosaic}
+    \caption{Simulations of spots under different noise regimes}
     \label{fig:spots_mosaic}
 \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figures/chapter2/spots_example}
-    \caption{Blablabla}
-    \label{fig:detection_results_simulation}
-\end{figure}
+\newpage
 
+\null
+\vfill
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figures/chapter2/fused_spot_detection_noise}
-    \caption{Blablabla}
-    \label{fig:detection_error}
-\end{figure}
+Figure~\ref{fig:cluster_mosaic} use the same logic but with an unique cluster of spots simulated in the center.
+This time, we modulate the number of spots inside the cluster.
+
+\vfill
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{figures/chapter2/cluster_mosaic}
-    \caption{Blablabla}
+    \includegraphics[width=\textwidth]{figures/appendix/cluster_mosaic}
+    \caption{Simulations of cluster under different noise regimes}
     \label{fig:cluster_mosaic}
 \end{figure}
 
+\newpage
 
+\section{Detection with different noise intensities} \label{sec:appendix_detection}
+
+\vfill
+
+In figure~\ref{fig:general_spots_elbow} we present elbow curves for three levels of noise.
+We observe the number of detected spots as a function of intensity thresholds.
+The optimal threshold (in red) is selected based on these curves.
+When an image has a high \ac{SNR}, the difference of regime between the noisy background blobs and the actual spots is clearly distinct in the elbow curve.
+
+The result in term of detection can be observed in figure~\ref{fig:general_spots_detection}.
+For each image, 100 spots are simulated.
+Detected positions are in red and simulated ground truth positions in white.
+
+\vfill
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/appendix/spots_elbow}
+    \caption{Elbow curves for different noise levels}
+    \label{fig:general_spots_elbow}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/appendix/spots_example}
+    \caption{Detection of 100 spots with different noise levels}
+    \label{fig:general_spots_detection}
+\end{figure}
