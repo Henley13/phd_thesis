@@ -11,6 +11,28 @@
 \section{State of the art}
 
 
+
+% ML and DL (pointnet) to classify caveolae clusters and non-caveolae clusters
+%~\cite{khater_caveolae_2019}
+% Specifically, we are generating abalanced dataset of 1000 blobs of isotropic
+% point clouds and 1000 blobs of non-isotropic point clouds. The isotropic
+% class of blobs mimicking the caveolae (positive class) and the non-isotropic
+% class mimicking the non-caveolae (negative class). The non-isotropic class of
+% blobs are more planar structures, while the isotropic class are more spherical
+% structures.
+
+% Caveolae are plasma membrane invaginations whose formation requires caveolin-1 (Cav1),
+% the adaptor protein polymerase I,and the transcript release factor (PTRF orCAVIN1).
+% Caveolae have an important role incell functioning, signaling, and disease. Inthe
+% absence ofCAVIN1/PTRF, Cav1 forms non-caveolarmembrane domains called scaffolds.
+% Inthis work, we train machine learning models toautomatically distinguish between
+% caveolae and scaffolds from single molecule localization microscopy (SMLM) data
+% The first uses arandom forest classifier applied to28 hand-crafted/designed features
+% (expert features), the second uses aconvolutional neural net (CNN) applied toaprojection
+% ofthe point clouds onto three planes, and the third uses aPointNet model, a recent
+% development that can directly take point clouds as its input.
+
+
 \subsection{Classical \ac{FISH} analysis}
 
 \subsection{Spatial statistics}

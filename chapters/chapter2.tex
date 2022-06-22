@@ -20,7 +20,7 @@ Finally we evaluate the robustness and the accuracy of our implementation by sim
 
 We first describe inputs and outputs we can expect when we perform spot detection.
 Then we review some solutions proposed in the literature, in bio-informatics, but more generally in computer vision.
-Lastly, we briefly discuss two recent methods based on a deep-learning framework.
+Lastly, we briefly discuss recent methods based on a deep-learning framework.
 
 \begin{figure}[h]
     \centering
@@ -55,68 +55,75 @@ It thus requires a robust approach to tackle this problem and extract accurate c
 
 \subsection{Related work} \label{subsec:detection_related_work}
 
-%The second step, fluorescence spot detection, has been addressed by a number
-%of approaches in the lit- erature, and more recently solutions specifically
-%adapted to smFISH have been proposed. RS-FISH allows robust and accurate detection
-%of fluorescent spots in 2D and 3D through radial symmetry but requires parameter
-%tuning before being scaled to a large set of images (Bahry et al. 2021). DeepLink
-%is a parameter-free deep-learning-based method, but is currently only available
-%for 2D data and might require retraining (Eichenberger et al. 2021). Lastly,
-%assigning spot counts to segmentation results and the subsequent analysis of
-%RNA levels and/or RNA locali- zation requires custom-written code (Stoeger et al. 2015; Samacoits et al. 2018).
+Spot detection, especially with fluorescent images, has been addressed by the scientific community through different approaches.
+Yet, some similitudes can be observed and difficulties remained.
 
-% general review
-\cite{lagache_statistical_2015}
-\cite{ruusuvuori_evaluation_2010}
-\cite{smal_quantitative_2010}
+A general review~\cite{smal_quantitative_2010} defines most detection frameworks with three steps: noise reduction, signal enhancement and signal thresholding.
+As for the noise reduction, they detailed in particular Gaussian smoothing technique, a method we exploit ourselves in the next section, and wavelet-based filtering.
+The later consists in applying a wavelet transform to obtain a sparse representation of the image, modifying the wavelet coefficients and transforming back the image.
+For this inverse transformation, we only keep the largest wavelet coefficients that correspond to structural elements in the image.
+Signal enhancement is then the most critical step.
+Seven unsupervised methods are compared, including techniques like top-hat filter, \ac{LoG} filter or h-dome transformation.
+This transformation is a reconstruction by dilation $\mathcal{B}(x, y)$ of the original image $f(x, y)$, from an image $f(x, y) - h$, with $h$ a positive constant.
+As a result, we can decompose the original image such that $f(x, y) = \mathcal{H}(x, y) + \mathcal{B}(x, y)$, with $\mathcal{H}(x, y)$ the h-dome image with the remaining spots and local intensity peaks.
+It can be interpreted as a local background subtraction technique that cut-off ''intensities of height h from the top, around local intensity maxima''.
+Unlike previous mentioned filters, it does not involve any shape or size parameter, but a height parameter $h$.
+Based on their experiment, authors favor this technique when a good detection performance is needed.
+However, when image quality is great and the \ac{SNR} high enough, all the detection methods tested in~\cite{smal_quantitative_2010} perform well.
+Finally, the signal thresholding discriminates the relevant spots from the noise, depending of the detection method applied.
+Supervised techniques are also discussed and evaluated like the training of an ADABOOST model~\cite{FREUND1997119} with Haar-like features.
+These methods appear to be accurate, even with low \ac{SNR} images, but require annotated data and a training stage.
 
-% reference blob detection (scikit-image)
-\cite{walt_scikit-image_2014}
+Review from~\cite{ruusuvuori_evaluation_2010} completes the analysis with additional algorithms: kernel-based methods, Otsu thresholding~\cite{Otsu_1979} or source extraction~\cite{bertin_sextractor_1996}.
+The later is mainly applied in astronomy.
+It thresholds an image where the background has been estimated then subtracted, before deblending adjacent spots.
 
-% reference Astropy
-\cite{bertin_sextractor_1996}
-\cite{}
+Several detection algorithms are already implemented and easily available in popular Python packages like \emph{scikit-image}~\cite{walt_scikit-image_2014} or \emph{astropy}~\cite{astropy_2018}.
+Astropy community developed an affiliated package \emph{photutils}~\cite{larry_bradley_2020_4044744} with helpful functions for photometry of astronomical sources like \ac{PSF} matching or source detection.
+Additional software focused on fluorescent image analysis, but not always in Python.
+They propose their own spot detection pipeline like Icy~\cite{de_chaumont_icy_2012} (with a wavelet-based method) or Trackmate~\cite{ershov_trackmate_2022} (with a blob detection method).
+The recent Python library \emph{starfish}~\cite{perkel_starfish_2019} wraps existing \emph{scikit-image} functions and the first FISH-quant version~\cite{mueller_fish-quant_2013} includes a blob detection pipeline with a \ac{LoG} filter.
+This last pipeline is the one we implemented and improved for \emph{bigfish.detection}.
 
-% general pipeline
-\cite{mcquin_cellprofiler_2018}
-\cite{mueller_fish-quant_2013}
-\cite{de_chaumont_icy_2012}
-\cite{ershov_bringing_2021} % trackmate
-\cite{ljosa_introduction_2009}
-\cite{stoeger_computer_2015}
-\cite{perkel_starfish_2019}
-\cite{noauthor_mammalian_2020}
-\cite{eng_transcriptome-scale_2019}
-\cite{kamenova_co-translational_2019}
-\cite{liao_rna_2019}
-\cite{xia_spatial_2019}
-\cite{tsanov_smifish_2016}
-\cite{samacoits_computational_2018}
-\cite{battich_image-based_2013}
-\cite{savulescu_interrogating_2021}
-\cite{battich_control_2015}
+More recently RS-FISH~\cite{bahry_rs-fish_2021} was released specifically for 3D spot detection with \ac{FISH} images.
+Developed in Java and exploiting radial symmetry, it presents a great subpixel accuracy, a fast runtime computation and robustness against anisotropic spot signal.
+After a \ac{DoG} filtering, we threshold the image to generate potential spot localizations.
+We then extract image gradients around each spot and correct them for anisotropy.
+Besides possible outliers that are filtered out, gradients should point toward a common center: the spot localization.
+In addition to their code, authors released a plugin for Fiji software~\cite{schindelin_fiji_2012}.
+Such \ac{GUI}, is not new: Icy, Trackmate and FISH-quant also have one.
+Like these alternatives, it allows the user to manually tune parameters and find the optimal setup for his application.
 
-% unknown
-\cite{shariff_automated_2010}
-\cite{laux_interactive_2020}
-\cite{das_intracellular_2021}
+This last point is a major limitation for us.
+The need for parameter tuning is a critical bottleneck for scaling detection.
+When we apply an algorithm to thousands of images, with noise and intensity heterogeneity, most parameters need to be set once (or automatically) and not recalibrated between images.
+In particular most of the presented methods require a threshold or a size parameter at some point.
 
-% reference RS-FISH
-\cite{bahry_rs-fish_2021}
-
+% add a detailed description of top-hat filter
+% add reference top-hat filter and h-dome transformation
+% add exemples from smFISH, seqFISH+ and MERFISH applications
 
 \subsection{Learning to spot} \label{subsec:detection_dl}
 
+Scaling of spot detection has been addressed by recent deep learning methods.
+They intend to prevent parameter tuning on a cell-by-cell or image-by-image basis at the cost of a learning stage.
 
-% reference DeepSpot
-\cite{bouilhol_deepspot_2022}
+A first study~\cite{bouilhol_deepspot_2022} proposes to preprocess images to make spot intensity homogeneous.
+They trained DeepSpot, a convolutional network, to enhance spot signal to the same intensity.
+The network has two main components: a \ac{CASO} module followed by a customized ResNet~\cite{He_2016}.
+\ac{CASO} mixes standard convolution blocks with strided and atrous (or dilated) convolutions~\cite{Hamaguchi_2018}.
+Small objects like spots do not contain enough semantic information to be captured.
+Standard convolution blocks (with max pooling) are great to learn semantic information, but at the expense of lower intensity spots and a potential spatial information loss.
+One the one hand, replacing the pooling layer with strided convolution compensates the lower intensity.
+On the other, the use of atrous convolution increases receptive field and thus improves context information with a minimal spatial information loss.
 
-% reference DeepBlink
-\cite{eichenberger_deepblink_2021}
-
-% other
-\cite{khater_caveolae_2019}
-
+Another model, DeepBlink~\cite{eichenberger_deepblink_2021}, is based on a U-Net architecture~\cite{Ronneberger_2015} and directly detects spots.
+The U-Net component extracts intermediate features.
+Then it maps the original image into \emph{grid-cells} (small bounding-boxes) for which model predicts the probability of a spot localization and the potential 2D coordinates.
+Size of the \emph{grid-cell} is critical.
+With a small size, too many cells might be empty, resulting in an imbalanced dataset for the classification head of the model.
+On the opposite, with a larger size, one cell could contain multiple spots (for only one prediction per \emph{grid-cell}).
+This process is directly inspired by the detection model YOLO~\cite{Redmon_2016_CVPR}.
 
 \section{Scaling \ac{mRNA} detection} \label{sec:method}
 
@@ -159,7 +166,7 @@ and $g(x, y, \sigma^2)$ the Gaussian kernel with a scale $\sigma^2$:
 An alternative filter is the \ac{DoG} filter.
 We estimate the background of the image with a large Gaussian kernel, then we subtract it from the original image or one smoothed with a narrower Gaussian kernel.
 It is a fast approximation of the \ac{LoG} filter.
-As illustrated in figure~\ref{fig:filters_detection}, both methods aim to remove the background signal and increase the \ac{SNR} of the spots.
+As illustrated in figure~\ref{fig:filters_detection}, both methods aim to remove the background noise and enhance the spot signal.
 
 % reference LoG and DoG
 
@@ -186,14 +193,6 @@ From all previously detected local peaks, we only keep those above a specific th
 A first limitation of spot detection algorithm appears with the choice of this threshold.
 If it is manually set, it might be difficult to scale the method to a large experiment as the fluorescence can be quite heterogeneous between images.
 Thus, we use a heuristic technique to set a threshold per image in a automated way.
-
-\begin{wrapfigure}{L}{0.35\textwidth}
-  \begin{center}
-    \includegraphics[width=0.33\textwidth]{figures/chapter2/elbow_curve_real}
-  \end{center}
-  \caption{Elbow curve}
-  \label{fig:elbow_detection}
-\end{wrapfigure}
 
 We assume that a \ac{mRNA} spot and a background fluorescent noise have different intensity distribution.
 The former have significantly higher intensity values since a \ac{mRNA} molecule is targeted by multiple oligos.
@@ -222,6 +221,14 @@ spots, threshold = detection.detect_spots(
     spot_radius=(350, 150, 150))  # in nanometer
 \end{lstlisting}
 \end{minipage}
+
+\begin{wrapfigure}{L}{0.35\textwidth}
+  \begin{center}
+    \includegraphics[width=0.33\textwidth]{figures/chapter2/elbow_curve_real}
+  \end{center}
+  \caption{Elbow curve}
+  \label{fig:elbow_detection}
+\end{wrapfigure}
 
 \subsection{Managing high spot density} \label{subsec:dense_decomposition}
 
@@ -390,6 +397,13 @@ import bigfish.multistack as multistack
 	voxel_size=(300, 103, 103))  # in nanometer
 \end{lstlisting}
 \end{minipage}
+
+% \cite{lagache_statistical_2015}
+% Colocalization methods are traditionally divided into pixel-based methods
+% that measure global correlation coefficients from the overlap between pixel
+% intensities in different color channels, and object-based methods that first
+% segment molecule spots and then analyze their spatial distributions with
+% second-order statistics.
 
 \section{Evaluation with simulated spots} \label{sec:detection_evaluation}
 
