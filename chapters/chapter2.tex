@@ -207,7 +207,7 @@ This difference of slope describes a clear separation between the regimes of ove
 
 In order to automatically set an optimal threshold, we geometrically find the plateau of the elbow curve in~\ref{fig:elbow_detection}.
 We select the threshold where the tangent's slope equals the average slope of the curve.
-Additional elbow curves can be observed in~\ref{sec:appendix_detection}, with different conditioning.\\
+Additional elbow curves can be observed in appendix~\ref{sec:appendix_detection}, with different conditioning.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -492,7 +492,7 @@ First the number of clusters and the number of spots per cluster are drawn from 
 The cluster centers are then localized like spots, with a Uniform distribution over the entire image, or fixed at the center of the frame.
 Finally, different spot localizations are randomly generated around the centers, using polar coordinates.
 The result can be observed in figure~\ref{fig:dense_decomposition} which is actually a simulated cluster.
-In addition, several simulations are available in appendix~\ref{sec:appendix_simulations}, with different conditioning.\\
+In addition, several simulations are available in appendix~\ref{sec:appendix_simulations_spots}, with different conditioning.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -541,7 +541,7 @@ Below a \ac{SNR} of 5, with poorly contrasted spots, a fully automated detection
 \paragraph{Accuracy of the cluster detection}
 
 We simulate images with an unique cluster in order to test the performance of our method to decompose the dense regions and detect the clusters.
-Such images can be observed in appendix~\ref{sec:appendix_simulations}.
+Such images can be observed in appendix~\ref{sec:appendix_simulations_spots}.
 In figure~\ref{fig:cluster_results} we report the number of spots we estimate in the clusters.
 Each dot represent an image with a cluster.
 Our decomposition is quite robust with the noise level, even with the lower \ac{SNR} values.

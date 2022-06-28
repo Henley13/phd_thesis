@@ -31,6 +31,25 @@
 
 \subsection{t-SNE visualization}
 
+3.4 Unsupervised visualization
+Another part of our work concerns the representation of thousands of cells
+based on localization features. We adopt an unsupervised approach. From the
+hand-crafted features or those built automatically by the neural network, we
+have a representation of each cell in a multidimensional point cloud. We use
+a t-distributed stochastic neighbour embedding (t-SNE) [38] to get a 2-dimensional
+projection of such a point cloud. The algorithm computes the probability distribution
+relative to the similarities of different observations in our high-dimensional
+space and the same probability distribution for observations in a 2-dimensional
+space. The 2-dimensional projection which minimizes the KL-divergence between
+both distributions is returned. Figure 13 is a 2-dimensional projection of the
+high-dimensional vectors returned by the neural network we describe in the
+previous section. The point cloud represents 4,000 real cells extracted from
+experimental images. Some clusters appear, especially for the foci, nuclear
+retention and extension patterns. Examples of relative input images are given
+in the figure. Different genes can present the same pattern. On the contrary,
+a same gene can present heterogeneous patterns. For example, if most of the
+time CEP192 mRNAs are kept inside the nucleus, they are periodically released
+in the cytoplasm.
 
 \section{Translation factories}
 
