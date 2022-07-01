@@ -146,21 +146,21 @@ The latter is assumed to be known for a given experiment and should not prevent 
 If we consider a 2D image $f(x,y)$, the \ac{LoG} filter consists in computing the second derivative of the smoothed image $L(x, y, \sigma^2)$:
 
 \begin{equation}
-	\nabla^{2}L(x, y, \sigma^2) = \frac{\partial^{2}L(x, y, \sigma^2)}{\partial x^2} + \frac{\partial^{2}L(x, y, \sigma^2)}{\partial y^2}
+	{\displaystyle \nabla^{2}L(x, y, \sigma^2) = \frac{\partial^{2}L(x, y, \sigma^2)}{\partial x^2} + \frac{\partial^{2}L(x, y, \sigma^2)}{\partial y^2}}
 \end{equation}
 
 \noindent
 with $L(x, y, \sigma^2)$ the convolve image:
 
 \begin{equation}
-	L(x, y, \sigma^2) = g(x, y, \sigma^2) * f(x, y)
+	{\displaystyle L(x, y, \sigma^2) = g(x, y, \sigma^2) * f(x, y)}
 \end{equation}
 
 \noindent
 and $g(x, y, \sigma^2)$ the Gaussian kernel with a scale $\sigma^2$:
 
 \begin{equation}
-	g(x, y, \sigma^2) = \frac{1}{2\pi \sigma^2} e^{-{\frac{x^{2} + y^{2}}{2\sigma^2}}}
+	{\displaystyle g(x, y, \sigma^2) = \frac{1}{2\pi \sigma^2} e^{-{\frac{x^{2} + y^{2}}{2\sigma^2}}}}
 \end{equation}
 
 An alternative filter is the \ac{DoG} filter.
@@ -288,7 +288,7 @@ The decomposition process consists in populating our candidate regions by simula
 Starting with an empty image, we iteratively add a new simulated spot in the region until we minimize the residual sum of square (RSS):
 
 \begin{equation}
-	{\displaystyle \operatorname{RSS} =\sum _{x, y}(\hat{f}(x, y) - f(x, y))^{2}}
+	{\displaystyle \operatorname{RSS} = \sum _{x, y}(\hat{f}(x, y) - f(x, y))^{2}}
 \end{equation}
 
 \noindent

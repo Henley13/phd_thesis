@@ -122,108 +122,195 @@ df = multistack.summarize_extraction_results(fov_results, ndim=3)
 
 \section{Hand-crafted localization features} \label{sec:hand_features}
 
-% intro subsections
+We now present the first approach to analyze \ac{RNA} localization patterns in depth: we manually design spatial features.
 
 \subsection{Related work} \label{subsec:related_work_hand_features}
 
-% reference classical fish analysis (battich + stoegger)
+% reference classical fish analysis (battich + stoegger + aubin)
 % reference dypfish
 % reference spatial statistics (carolina whelbi)
 
+%~\cite{savulescu_interrogating_2021}
+%~\cite{samacoits_computational_2018}
+%~\cite{stoeger_computer_2015}
+%~\cite{mcquin_cellprofiler_2018}
+%~\cite{held_cellcognition_2010}
+%~\cite{berg_ilastik_2019}
+%~\cite{shariff_automated_2010}
+%~\cite{laux_interactive_2020}
+%~\cite{ljosa_introduction_2009}
+%~\cite{battich_image-based_2013}
+%~\cite{battich_control_2015}
+
+%Feature engineering
+%Aubin designed features from the cloud point representation
+%of the cell in order to discriminate the different localization patterns. He
+%gathered more than 20 features in a tabular format
+%(one row per cell), ready to feed a machine learning model.
+%A first set of features is based on the euclidean distance. We compute the distance between each
+%mRNAs and the centroid of the cell, the centroid of the nucleus, the cell border and
+%the nucleus border. Averages and quantiles are then computed from these distances and finally normalized.
+%A second set of features involved the Ripley K-function. It quantifies the aggregation or dispersion of mRNAs:
+%K(r)=1∑n Npi(r) (7) nλ
+%i=1
+%with r the distance range, Npi (r) the number of mRNAs in a circle of radius r centered
+%on the ith mRNA and λ the total density of mRNAs in the cell (the total number of mRNAs
+%normalized by the cell area). Several features are returned from this function like the
+%maximum values, the Spearman correlation with the radius r, etc... Such features are
+%useful to discriminate foci patterns. A corrected version of the function is actually
+%used, less sensitive to boundary effects (mRNAs close to a border have a limited neighbourhood).
+%A third set of features is based on morphological opening (an erosion followed by a dilation).
+%Applying openings with different sizes, we remove cell’s extensions. We can count the mRNAs
+%we loose and compute their proportion with the total number of mRNAs. The idea is to detect
+%RNA localization in cell extensions.
+%A final group of features concern the proportion of mRNAs inside the nucleus, a dispersion
+%and a polarization index.
+%1 Ripley: maximum
+%2 Ripley: max gradient [0,max]
+%3 Ripley: min gradient [max,end]
+%4 Ripley: value at mid-point between center and boundary
+%5 Ripley: Spearman correlation between Ripley and radius
+%6 Ripley: radius of max value
+%7 Polarization index
+%8 Dispersion index
+%9–12 Morph opening–enrichment ratio: 15, 30, 45, 60 pixels
+%13 Cell height: Spearman correlation with ZmRNA
+%14 Cell height: R2 with ZmRNA
+%15 Cell membrane: distance – mean
+%16-19 Distance membrane: quantile 5%, 10%, 20%, 50%
+%20 Nucleus: distance – mean
+%21 Cell centroid: distance – mean
+%22 Nucleus centroid: distance – mean
+%23 Ratio: mRNAs inside nucleus/outside nucleus
+
 \subsection{Expert features} \label{subsec:expert_features}
 
-% input preparation
-% distance features
-% dispersion features
-% morphological features
-% centrosomal features
-% (plot boxplot)
-% (plot RDI or opening)
+A large part of hand-crafted features we implemented in \emph{bigfish.classification} were initially designed for our own studies~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}.
+These features capture more specific information about \ac{RNA} localization, beyond surface areas (\emph{cell\_area} and \emph{nuc\_area}) or expression levels (\emph{nb\_rna}).
 
-Feature engineering Aubin designed features from the cloud point representation
-of the cell in order to discriminate the different localization patterns. He
-gathered more than 20 features in a tabular format
-(one row per cell), ready to feed a machine learning model.
-A first set of features is based on the euclidean distance. We compute the distance between each
-mRNAs and the centroid of the cell, the centroid of the nucleus, the cell border and
-the nucleus border. Averages and quantiles are then computed from these distances and finally normalized.
-A second set of features involved the Ripley K-function. It quantifies the aggregation or dispersion of mRNAs:
-K(r)=1∑n Npi(r) (7) nλ
-i=1
-with r the distance range, Npi (r) the number of mRNAs in a circle of radius r centered
-on the ith mRNA and λ the total density of mRNAs in the cell (the total number of mRNAs
-normalized by the cell area). Several features are returned from this function like the
-maximum values, the Spearman correlation with the radius r, etc... Such features are
-useful to discriminate foci patterns. A corrected version of the function is actually
-used, less sensitive to boundary effects (mRNAs close to a border have a limited neighbourhood).
-A third set of features is based on morphological opening (an erosion followed by a dilation).
-Applying openings with different sizes, we remove cell’s extensions. We can count the mRNAs
-we loose and compute their proportion with the total number of mRNAs. The idea is to detect
-RNA localization in cell extensions.
-A final group of features concern the proportion of mRNAs inside the nucleus, a dispersion
-and a polarization index.
+\paragraph{Distance features}
 
-% reference FQ1 (aubin)
-% reference rdi calculator
+We first reuse and adapt some distance features already implemented in the first FISH-quant version and presented in a recent paper~\cite{samacoits_computational_2018}.
+Distances from cell or nuclear membranes are computed in 2D as we only use 2D segmentation results so far.
+However, such features could be easily extended with 3D segmentation masks.
 
-%\paragraph{}
+We compute the average distance between detected \ac{RNA}s and cell membrane \emph{index\_mean\_distance\_cell} such that:
 
+\begin{equation}
+	{\displaystyle \operatorname{index\_mean\_distance\_cell} = \frac{\overline{d_{cell}(x_i, y_i)}}{\lambda_{cell}}}
+\end{equation}
 
-Here, we list the different spatial features that are implemented in big-fish and permit a classification of cells based on their RNA localization patterns. Features are grouped into different classes.
-Feature
-Description
-Area of nucleus
-Measured in pixels.
-Area of cell
-Measured in pixels.
-Area of cell extension
-The cell area removed by an opening of size 3000nm (an erosion followed by a dilation). Measured in pixels.
-Proportion of nucleus area
-Proportion of the nucleus area compared to the entire cell.
-Table S2. Features to describe cell morphology.
-Feature
-Description
-Total number of mRNAs
--
-Number of mRNAs inside nucleus
--
-Proportion of mRNAs inside nucleus
-Proportion of the mRNAs localizing inside the nucleus compared to the total number of mRNAs in the cell.
-Proportion of mRNAs in foci
-Proportion of mRNAs clustered in a foci compared to the total number of mRNAs in the cell.
-Proportion of mRNAs in cell extension
-Proportion of mRNAs in cell extension compared to the total number of mRNAs in the cell.
-mRNA proportion along nuclear envelope
-Proportion of mRNAs within 500 nm from the nuclear envelope compared to the total number of mRNAs in the cell.
-Proportion of mRNAs in specific subcellular areas
-Proportion of mRNAs in specific subcellular regions compared to the total number of mRNAs. Five concentric regions are defined around the nuclear envelope: 500-1000 nm, 1000-1500 nm, 1500-2000 nm, 2000-2500 nm and 2500-3000 nm. Six concentric regions are defined from the cell membrane: 0-500 nm, 500-1000 nm, 1000-1500 nm, 1500-2000 nm, 2000-2500 nm and 2500-3000 nm.
-Polarization index
-Measurement of the mRNA point cloud polarization in the cell. The higher the more polarized are the mRNAs. Index is computed based on the distance between the mRNAs centroid and the cell centroid. Details in (6).
-Dispersion index
-Measurement of the mRNA point cloud dispersion in the cell. The higher the more dispersed are the mRNAs. Details in (6).
+\noindent
+With $d_{cell}(x_i, y_i)$ the euclidean distance to the cell membrane for the rna $i$ and $\lambda_{cell}$ the expected average distance under uniform \ac{RNA} distribution.
+A previous study~\cite{battich_control_2015} used the square root of cell area to normalize its distance features.
+However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in term of cell morphology.
+For this reason we approximate $\lambda_{cell}$ as the average value of the 2D distance map from the cell membrane.
+Similarly, we compute the normalized average distance of \ac{RNA}s to the nucleus: \emph{index\_mean\_distance\_nuc}.
+Alternative computation with the median function is available for these two features too.
 
-Peripheral distribution index
-Measurement of how close the mRNAs localize to the cell periphery. Details in (6).
-Mean/median mRNA distance to centrosome
-Expressed as an index: mean/median distance over the expected mean/median distance if mRNAs were distributed uniformly in the cell.
-Proportion of mRNAs around centrosome
-Proportion of mRNAs within 2000 nm from a centrosome compared to the total number of mRNAs in the cell.
+Unlike the first FISH-quant version, we do not compute distances to cell or nucleus centroids, nor quantiles of the \ac{RNA} distance distribution.
+These features might appear redundant to quantify distance information.
+
+\paragraph{Morphological features}
+
+A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
+We already count the number of transcripts detected inside the nucleus.
+More precisely, proportion of \ac{RNA}s inside the nucleus (\emph{proportion\_rna\_in\_nuc}) is a good enough indicator to identify intranuclear pattern.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figures/chapter4/plot_topography}
-    \caption{Concentric distances from cell and nuclear membrane}
+    \caption{Proportion of \ac{mRNA} at various distances from cell and nuclear membranes}
     \label{fig:features_topography}
 \end{figure}
+
+Still we can go further to partition cell regions.
+We define a list of features to measure the distribution of \ac{RNA}s within different cell regions.
+Regions of interest are delimited with concentric circles from cell or nuclear membranes, with an interval distance of 500nm each.
+More precisely, area between 0 and 3000nm from the cell membrane is divided in six concentric regions.
+In each region we compute \ac{RNA} proportion (\emph{proportion\_rna\_cell\_radius\_1000\_1500} for the proportion between 1000nm and 1500nm from the cell membrane) or we count the number of \ac{RNA}s we detect, normalized by the expected number of \ac{RNA}s under random distribution (\emph{index\_rna\_cell\_radius\_1000\_1500}).
+We define 5 more regions around the nuclear membrane between 500nm and 3000nm.
+Lastly, a larger region is defined along the nuclear membrane, including detected \ac{RNA}s inside or outside the nucleus, but within 500nm from its membrane.
+Likewise, proportion (\emph{proportion\_rna\_nuc\_radius\_500\_1000}) and \ac{RNA} count (\emph{index\_rna\_nuc\_radius\_500\_1000}) are computed for all regions.
+When we manually annotate real cells and identify different localization pattern we measure how discriminative these features can be.
+In figure~\ref{fig:features_topography} we can observe average \ac{RNA} proportion for the different regions we described.
+The 95\% confidence interval is also reported in the plot.
+Logically, nuclear edge and perinuclear patterns present a higher proportion of \ac{RNA} along the nuclear membrane.
+On the opposite, cells with a protrusion pattern have a higher \ac{RNA} density along the cell membrane.
+
+We focus on a last relevant region in a cell: protrusions.
+To design cell extension related features, we first need to define such extension.
+Like~\cite{samacoits_computational_2018} we define this region as the lost area after applying a morphological opening (an erosion followed by a dilation) to the cell mask.
+For this operation we use a disk with 3000nm radius as a structuring element.
+We then compute the proportion of \ac{RNA} (\emph{proportion\_rna\_protrusion}) or the normalized \ac{RNA} count (\emph{index\_rna\_protrusion}) in protrusion.
+
+\paragraph{Dispersion features}
+
+We implement three features described and tested in a recent paper~\cite{stueland_rdi_2019} to quantify \ac{RNA} polarization and dispersion within the cell.
+
+The polarization index (\emph{index\_polarization}) is computed by comparing \ac{RNA} point cloud and cell centroids:
+
+\begin{equation}
+	{\displaystyle \operatorname{index\_polarization} = \frac{\sqrt{(x_{rna} - x_{cell})^2 + (y_{rna} - y_{cell})^2}}{Rg_{cell}}}
+\end{equation}
+
+\noindent
+With $(x_{rna}, y_{rna})$ the coordinates of the \ac{RNA} centroid and $(x_{cell}, y_{cell})$ the coordinates of the cell centroid.
+The radius of gyration $Rg_{cell}$ normalizes the index for different cell sizes.
+It is defined as the root-mean-squared distance between every cell pixels and the cell centroid.
+The higher, the more polarized \ac{RNA}s are.
+
+The dispersion index (\emph{index\_dispersion}) measures the dispersion of the \ac{RNA} point cloud.
+In addition to the extracted coordinates, its computation also implies pixel intensities from the original \ac{smFISH} image:
+
+\begin{equation}
+	{\displaystyle \operatorname{index\_dispersion} = \frac{\frac{\sum_{i} r_i^2 I_i}{\sum_{i} I_i}}{\frac{\sum_{j} r_j^2 I_j}{\sum_{j} I_j}}}
+\end{equation}
+
+\noindent
+With $r_i$ and $r_j$ the euclidean distance of \ac{RNA} $i$ and cell pixel $j$ to the \ac{RNA} centroid respectively, $I_i$ the pixel intensity of \ac{RNA} $i$ and $I_j$ the pixel intensity of cell pixel $j$.
+Pixel intensity of transcripts distant from the \ac{RNA} centroid are overweighted.
+As the index is normalized considering every pixels $j$ from the cell mask, it tends to 1 when \ac{RNA} point cloud is uniformly distributed.
+A diffuse point cloud has a value greater than 1.
+On the opposite, if \ac{RNA}s are concentrated anywhere in the cell, index value is lower than 1.
+
+The peripheral distribution index (\emph{index\_peripheral\_distribution}) measures how close the \ac{RNA}s localize to the cell periphery.
+Its computation is similar to the dispersion index, but the \ac{RNA} centroid is replaced by the nucleus one in the equation.
+A completely dispersed point cloud still has a value of 1, but it increases if \ac{RNA}s move toward the cell periphery, with a concentrated or diffused pattern.
+Again, an aggregation of transcripts around the nucleus centroid (often close to the cell centroid too) decreases index value.
+
+\paragraph{Centrosomal features}
 
 \begin{wrapfigure}{R}{0.40\textwidth}
   \begin{center}
     \includegraphics[width=0.33\textwidth]{figures/chapter4/centrosomal_features}
   \end{center}
-  \caption{Centrosomal features}
+  \caption{Centrosomal \ac{RNA}s (from~\cite{safieddine_choreography_2021})}
   \label{fig:centrosome_features}
 \end{wrapfigure}
 
+If we detect additional object and extract new coordinates besides individual and clustered \ac{RNA}s, more specific features can be designed.
+For example, these objects can be cell organelles labelled during the experimentation and targeted for a study.
+We design such features with the centrosomes to further study \ac{RNA} localization related to the \ac{MTOC}.
+
+A first obvious feature is the average (or median) distance between \ac{RNA}s and the closest detected centrosomes (up to two centrosomes can be detected in the cell): \emph{index\_mean\_distance\_centrosome}.
+Similarly to the distance features we compute with the cell or nuclear membranes, we compute the expected distance under uniform \ac{RNA} distribution for normalization.
+
+A second set of features consists in delimiting an area around each centrome to be considered as centrosome neighbors.
+In our case we manually choose a radius of 2000nm around centrosomes to define such areas, as illustrated in figure~\ref{fig:centrosome_features}.
+We can then compute the normalized \ac{RNA} count (\emph{index\_rna\_centrosome}) or the \ac{RNA} proportion (\emph{proportion\_rna\_centrosome}) in these regions.
+
+Lastly, we derived a feature from the dispersion index described above.
+We define a centrosomal dispersion index to quantify \ac{RNA} dispersion around centrosomes: \emph{index\_centrosome\_dispersion}.
+We design it like the dispersion index, but instead of \ac{RNA} centroid, we use the closest centrosome coordinates to compute the euclidean distance.
+The lower, the closer \ac{RNA}s localized to the centrosomes.
+
+\paragraph{Cluster features}
+
+Concerning cluster localization patterns, we observed than our clustering method (see subsection~\ref{subsec:dense_decomposition}) already captures good enough information.
+More specifically, number of detected clusters (\emph{nb\_foci}) or \ac{RNA} proportion inside these clusters (\emph{proportion\_rna\_in\_foci}) are relevant features to identify transcripts with a tendency for clustering.
+As a consequence, and unlike~\cite{samacoits_computational_2018}, we do not implement diverse features based on the famous Ripley's K-function.
+This would require tuning a lot more parameters than just reusing the detected number of clusters.
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -252,6 +339,49 @@ features, features_names = classification.compute_features(
 \section{Learned localization features} \label{sec:learned_features}
 
 % intro subsections
+
+\subsection{Related work} \label{subsec:related_work_learned_features}
+
+% references neural network to build features
+% 3-4 papers cnn features in image
+% 3-4 papers cnn features in bioimage
+% 3-4 papers cnn features with protein localization
+% Bouilohol
+
+% 1-2 paper review (deep laerning with bioimage)
+% paper isbi + reference appendix
+% 1-2 paper review (deep learning with point cloud)
+
+% transition from cnn to pointcloud (pb localization with cnn // protein localization == texture classification)
+
+%~\cite{dubois_deep_2019}
+
+% pointnet
+% dgcnn
+% pointtransformer
+% pointmlp
+
+% general review shape classification with point cloud (kernel, curve, pointcnn, voxel3D)
+
+% ML and DL (pointnet) to classify caveolae clusters and non-caveolae clusters
+%%~\cite{khater_caveolae_2019}
+%% Specifically, we are generating abalanced dataset of 1000 blobs of isotropic
+%% point clouds and 1000 blobs of non-isotropic point clouds. The isotropic
+%% class of blobs mimicking the caveolae (positive class) and the non-isotropic
+%% class mimicking the non-caveolae (negative class). The non-isotropic class of
+%% blobs are more planar structures, while the isotropic class are more spherical
+%% structures.
+%
+%% Caveolae are plasma membrane invaginations whose formation requires caveolin-1 (Cav1),
+%% the adaptor protein polymerase I,and the transcript release factor (PTRF orCAVIN1).
+%% Caveolae have an important role incell functioning, signaling, and disease. Inthe
+%% absence ofCAVIN1/PTRF, Cav1 forms non-caveolarmembrane domains called scaffolds.
+%% Inthis work, we train machine learning models toautomatically distinguish between
+%% caveolae and scaffolds from single molecule localization microscopy (SMLM) data
+%% The first uses arandom forest classifier applied to28 hand-crafted/designed features
+%% (expert features), the second uses aconvolutional neural net (CNN) applied toaprojection
+%% ofthe point clouds onto three planes, and the third uses aPointNet model, a recent
+%% development that can directly take point clouds as its input.
 
 \subsection{Pretext task: simulated pattern classification} \label{subsec:simulation_localization}
 
@@ -287,74 +417,6 @@ instance_coord = sim.simulate_localization_pattern(
 	proportion_pattern=0.6)
 \end{lstlisting}
 \end{minipage}
-
-\subsection{Related work} \label{subsec:related_work_learned_features}
-
-% references neural network to build features
-% 3-4 papers cnn features in image
-% 3-4 papers cnn features in bioimage
-% 3-4 papers cnn features with protein localization
-% Bouilohol
-
-% 1-2 paper review (deep laerning with bioimage)
-% paper isbi + reference appendix
-% 1-2 paper review (deep learning with point cloud)
-
-% transition from cnn to pointcloud (pb localization with cnn // protein localization == texture classification)
-
-% pointnet
-% dgcnn
-% pointtransformer
-% pointmlp
-
-% general review shape classification with point cloud (kernel, curve, pointcnn, voxel3D)
-
-% ML and DL (pointnet) to classify caveolae clusters and non-caveolae clusters
-%%~\cite{khater_caveolae_2019}
-%% Specifically, we are generating abalanced dataset of 1000 blobs of isotropic
-%% point clouds and 1000 blobs of non-isotropic point clouds. The isotropic
-%% class of blobs mimicking the caveolae (positive class) and the non-isotropic
-%% class mimicking the non-caveolae (negative class). The non-isotropic class of
-%% blobs are more planar structures, while the isotropic class are more spherical
-%% structures.
-%
-%% Caveolae are plasma membrane invaginations whose formation requires caveolin-1 (Cav1),
-%% the adaptor protein polymerase I,and the transcript release factor (PTRF orCAVIN1).
-%% Caveolae have an important role incell functioning, signaling, and disease. Inthe
-%% absence ofCAVIN1/PTRF, Cav1 forms non-caveolarmembrane domains called scaffolds.
-%% Inthis work, we train machine learning models toautomatically distinguish between
-%% caveolae and scaffolds from single molecule localization microscopy (SMLM) data
-%% The first uses arandom forest classifier applied to28 hand-crafted/designed features
-%% (expert features), the second uses aconvolutional neural net (CNN) applied toaprojection
-%% ofthe point clouds onto three planes, and the third uses aPointNet model, a recent
-%% development that can directly take point clouds as its input.
-
-3.2 Deep learning framework
-This work has been investigated by Remy in 2018, then by myself at the beginning
-of my PhD. It was presented at ISBI conference in April 2019 [6].
-Simpler features, harder interpretation A deep learning framework presents the
-advantage to simplify our feature engineering pipeline. We directly feed a convolutional
-neural network with a 3- channels image. This image is crafted from our coordinates
-data of the cell boundary, the nucleus boundary and the mRNA spots. Different kind
-of inputs have been tested: stacked coordinates maps
-(figure 14), stacked surface maps (figure 11) and stacked distance maps (figure 15).
-Compared to the random forest, when the neural network makes a prediction, it is
-much more com- plicated to understand why it favours a pattern over another.
-This is due to the fact that a neural
-network builds an internal representation of the input images during training.
-There is no direct method to visualize these representations, to quantify the
-importance of a subregion from the input image in a prediction or to measure
-the confidence given to a prediction by the model. Several recent publications
-investigated the problem [8] [28] [29].
-
-Another interesting aspect is to limit the size of the network and to make
-training easier, while keeping the same performance. This saves computational
-resources which is a very important aspect in academic research. Here, we use
-SqueezeNet as a backbone for our convolutional neural network [18]. This model
-integrates compression techniques to keep a reasonable accuracy, but drastically
-reduces the number of parameters to train. Such techniques include squeeze
-operations that reduce the number of channels of a layer.
-
 
 \subsection{PointFISH} \label{subsec:pointfish}
 
