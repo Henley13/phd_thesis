@@ -223,11 +223,11 @@ spots, threshold = detection.detect_spots(
 \end{minipage}
 
 \begin{wrapfigure}{L}{0.35\textwidth}
-  \begin{center}
-    \includegraphics[width=0.33\textwidth]{figures/chapter2/elbow_curve_real}
-  \end{center}
-  \caption{Elbow curve}
-  \label{fig:elbow_detection}
+	\begin{center}
+		\includegraphics[width=0.33\textwidth]{figures/chapter2/elbow_curve_real}
+	\caption{Elbow curve}
+	\label{fig:elbow_detection}
+	\end{center}
 \end{wrapfigure}
 
 \subsection{Managing high spot density} \label{subsec:dense_decomposition}
@@ -252,11 +252,11 @@ In the former we handle high spot density regions in two independent steps:
 \end{itemize}
 
 \begin{wrapfigure}{R}{0.35\textwidth}
-  \begin{center}
-    \includegraphics[width=0.33\textwidth]{figures/chapter2/reference_spot}
-  \end{center}
-  \caption{Reference spot}
-  \label{fig:reference_spot}
+	\begin{center}
+		\includegraphics[width=0.33\textwidth]{figures/chapter2/reference_spot}
+	\caption{Reference spot}
+	\label{fig:reference_spot}
+	\end{center}
 \end{wrapfigure}
 
 \paragraph{Dense region detection}
@@ -274,7 +274,7 @@ A second criterion is the size of the regions.
 They should be larger than an individual spot.
 To match these criteria, we first threshold the denoised image with the median spot intensity, then we apply a connected component algorithm\cite{wu_connected_component_2005} to the binary mask obtained.
 Each group of connected pixels represent a region.
-Because the mask is the result of a thresholding above the median spot signal, every regions (or connected components) with at least 2 pixels are larger and brighter than the individual median spot.
+Because the mask is the result of a thresholding above the median spot signal, every region (or connected component) with at least 2 pixels are larger and brighter than the individual median spot.
 
 \paragraph{Dense region decomposition}
 
@@ -301,7 +301,7 @@ Once we detect a \ac{RNA} point cloud, with or without the decomposition step, w
 
 To this end we use a DBSCAN algorithm\cite{ester_density-based_1996, scikit-learn}.
 Two parameters need to be set: a minimum number of spots $k$ and a threshold distance $d$.
-Every pairs of \ac{RNA}s closer than $d$ are connected.
+Every pair of \ac{RNA}s closer than $d$ are connected.
 If a \ac{RNA} is connected to at least $k$ neighbors \ac{RNA}, it's a \emph{core sample} and with its connections it defines a cluster.
 Such method allows us to detect clusters as ''areas of high density separated by areas of low density''\footnote{\url{https://scikit-learn.org/stable/modules/clustering.html}}.
 
@@ -367,11 +367,11 @@ spots_subpixel = detection.fit_subpixel(
 \paragraph{Spot colocalization}
 
 \begin{wrapfigure}{R}{0.35\textwidth}
-  \begin{center}
-    \includegraphics[width=0.33\textwidth]{figures/chapter2/colocalization_elbow}
-  \end{center}
-  \caption{Colocalization}
-  \label{fig:elbow_colocalization}
+	\begin{center}
+		\includegraphics[width=0.33\textwidth]{figures/chapter2/colocalization_elbow}
+	\caption{Colocalization}
+	\label{fig:elbow_colocalization}
+	\end{center}
 \end{wrapfigure}
 
 Another method requested by the community is the possibility to detect adjacent spots in different channels then match their coordinates.
@@ -433,7 +433,7 @@ Our images are generated with three main steps:
 	Alternatively the number of spots can be set manually.
 	\item For each spot in the image we simulate its pixel intensity.
 	Instead of directly sample the intensity value from a Gaussian distribution, we reuse the simulation process from~\cite{bahry_rs-fish_2021}.
-	With a Gaussian distribution centered on every spots, we simulate the average number of photon collected by each pixel in the image.
+	With a Gaussian distribution centered on every spot, we simulate the average number of photon collected by each pixel in the image.
 	The amplitude and the standard deviation of this Gaussian signals are manually or randomly predetermined.
 	The final intensity of every pixel is then sampled from a Poisson distribution with the number of photons as expectation.
 	\item (Optional) We add a background white noise to the entire image.
@@ -453,7 +453,7 @@ A second option is to increase the variance of the different parameters: spot st
 \paragraph{\ac{SNR}}
 
 We can tune the different parameters mentioned to simulate spots with an increasing level of difficulty to detect.
-To quantify the noise of an image and graduate the challenge it offers in term of detection, we compute its \ac{SNR} for every spots.
+To quantify the noise of an image and graduate the challenge it offers in term of detection, we compute its \ac{SNR} for every spot.
 
 \noindent
 For a 2D image, we define the $\operatorname{SNR}$ of an image as the median of the $\operatorname{SNR_i}$ we compute for each spot $i$, such that:
