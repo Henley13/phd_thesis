@@ -148,6 +148,10 @@ We now present the first approach to analyze \ac{RNA} localization patterns in d
 %~\cite{battich_image-based_2013}
 %~\cite{battich_control_2015}
 
+%~\cite{savulescu_dypfish_2019}
+
+%~\cite{ripley2005spatial} spatial statistics
+
 %Feature engineering
 %Aubin designed features from the cloud point representation
 %of the cell in order to discriminate the different localization patterns. He
@@ -209,7 +213,7 @@ We compute the average distance between detected \ac{RNA}s and cell membrane \em
 \noindent
 With $d_{cell}(x_i, y_i)$ the euclidean distance to the cell membrane for the rna $i$ and $\lambda_{cell}$ the expected average distance under uniform \ac{RNA} distribution.
 A previous study~\cite{battich_control_2015} used the square root of cell area to normalize its distance features.
-However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in term of cell morphology.
+However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in terms of cell morphology.
 For this reason we approximate $\lambda_{cell}$ as the average value of the 2D distance map from the cell membrane.
 Similarly, we compute the normalized average distance of \ac{RNA}s to the nucleus: \emph{index\_mean\_distance\_nuc}.
 Alternative computation with the median function is available for these two features too.
@@ -392,7 +396,7 @@ We explore the use of convolutional features for \ac{RNA} localization~\cite{dub
 However, \ac{smFISH} images have spots and a texture classification approach seems unfit.
 Instead of learning from fluorescent images, we build binary images from coordinates representation and train a convolutional neural network with them.
 A more detailed description of the method is available in appendix~\ref{ch:convolutional_features}.
-Several patterns are not correctly identified and the conversion of coordinates into binary images have some limitations.
+Some patterns are not correctly identified and the conversion of coordinates into binary images have some limitations.
 We densify a coordinate array in a 2D or 3D image, dramatically increasing the memory needed to process the sample.
 With a 2D projected image we also lose relevant spatial information.
 Lastly, it has been observed~\cite{Rosanne_2018} that naive convolutional neural networks fail to predict simple coordinates from a coordinate image.
@@ -406,118 +410,27 @@ The latter might not be the optimal input format to predict \ac{RNA} localizatio
 
 \paragraph{Point cloud models}
 
-% ML and DL (pointnet) to classify caveolae clusters and non-caveolae clusters
-~\cite{khater_caveolae_2019}
-%% Specifically, we are generating abalanced dataset of 1000 blobs of isotropic
-%% point clouds and 1000 blobs of non-isotropic point clouds. The isotropic
-%% class of blobs mimicking the caveolae (positive class) and the non-isotropic
-%% class mimicking the non-caveolae (negative class). The non-isotropic class of
-%% blobs are more planar structures, while the isotropic class are more spherical
-%% structures.
-%
-%% Caveolae are plasma membrane invaginations whose formation requires caveolin-1 (Cav1),
-%% the adaptor protein polymerase I,and the transcript release factor (PTRF orCAVIN1).
-%% Caveolae have an important role incell functioning, signaling, and disease. Inthe
-%% absence ofCAVIN1/PTRF, Cav1 forms non-caveolarmembrane domains called scaffolds.
-%% Inthis work, we train machine learning models toautomatically distinguish between
-%% caveolae and scaffolds from single molecule localization microscopy (SMLM) data
-%% The first uses arandom forest classifier applied to28 hand-crafted/designed features
-%% (expert features), the second uses aconvolutional neural net (CNN) applied toaprojection
-%% ofthe point clouds onto three planes, and the third uses aPointNet model, a recent
-%% development that can directly take point clouds as its input.
+We postulate that learning to classify \ac{RNA} localization patterns directly from coordinates is the most efficient approach.
+A point cloud has an unordered and irregular structure.
+Projecting the coordinates into images or voxels~\cite{Maturana_2015} transforms the problem as an easier vision challenge, but it comes along with some input degradations.
 
-% pointnet
-~\cite{Qi_2017_CVPR}
+A recent paper~\cite{khater_caveolae_2019} proposes to train a machine learning pipeline to discriminate caveolae clusters from scaffolds clusters.
+These cell structures can be recognized through the detection of caveolin-1 proteins and the shape of the resulting point clouds.
+Authors compare three pipelines to address the problem: a random forest classifier trained on hand-crafted features, a convolutional neural network applied on the point cloud image and more importantly a PointNet fed directly with point cloud.
+Albeit legitimate, the PointNet method is less successful for this task.
+Possibly, this model is too naive.
+PointNet~\cite{Qi_2017_CVPR} is a seminal work that leads the way for innovative models to address shape classification.
+It directly processes point clouds with share MLPs and a max pooling layer, making the network invariant to input permutation.
+However, the pooling step is the only way for the model to share information between close points, which ultimately limits its performance.
+Yet, recent research dramatically improves point cloud modelling and especially the capture of local information.
 
-% dgcnn
-~\cite{Wang_2019}
-
-% pointtransformer
-~\cite{Zhao_2021_ICCV}
-
-% pointmlp
-~\cite{ma2022rethinking}
-
-%Point cloud analysis. There are mainly two streams to process point cloud.
-%Since the point cloud data structure is irregular and unordered, some works
-%consider projecting the original point clouds to intermediate voxels
-%(Maturana & Scherer, 2015; Shi et al., 2020) or images (You et al., 2018; Li et al., 2020),
-%translating the challenging 3D task into a well-explored 2D image problem.
-%In this regime, point clouds understanding is largely boosted and enjoys the
-%fast processing speed from 2D images or voxels. Albeit efficient, information
-%loss caused by projection degrades the representational quality of details for
-%point clouds (Yang et al., 2019). To this end, some methods are proposed to
-%process the original point cloud sets directly. PointNet (Qi et al., 2017a)
-%is a pioneering work that directly consumes unordered point sets as inputs
-%using shared MLPs. Based on PointNet, PointNet++ (Qi et al., 2017b) further
-%introduced a hierarchical feature learning paradigm to capture the local
-%geometric structures recursively. Owing to the local point representation
-%(and multi-scale information), PointNet++ exhibits promising results and
-%has been the cornerstone of modern point cloud methods (Wang et al., 2019; Fan et al., 2021; Xu et al., 2021a).
-%Our PointMLP also follows the design philosophy of PointNet++ but explores a simpler yet much deeper network architecture.
-
-%Local geometry exploration. As PointNet++ built the generic point cloud analysis
-%network framework, the recent research focus is shifted to how to generate better
-%regional points repre- sentation. Predominantly, the explorations of local points
-%representation can be divided into three categories: convolution-, graph-, and
-%attention-based methods. One of the most distinguished convolution-based methods
-%is PointConv (Wu et al., 2019). By approximating continuous weight and density
-%functions in convolutional filters using an MLP, PointConv is able to extend the
-%dynamic filter to a new convolution operation. Also, PAConv (Xu et al., 2021a)
-%constructs the convolution
-%kernel by dynamically assembling basic weight matrices stored in a weight bank.
-%Without modifying network configurations, PAConv can be seamlessly integrated
-%into classical MLP-based pipelines. Unlike convolution-based methods, Graph-based
-%methods investigate mutually correlated relation- ships among points with a graph.
-%In Wang et al. (2019), an EdgeConv is proposed to generate edge features that
-%describe the relationships between a point and its neighbors. By doing so, a
-%local graph is built, and the point relationships are well preserved. In 3D-GCN (Lin et al., 2021),
-%authors aim at deriving deformable 3D kernels using a 3D Graph Convolution Network.
-%Closely related to graph- based methods, the attention-based methods exhibit
-%excellent ability on relationship exploration as well, like PCT (Guo et al., 2021)
-%and Point Transformer (Zhao et al., 2021; Engel et al., 2020). With the
-%development of local geometry exploration, the performances on various tasks
-%appear to be saturated. Continuing on this track would bring minimal improvements.
-%In this paper, we show- case that even without the carefully designed operations
-%for local geometry exploration, a pure deep hierarchical MLP architecture is able
-%to exhibit gratifying performances and even better results.
-
-%Deep network architecture for point
-%cloud. Interestingly, the development
-%of point cloud analysis is closely related
-%to the evolution of the image process-
-%ing network. In the early era, works in
-%the image processing field simply stack
-%several learning layers to probe the per-
-%formance limitations (Krizhevsky et al.,
-%2012; Simonyan & Zisserman, 2015;
-%Dong et al., 2014). Then, the great
-%success of deep learning was signif-
-%icantly promoted by deep neural ar-
-%chitectures like ResNet (He et al.,
-%2016), which brings a profound impact
-%to various research fields. Recently,
-%attention-based models, including atten-
-%tion blocks (Wang et al., 2018) and Transformer architectures (Dosovitskiy et al., 2021),
-%further flesh out the community. Most recently, the succinct deep MLP architectures
-%have attracted a lot of atten- tion due to their efficiency and generality.
-%Point cloud analysis follows the same develop history as well, from MLP-based
-%PointNet (Qi et al., 2017a), deep hierarchical PointNet++ (Qi et al., 2017b),
-%convolution-/graph-/relation- based methods (Wu et al., 2019; Wang et al., 2019; Ran et al., 2021),
-%to state-of-the-art Transformer-based models (Guo et al., 2021; Zhao et al., 2021).
-%In this paper, we abandon sophisticated details and present a simple yet effective
-%deep residual MLP network for point cloud analysis. Instead of following the
-%tendency in the vision community deliberately, we are in pursuit of an inherently
-%simple and empirically powerful architecture for point cloud analysis.
-
-% general review shape classification with point cloud (kernel, curvenet, pointcnn, voxel3D, deepset, tr)
-~\cite{Xiang_2021_ICCV} % curvenet
-~\cite{Qi_2017} % pointnet++
-~\cite{Li_2018} % pointcnn
-~\cite{Wu_2019_CVPR} % PointConv
-~\cite{Thomas_2019_ICCV} % KPConv
-~\cite{Maturana_2015} % VoxNet
-~\cite{Zaheer_2017} % DeepSet
+PointNet++~\cite{Qi_2017} learns local geometric structures by recursively apply PointNet to different regions of the point cloud, in a hierarchical manner.
+This way, local information can be conveyed through the network more efficiently.
+DGCNN~\cite{Wang_2019} proposes a new EdgeConv layer where edge features are computed between a point and its neighbors.
+Some models propose to adapt convolutions to point cloud by designing new weighting functions or kernel operations like PointCNN~\cite{Li_2018}, PointConv~\cite{Wu_2019_CVPR} or KPConv~\cite{Thomas_2019_ICCV}.
+Another inspiration from the computer vision or NLP literature is the attention-based model.
+To this end, PointTransformer~\cite{Zhao_2021_ICCV} proposes an attention layer to be applied to local regions within the point cloud.
+Last but not least, PointMLP~\cite{ma2022rethinking} proposes a simple but still efficient network with a pure deep hierarchical MLP architecture.
 
 \subsection{Simulated and real tasks} \label{subsec:simulation_real_datasets}
 
@@ -525,14 +438,25 @@ We want to train a model we can directly feed with an input point cloud to obtai
 A deep learning model might need a lot of annotated data to reach a convenient performance.
 To cope with this requirement, we exploit simulations to train our point cloud model and then use it as a trained feature extractor.
 Eventually we use these learned features to classify \ac{RNA} localization patterns on a real dataset.
-We define a pretext task to train a point cloud model to generate relevant features in term of localization patterns.
+We define a pretext task to train a point cloud model to generate relevant features in terms of localization patterns.
 This pretext task is simply a classification of simulated localization patterns.
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figures/chapter4/foci_panel}
-    \caption{Foci pattern simulations}
-    \label{fig:foci_panel}
+	\centering
+	\minipage{0.33\textwidth}
+		\includegraphics[width=\linewidth]{figures/chapter4/simulation_foci_10}
+		\subcaption{10\% clustered \ac{RNA}}
+	\endminipage\hfill
+	\minipage{0.33\textwidth}
+		\includegraphics[width=\linewidth]{figures/chapter4/simulation_foci_50}
+		\subcaption{50\% clustered \ac{RNA}}
+	\endminipage\hfill
+	\minipage{0.33\textwidth}
+		\includegraphics[width=\linewidth]{figures/chapter4/simulation_foci_90}
+		\subcaption{90\% clustered \ac{RNA}}
+	\endminipage
+	\caption{Foci pattern simulations with increasing pattern strength}
+	\label{fig:foci_panel}
 \end{figure}
 
 \paragraph{Localization pattern simulations}
@@ -558,10 +482,21 @@ For example to simulate pattern with a moderate strength, we can simulate betwee
 Lastly, we choose a pattern to simulate.
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figures/chapter4/perinuclear_panel}
-    \caption{Perinuclear pattern simulations}
-    \label{fig:perinuclear_panel}
+	\centering
+	\minipage{0.33\textwidth}
+		\includegraphics[width=\linewidth]{figures/chapter4/simulation_perinuclear_10}
+		\subcaption{10\% perinuclear \ac{RNA}}
+	\endminipage\hfill
+	\minipage{0.33\textwidth}
+		\includegraphics[width=\linewidth]{figures/chapter4/simulation_perinuclear_50}
+		\subcaption{50\% perinuclear \ac{RNA}}
+	\endminipage\hfill
+	\minipage{0.33\textwidth}
+		\includegraphics[width=\linewidth]{figures/chapter4/simulation_perinuclear_90}
+		\subcaption{90\% perinuclear \ac{RNA}}
+	\endminipage
+	\caption{Perinuclear pattern simulations with increasing pattern strength}
+	\label{fig:perinuclear_panel}
 \end{figure}
 
 The 9 available patterns are: random, foci, intranuclear, extranuclear, nuclear edge, perinuclear, cell edge, pericellular and protrusion.
@@ -629,7 +564,7 @@ Furthermore, 810 cells have been manually annotated with localization patterns b
 These patterns are not mutually exclusive.
 Distribution of these annotates patterns is detailed in table~\ref{table:real_dataset}.
 
-\begin{wrapfigure}{L}{0.40\textwidth}
+\begin{wraptable}{L}{0.40\textwidth}
 	\centering
 	\begin{tabular}{| c | c |}
 		\hline
@@ -645,12 +580,18 @@ Distribution of these annotates patterns is detailed in table~\ref{table:real_da
 	\end{tabular}
 	\caption{Annotated real dataset}
 	\label{table:real_dataset}
-\end{wrapfigure}
+\end{wraptable}
 
 % add FISH image as example
 % add real point cloud as example
 
-\paragraph{Input preparation}
+\subsection{PointFISH} \label{subsec:pointfish}
+
+PointFISH exploits several modules developed in the literature on deep learning models for point cloud analysis and more precisely for shape classification.
+We implement a parallel branch to integrate information about cell morphology, with membrane coordinates directly, precomputed distances or cluster detection results.
+Trained on a large simulated dataset, PointFISH allows us compute an embedding for any \ac{RNA} point cloud.
+
+\subsubsection{Input preparation}
 
 Besides the original \ac{RNA} point cloud, we can use an optional second input vector with our model.
 Let's $X \in \mathbb{R}^{N \times 3}$ be the original input point cloud with $N$ the number of \ac{RNA}s.
@@ -668,17 +609,17 @@ Third, we can leverage the cluster detection algorithm from \emph{bigfish} in or
 It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ as extra input.
 Depending on whether or not we choose to add the morphological, the clustering or the distance information, we can exploit up to 5 extra dimensions of input.
 
-\subsection{PointFISH} \label{subsec:pointfish}
-
-PointFISH exploits several modules developed in the literature on deep learning models for point cloud analysis and more precisely for shape classification.
-We implement a parallel branch to integrate information about cell morphology, with membrane coordinates directly, precomputed distances or cluster detection results.
-Trained on a large simulated dataset, PointFISH allows us compute an embedding for any \ac{RNA} point cloud.
-
-\paragraph{Model architecture}
+\subsubsection{Model architecture}
 
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
+
+\paragraph{Point-wise Block}
+
+\paragraph{Alignment Module}
+
+\paragraph{Contextual Inputs}
 
 % architecture description
 % plot architecture
@@ -703,25 +644,28 @@ Trained on a large simulated dataset, PointFISH allows us compute an embedding f
     \label{fig:PointFISH_architecture}
 \end{figure}
 
-\paragraph{Training and evaluation on simulated patterns}
+\subsection{Experiment} \label{subsec:experiment}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+We did not design PointFISH to classify localization patterns, but to learn continuous representations first.
+Therefore, we train it on simulated dataset, with realistic but different localization patterns observed in real cells.
+Afterwards, we reuse its internal representations for unsupervised and supervised analysis with a real dataset.
 
-%- adam + learning rate
-%- epoch + early stopping
-%- bach size
-%- time + GPU
-%- loss
-%- metric
+\subsubsection{Training and evaluation on simulated patterns}
 
-%- general accuracy
-%- confusion matrix
+We train PointFISH on the simulated dataset.
+Our implementation is based on TensorFlow~\cite{tensorflow_2015}.
+We use Adam optimizer~\cite{Diederik_2015} with a learning rate from 0.001 to 0.00001 and an exponential decay (decay rate of 0.5 every 20,000 steps).
+Model is trained for a maximum of 150 epochs, with a batch size of 32, but early stopping criterion is implemented if validation loss does not decrease after 10 consecutive epochs.
+Usually model converges after 50 epochs.
+We apply a 10\% dropout for the last layer and classifications are evaluated with a categorical cross entropy loss.
+Even if localization patterns are not necessarily exclusive, for the simulations we trained the model to predict only one pattern per cell.
+For this reason, we did not simulate mixed patterns and assume it could help the model to learn disentangled representations.
+Training takes 6 to 8 hours to converge with a Tesla P100 GPU.
 
-% training process
-% results simulation
-% plot matrix confusion simulation
+A first evaluation can be performed on the simulated test dataset.
+Because each pattern is equally generated, a simple accuracy metric is enough.
+On real dataset, imbalanced between localization patterns implies a more robust metric like F1-score.
+With our best PointFISH models, we obtain a general accuracy of 95\% over the different patterns (see confusion matrix~\ref{fig:confusion_matrix}).
 
 \begin{figure}[h]
     \centering
@@ -730,20 +674,21 @@ Trained on a large simulated dataset, PointFISH allows us compute an embedding f
     \label{fig:confusion_matrix}
 \end{figure}
 
-\subsection{Embedding extraction} \label{subsec:learned_embedding}
+\subsubsection{Embedding extraction}
 
-% results supervised
-% plot boxplot
-% results unsupervised
-% plot umap
-% (plot dendogram)
-% ablation studies (table)
+From a trained PointFISH model we can remove the output layer to get a feature extractor that computes a 256-long embedding from a \ac{RNA} point cloud.
 
 \paragraph{Learned embedding}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+We compute the embedding for the entire cell population studied in~\cite{CHOUAIB_2020}.
+All the 9170 cells can be visualized in 2D using a UMAP projection~\cite{McInnes2018}.
+In figure~\ref{fig:umap_real} every point represents a cell.
+Among the 810 annotated cells, those with a unique pattern are colored according to the localization pattern observed in their \ac{RNA} point cloud.
+The rest of the dataset remains gray.
+Overall, PointFISH embedding discriminates well the different localization patterns.
+Intranuclear, nuclear edge and perinuclear cells form distinct clusters, despite their spatial overlap, as well as protrusions.
+Foci cells gather in a separated clusters as well, but also mix with nuclear and perinuclear patterns.
+This confusion is not surprising as a large number of cells in the dataset present a nuclear-related foci pattern.
 
 \begin{figure}[h]
     \centering
@@ -754,51 +699,107 @@ Trained on a large simulated dataset, PointFISH allows us compute an embedding f
 
 \paragraph{Supervised classification}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+Because PointFISH already returns meaningful embeddings, we can apply a simple classifier on top of these features to learn localization patterns.
+We use the 810 manually annotated cells from the real dataset.
+We compare the hand-crafted features selected in~\cite{CHOUAIB_2020} with our learned embedding.
+Every set of features is rescaled before feeding a classifier.
+The former includes 15 features:
 
-% SVC model + gridsearch + nested cross validation
-% average F1-score hand-crafted features: 0.849
-
-%"nb_foci", "proportion_rna_in_foci",
-%"index_foci_mean_distance_cyt", "index_foci_mean_distance_nuc",
-%"proportion_rna_in_nuc",
-%"index_mean_distance_cyt", "index_mean_distance_nuc",
-%"index_rna_opening_30", "index_peripheral_dispersion",
-%"index_rna_nuc_edge", "index_rna_nuc_radius_5_10", "index_rna_nuc_radius_10_15",
-%"index_rna_cyt_radius_0_5", "index_rna_cyt_radius_5_10", "index_rna_cyt_radius_10_15"
+\begin{itemize}
+	\item The number of foci and the proportion of clustered \ac{RNA}.
+	\item The average foci distance from nucleus and cell (normalized by the expected distance with a random foci distribution).
+	\item The proportion or \ac{RNA} inside nucleus.
+	\item The average \ac{RNA} distance from nucleus and cell (normalized by the expected distance with a random \ac{RNA} distribution).
+	\item The number of \ac{RNA}s detected in cell extensions (normalized by the expected number with a random \ac{RNA} distribution) and the peripheral dispersion index~\cite{stueland_rdi_2019}.
+	\item The number of \ac{RNA}s within different relevant subcellular regions (normalized by the expected number with a random \ac{RNA} distribution).
+\end{itemize}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{figures/chapter4/f1_SVC}
+	\includegraphics[clip, trim=0cm 0cm 0cm 1cm, width=1\textwidth]{figures/chapter4/f1_SVC}
     \caption{F1-score with localization pattern classification (SVC model)}
     \label{fig:f1_SVC_real}
 \end{figure}
 
-\paragraph{Ablation study}
+We design 5 binary classification tasks, one per localized pattern (random pattern is omitted).
+The classifier is a SVC model~\cite{Platt99probabilisticoutputs,chang2011libsvm}.
+For evaluation purpose, we apply a nested cross-validation scheme.
+First a test dataset is sampled the dataset (20\%), then the remaining cells are used with a gridsearch to fit an optimal SVC model (with a 20\% validation split).
+Parameters grid includes the choice between a linear or a RBF kernel and the strength of the regularization.
+The entire process is repeated 50 times, with different test split, and F1-score for each classification task is returned.
+This full evaluation pipeline is implemented with \emph{scikit-learn}~\cite{scikit-learn}.
+F1-score's distribution over 50 splits are summarized in figure~\ref{fig:f1_SVC_real}.
+Learned features match performances of hand-crafted features selected for the tasks.
+Only protrusion recognition is slightly worse, but it is also the only pattern that is not simulated.
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+\subsubsection{Ablation study}
 
-\begin{wrapfigure}{R}{0.40\textwidth}
+We perform several ablation studies to evaluate the impact of different components in PointFISH model.
+In the point cloud literature, papers often propose new modules to improve network's performances, but they implement them in slightly different architectures.
+Heterogeneity in terms of normalization, latent dimensions or layer size complicate comparisons between techniques.
+In order to isolate the importance of each element, we use a template architecture as illustrated in figure~\ref{fig:PointFISH_architecture}.
+Instead of comparing PointFISH with DGCNN, we compare PointFISH with an equivalent networks where attention layers are replaced by EdgeConv~\cite{Wang_2019}.
+The rest of the network remains strictly identical.
+
+\paragraph{Additional input}
+
+\begin{wraptable}{R}{0.60\textwidth}
 	\centering
 	\begin{tabular}{| c | c | c | c |}
 		\hline
 		Distance & Cluster & Morphology & F1-score \\
 		\hline
-		\ding{55} & \ding{55} & \ding{55} & 0.415\\
-		\checkmark & \ding{55} & \ding{55} & 0.736\\
-		\ding{55} & \checkmark & \ding{55} & 0.452\\
-		\checkmark & \checkmark & \ding{55} & 0.816\\
-		\checkmark & \checkmark & \checkmark & \textbf{0.823}\\
+		\ding{55} & \ding{55} & \ding{55} & 0.42\\
+		\checkmark & \ding{55} & \ding{55} & 0.74\\
+		\ding{55} & \checkmark & \ding{55} & 0.45\\
+		\checkmark & \checkmark & \ding{55} & $0.81^{\ast}$\\
+		\checkmark & \checkmark & \checkmark & \textbf{0.82}\\
 		\hline
 	\end{tabular}
-	\caption{Impact of extra inputs}
+	\caption{Impact of contextual inputs.
+	F1-score is averaged over 4 trainings with different random seeds.
+	Best model is in bold.
+	Reference model is labelled with $\ast$}
 	\label{table:extra_inputs}
-\end{wrapfigure}
+\end{wraptable}
 
+We compare the use of \ac{RNA} point cloud only as input or the inclusion of secondary inputs through a parallel branch.
+\ac{RNA} coordinates do not have any morphological information about the cell.
+In table~\ref{table:extra_inputs}, this design logically returns the lowest F1-score.
+Three additional inputs are available: \ac{RNA} distance from cell and nucleus (\emph{distance}), \ac{RNA} clustering flag (\emph{cluster}) and the integration of cell and nucleus membrane coordinates (\emph{morphology}).
+Best performances are reached with at least distance and cluster information.
+Cell and nucleus coordinates do not increase significantly the classification and dramatically increase the computation time of the model (we need to process a larger point cloud).
+In particular, cluster information greatly improves foci pattern recognition while distances boost others localization patterns.
+
+\paragraph{Alignment module and Point-wise block}
+
+To measure the impact of the geometric affine module~\cite{ma2022rethinking} we compare it with the TNet module implemented in PointNet~\cite{Qi_2017_CVPR}.
+We also design a variant TNetEdge where MLP layers extracting point-wise independent features are replaced with EdgeConv layers.
+Results are reported in table~\ref{table:ablation}.
+An alignment block seems critical at the beginning of the network.
+However, the geometric affine module is both more efficient (F1-score of 0.81) and much lighter than TNet and TNetEdge.
+
+From PointNet and DGCNN seminal papers we also compare the use of their respective point-wise blocks compare to our multi-attention layers.
+As expected, EdgeConv blocks convey a better information than PointNet by exploiting local neighborhood within point cloud (F1-score of 0.78 and 0.75 respectively).
+Yet, they do not match the performance of multi-attention layers.
+
+Concerning these layers, we evaluate how the number of parallel heads can influence the performance of PointFISH.
+By default, we use 3 parallel attention layers to let the model specialized its attentions vectors, but we also test 1, 6 and 9 parallel heads.
+In table~\ref{table:ablation} we only observe a slight benefit between the original point transformer layer~\cite{Zhao_2021_ICCV} (without one attention layer) and its augmented implementation.
+
+% multiscale
+
+\paragraph{Latent dimensions}
+
+The second part of PointFISH architecture is standardized: a first MLP block, a max pooling operation, a second MLP block and the output layer.
+We quantify the impact of additional MLP layers within these blocks.
+Our reference model returns an embedding with 256 dimensions (before the output layer).
+In a MLP block, we increase or decrease the depth by a factor 2 between layers.
+Before the pooling layer, the first MLP block includes 4 layers with an increasing depth (128, 256, 512 and 1024).
+After the pooling layer, the second MLP block includes 2 layers with a decreasing depth (512 and 256).
+Similarly, to return 128, 64 or 32 long embeddings, we implement 6 (128, 256, 512, pooling, 256 and 128), 5 (128, 256, pooling, 128 and 64) or 4 final layers (128, pooling, 64 and 32).
+We observe in table~\ref{table:ablation} a fall in performance for the lowest dimensional embedding (64 and 32).
+This hyperparameter is also critical to design lighter models, with a division by 4 in terms of trainable parameters between a 256 and a 128 long embedding.
 
 \begin{table}[h]
 	\centering
@@ -806,30 +807,29 @@ Trained on a large simulated dataset, PointFISH allows us compute an embedding f
 		\hline
 		Alignment & Point-wise block & \# heads & \# dimensions & \# parameters & F1-score \\
 		\hline\hline
-		- & Attention layer & 3 & 256 & 1,372,614 & 0.729\\
-		TNet & Attention layer & 3 & 256 & 1,372,614 & \\
-		TNetEdge & Attention layer & 3 & 256 & 1,372,614 & \\
+		- & Attention layer & 3 & 256 & 1,372,608 & 0.73\\
+		TNet & Attention layer & 3 & 256 & 1,712,521 & 0.74\\
+		TNetEdge & Attention layer & 3 & 256 & 1,589,321 & 0.74\\
 		\hline\hline
-		Affine & MLP & - & 256 & 1,372,614 & 0.748\\
-		Affine & EdgeConv & - & 256 & 1,372,614 & 0.783\\
+		Affine & MLP & - & 256 & 1,374,526 & 0.75\\
+		Affine & EdgeConv & - & 256 & 1,387,006 & 0.78\\
 		\hline\hline
-		Affine & Attention layer & 9 & 256 & 1,372,614 & \\
-		Affine & Attention layer & 6 & 256 & 1,372,614 & \\
-		Affine & Attention layer & 1 & 256 & 1,372,614 & \\
+		Affine & Attention layer & 9 & 256 & 1,403,334 & \textbf{0.82}\\
+		Affine & Attention layer & 6 & 256 & 1,387,974 & \textbf{0.82}\\
+		Affine & Attention layer & 3 & 256 & 1,372,614 & $0.81^{\ast}$\\
+		Affine & Attention layer & 1 & 256 & 1,362,374 & 0.81\\
 		\hline\hline
-		Affine & Attention layer & 3 & 128 & 1,372,614 & 0.811\\
-		Affine & Attention layer & 3 & 64 & 1,372,614 & 0.770\\
-		Affine & Attention layer & 3 & 32 & 1,372,614 & 0.749\\
-		\hline\hline
-		Affine & Attention layer & 3 & 256 & 1,372,614 & \textbf{0.816}\\
+		Affine & Attention layer & 3 & 128 & 352,966 & 0.81\\
+		Affine & Attention layer & 3 & 64 & 97,094 & 0.77\\
+		Affine & Attention layer & 3 & 32 & 32,646 & 0.75\\
 		\hline
 	\end{tabular}
-	\caption{Ablation studies on real dataset~\cite{CHOUAIB_2020}}
+	\caption{Ablation studies on real dataset~\cite{CHOUAIB_2020}.
+	F1-score is averaged over 4 trainings with different random seeds.
+	Best models are bold.
+	Reference model is labelled with $\ast$}
 	\label{table:ablation}
 \end{table}
-
-% add number of trainable parameters
-
 
 \section{Conclusion} \label{sec:analysis_conclusion}
 
