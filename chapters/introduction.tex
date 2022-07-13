@@ -66,7 +66,59 @@
 ~\cite{samacoits_computational_2018}
 ~\cite{battich_image-based_2013}
 ~\cite{savulescu_interrogating_2021}
+
+~\cite{battich_image-based_2013}
+We obtained 18 primary spot features that reflect the
+relative localization of each spot in a single cell, with respect to both the cell and other spots
+here we show that branched dnA technology combined with automated liquid handling, high-content imaging and quantitative image analysis allows highly reproducible quantification of transcript abundance in thousands of single cells at single-molecule resolution.
+in addition, it allows extraction of a multivariate feature set quantifying subcellular patterning and spatial properties of transcripts and their cell-to-cell variability. this has multiple implications for the functional interpretation of cell-to-
+cell variability in gene expression and enables the unbiased identification of functionally relevant in situ signatures
+of the transcriptome without the need for perturbations. Because this method can be incorporated in a wide variety of high-throughput image-based approaches, we expect it to be broadly applicable.
+
+~\cite{stoeger_computer_2015}
+(talking about ~\cite{battich_image-based_2013})
+Therefore, we have previously developed and documented [4] an unsupervised
+clustering scheme that uses selected cellular statistics to identify a small
+number of main patterns in single cell subcellular transcript localization.
+Briefly, this package uses the per-cell mean and standard deviation of the
+single-transcript localization features to first identify a number of
+different patterns, by clustering random subsets of cells, such that
+the clusters are most reproducible. In a second step, it determines the
+similarity of each single cell to each of the identified patterns.
+
+To enable imagebased transcriptomics to reach its full potential, we developed
+computer vision algorithms that build on and improve those currently used to
+detect objects in confocal images. By using iterative watershedding we have
+improved the segmentations of nuclei and cells. In addition, we describe how
+to perform spot detection for transcript identification in an automated way for
+thousands of images. Accurate detection of nuclear outlines, cell outlines, and
+transcript molecules are essential for the correct quantification of a
+high-dimensional multivariate feature space of each transcript and to reveal
+bona fide novel properties of the spatial organization of the transcriptome [4].
+The computer vision pipeline presented here complements our earlier work [4],
+and can be used independently of transcripts in other image-based approaches.
+
 ~\cite{battich_control_2015}
+Here, we applied image-based transcriptomics, a highthroughput automated
+single-molecule fluorescence in situ hybridization (sm-FISH) method that we
+recently developed (Battich et al., 2013), which meets these requirements.
+Using large-scale single-cell datasets acquired with this approach, we show
+that cell-to-cell variability in cytoplasmic transcript abundance in human
+adherent cells can be accurately predicted at the single-cell level with a
+multivariate set of features that quantify properties of the cellular state
+and microenvironment, and we experimentally verify some of the underlying
+causality. We find that for most genes, the unexplained variability in cytoplasmic
+transcript abundance approaches a limit of minimal stochasticity imposed by a
+Poisson process. The few genes that deviate from this limit also show a high
+amount of explained variability, suggesting high-level regulation rather than
+high stochasticity. Through computational multiplexing, we uncover the existence
+of multilevel transcript homeostasis in single cells to achieve specific
+adaptation of transcript abundance to the cellular state and microenvironment,
+according to function of the proteins they encode. Finally, we show that the
+mammalian nucleus acts as a potent and global buffer to stochastic fluctuations
+arising from bursts in gene transcription by temporally retaining transcripts
+in the nucleus. This explains how cytoplasmic transcript abundance in mammalian
+cells can be minimally stochastic, while deterministic variation is maintained.
 
 % ML for detection ?
 ~\cite{khater_caveolae_2019}
