@@ -50,6 +50,7 @@ The noise can be highly heterogeneous and vary between images and even cells.\\
 \noindent
 We can observe two types of noise:
 \begin{itemize}
+	\setlength\itemsep{0.1em}
 	\item At the \ac{FoV} level, the noise from the optical setup itself and the experimental conditions.
 	\item At the cellular level, the difference in the autofluorescence of the observed samples.
 \end{itemize}
@@ -261,6 +262,7 @@ The latter detect the potential clusters and decompose them at the same time.
 In the former we handle high spot density regions in two independent steps:
 
 \begin{itemize}
+	\setlength\itemsep{0.1em}
 	\item We identify potential dense regions, then we decompose them in individual spots (mostly re-using the method from the first FISH-quant version).
 	This step increases the number of detected spots in the image (see figure~\ref{fig:dense_decomposition}).
 	\item We detect cluster of \ac{RNA}s by applying a clustering algorithm to the \ac{RNA} point cloud.
