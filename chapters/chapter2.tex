@@ -147,7 +147,7 @@ We now describe at depth the algorithms currently implemented in \emph{bigfish.d
 \subsection{Spot detection}
 \label{subsec:spot_detection}
 
-The method we use is directly adapted from the original version of FISH-quant\cite{mueller_fish-quant_2013} and the blob detection algorithms\cite{walt_scikit-image_2014}.
+The method we use is directly adapted from the original version of FISH-quant~\cite{mueller_fish-quant_2013} and the blob detection algorithms~\cite{walt_scikit-image_2014}.
 Detection is performed in 2D or 3D. Image is filtered in order to increase its \ac{SNR}, then each spot is defined as a local maximum above a specific threshold.
 
 \subsubsection{Filtering}
@@ -255,9 +255,9 @@ When spots are agglomerated, their shapes can't be resolved.
 In addition, detection methods based on quick and sharp changes it term of pixel intensity might fails to detect a spot in a bright and uniform region.
 In practice, an accumulation of spots looks like a large and bright fluorescent region where our detection will underestimate the number of individual spots.
 
-Using a different (and larger) scale, a blob detection algorithm\cite{walt_scikit-image_2014} might help to detect the cluster as a bigger spot.
+Using a different (and larger) scale, a blob detection algorithm~\cite{walt_scikit-image_2014} might help to detect the cluster as a bigger spot.
 However such method does not allow to decompose the cluster in individual spots.
-In \emph{bigfish.detection} we adapt the solution proposed in MATLAB FISH-quant\cite{mueller_fish-quant_2013}.
+In \emph{bigfish.detection} we adapt the solution proposed in MATLAB FISH-quant~\cite{mueller_fish-quant_2013}.
 The latter detect the potential clusters and decompose them at the same time.
 In the former we handle high spot density regions in two independent steps:
 
@@ -290,7 +290,7 @@ We expect these regions to be brighter than individual spots, so they should at 
 
 A second criterion is the size of the regions.
 They should be larger than an individual spot.
-To match these criteria, we first threshold the denoised image with the median spot intensity, then we apply a connected component algorithm\cite{wu_connected_component_2005} to the binary mask obtained.
+To match these criteria, we first threshold the denoised image with the median spot intensity, then we apply a connected component algorithm~\cite{wu_connected_component_2005} to the binary mask obtained.
 Each group of connected pixels represent a region.
 Because the mask is the result of a thresholding above the median spot signal, every region (or connected component) with at least 2 pixels are larger and brighter than the individual median spot.
 
@@ -326,7 +326,7 @@ with $\hat{f}(x, y)$ the simulated image intensity and $f(x, y)$ the denoised on
 The second independent step is the clustering itself.
 Once we detect a \ac{RNA} point cloud, with or without the decomposition step, we look for \ac{RNA} clusters.
 
-To this end we use a DBSCAN algorithm\cite{ester_density-based_1996, scikit-learn}.
+To this end we use a DBSCAN algorithm~\cite{ester_density-based_1996, scikit-learn}.
 Two parameters need to be set: a minimum number of spots $k$ and a threshold distance $d$.
 Every pair of \ac{RNA}s closer than $d$ are connected.
 If a \ac{RNA} is connected to at least $k$ neighbors \ac{RNA}, it's a \emph{core sample} and with its connections it defines a cluster.
@@ -359,7 +359,7 @@ spots_post_clustering, clusters = detection.detect_clusters(
 \subsection{Going beyond pixel accuracy}
 \label{subsec:subpixel}
 
-Two additional methods already present in the first version of FISH-quant\cite{mueller_fish-quant_2013} have been implemented in \emph{bigfish} as it is.
+Two additional methods already present in the first version of FISH-quant~\cite{mueller_fish-quant_2013} have been implemented in \emph{bigfish} as it is.
 
 \subsubsection{Subpixel fitting}
 
@@ -396,11 +396,11 @@ spots_subpixel = detection.fit_subpixel(
 \end{wrapfigure}
 
 Another method requested by the community is the possibility to detect adjacent spots in different channels then match their coordinates.
-Our implementation is based on the one developed in the recent work from\cite{CORNES_2022}.
+Our implementation is based on the one developed in the recent work from~\cite{CORNES_2022}.
 This could be the same \ac{RNA} detected with two different fluorescent probes or techniques.
 As an example, in the Figure~\ref{fig:elbow_colocalization}, we detect colocalized spots between a sample of spots detected with a pixel accuracy and the same sample with a subpixel accuracy.
 
-First we compute the euclidean distance matrix between the two sets of spot coordinates, then we solve a linear sum assignment problem\cite{crouse_linear_assignment_2016, 2020SciPy-NMeth}.
+First we compute the euclidean distance matrix between the two sets of spot coordinates, then we solve a linear sum assignment problem~\cite{crouse_linear_assignment_2016, 2020SciPy-NMeth}.
 We obtain an matching between the two sets of spots, for each spots, that minimize the overall euclidean distance between assigned pairs.
 Finally, we only keep pairs with a distance below a specific threshold.
 The Figure~\ref{fig:elbow_colocalization} illustrates the impact of the threshold parameter on the number of colocalized spots.
