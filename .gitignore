@@ -14,7 +14,7 @@ external_ressources/
 *.gz
 *.lot
 *.toc
-*.pdf
+main.pdf
 *.bbl
 *.blg
 reports.tex
