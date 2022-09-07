@@ -9,14 +9,16 @@
 \minitoc
 \newpage
 
-In this chapter we review different techniques for spot detection.
-Even though the problem is not new, and has been largely addressed by different scientific communities, none of the suggested methods really meet the requirements of a high content screening analysis with \ac{FISH} experiments.
 
-The second part of this chapter therefore describe our own implementation in \mbox{\emph{bigfish.detection}}.
-We try to answer specific limitations of existing solutions, especially the possibility to scale the detection.
-As an example, we also add a code snippet at the end of each step.
+In smFISH images, RNA molecules appear as diffraction limited spots, and for this reason, the detection of individual RNA molecules boils down to spot detection.
+%Here, we review different techniques for spot detection.
+The problem of spot detection has been largely addressed by different scientific communities; I will therefore start by reviewing different techniques aiming at detecting spots in images. 
 
-Finally we evaluate the robustness and the accuracy of our implementation by simulating spots under different noise conditions.
+I will then point to the shortcomings of existing algorithms when applied to High Content Screening by \ac{FISH} 
+and describe the solution I have developed and implemented in \mbox{\emph{bigfish.detection}}.
+%We try to answer specific limitations of existing solutions, especially the possibility to scale the detection.
+As an example, I also add a code snippet at the end of each step.
+Finally I evaluate robustness and accuracy of this implementation by applying the algorithm on simulated data under different noise conditions.
 
 \section{Spot detection as a signal processing problem}
 \label{sec:detection_introduction}
