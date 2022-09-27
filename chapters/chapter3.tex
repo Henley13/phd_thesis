@@ -40,6 +40,19 @@
 
 \section{Postprocessing}
 
+% bigfish.segmentation.remove_segmented_nuc
+
+First, I dilate the binary mask of the segmented nuclei.
+Second, in the original DAPI image, every pixels outside of the dilated mask are set to zero.
+This includes the background and the potentially missed nuclei.
+Third, I perform a morphological reconstruction of the missing nuclei by small dilation.
+This dilation is constrained by the original DAPI image.
+A pixel can't have a dilated value greater than its original intensity.
+This way, the background pixels keep a low intensity and the missed nuclei (brighter in the original image) are partially reconstructed by the dilation.
+The reconstructed image only differs from the original one where the nuclei have been missed.
+Fourth, I subtract the reconstructed image from the original one to get an approximate image of the missing nuclei.
+The latter is used to threshold a binary mask of the missing nuclei and ultimately extract their original pixel intensity from the original image.
+Lastly, I merge the masks obtained from the two rounds of segmentation.
 
 % related work (nucleaizer, mask rcnn, unet, single and two pass, coordinates and mask, cellpose, embedseg, Tissuenet)
 % related work (watershed, watershed-like model)

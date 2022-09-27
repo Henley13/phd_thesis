@@ -41,22 +41,54 @@ This last section mainly describes results presented in:
 \section{General pattern recognition}
 \label{sec:general_pattern_recognition}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+Our first large-scale application of the pipeline described in the previous chapters consists in classifying individual cells with one or several \ac{RNA} localization patterns.
+This work is published in~\cite{CHOUAIB_2020}.
 
 \subsection{Introduction}
 \label{subsec:introduction_general_pattern}
 
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
+
+% paper FQ2
+
+% In Chouaib et al. (2020), we performed a high-content screen in HeLa cells and analyzed 10,000 segmented cells.
+% FISH-quant v2 was used for spot detection, cell segmenta- tion and the computation of localization features
+% that al- lowed us to apply supervised and unsupervised machine learning to identify localization patterns and
+% classify single cells into predefined pattern classes. We observed several distinct mRNA localization patterns,
+% including RNA accu- mulating (i) in foci, (ii) in cytoplasmic protrusions, (iii) in the perinuclear area
+% (which could be subdivided in endo- somal, RE, Golgi and centrosome associate), (iv) forming a rim at the nuclear edge, or (v) inside the nucleus (Fig. 2).
+% Interestingly, automated classification done on a single-cell level revealed a high degree of
+% cell-to-cell het- erogeneity in RNA localization, with 10% to 80% of the cells displaying the
+% expected pattern depending on the RNA (Fig. 5A). In addition, for each pattern, only a fraction of
+% the mRNA appeared to localize, revealing a high degree of plasticity in RNA localization mechanisms.
+% This appears to be specific to cell lines as RNA localization in embryos is usually much more stereotyped.
+% We also quantified how translation inhibition affected RNA localization and found that most mRNAs localize in a
+% translation-dependent man- ner, which is unexpected (Fig. 5B). This also enabled us to discover translation factories,
+% small cytoplasmic structures where specific mRNAs accumulate to be translated.
+
 \subsection{Materials and methods}
 \label{subsec:materials_general_pattern}
 
+The quantitative pipeline used in this study and the existing work in FISH-quant V1 are the building blocks of FISH-quant V2.
+Therefore, the various methods presented here were not yet packaged in \emph{bigfish}, but Python packages that formed its foundation are already in used.
+This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_translation_factories_2020}}.
+
 \subsubsection{Experimental data}
+
+At first more than 500 genes have been manually analyzed to identify potential transcripts with non random localization patterns within the cell.
+In addition to different qualitative and manual observations performed over this dual \ac{RNA}-protein localization screen, we also develop a quantitative pipeline to systematically classify transcripts' localization patterns.
+To this end, I exploit a dataset of 526 \ac{FoV}s, combining DAPI and \ac{smFISH} channels as illustrated in Figure~\ref{fig:fov_racha}.
+The raw images stacks several 2D acquisitions to gather a 3D information of the \ac{FoV} with a z-spacing of 0.3μm.
+Acquisitions are performed with a Zeiss Axioimager Z1 widefield microscope or a Nikon Ti fluorescence microscope, on human cell lines HeLa.
+In total, this dataset is built from 57 independent experiments gathering observations from 27 different \ac{mRNA}s under different experimental conditions.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/chapter5/FoV_DYNLL2}
+    \includegraphics[width=\textwidth]{figures/chapter5/FoV_DYNLL2}
     \caption{Contrasted image with Dapi (\textit{left}) and smFISH (\textit{right}) channels.
+	Images are projected in 2D.
 	Targeted transcript is DYNLL2.
 	Plot build with \emph{bigfish}}
     \label{fig:fov_racha}
@@ -64,21 +96,62 @@ This last section mainly describes results presented in:
 
 \subsubsection{Semi-automated RNA detection}
 
-%Image Analysis and Quantifications
-%Nuclear segmentation was performed from the DAPI channel, cell segmentation from the autofluorescence of the actual smFISH im- age. Prior to segmentation, 3D images were projected to 2D images using maximal local focus values (Tsanov et al., 2016). Nuclei were segmented with a Deep Neural Network (Matterport implementation of the Mask R-CNN, He et al., 2017), trained on the Data Science Bowl 2018. Cells were segmented with a custom algorithm, based on prefiltering the 2D projected smiFISH image, followed by a watershed based method using nuclear regions as seeds. In case of poor results, segmentation was corrected manually. RNAs were detected with a Python implementation of FISH-quant (Mueller et al., 2013), by applying a local maximum detection on Lap- lacian of Gaussian (LoG) filtered images, and by decomposing larger agglomerations of spots using gaussian mixture models (Sa- macoits et al., 2018). The quantification of the number of mRNA per cell is shown in Figure S6D.
-%To analyze the percentage of mRNAs molecules in protrusions, we first detected protrusions by calculating the difference between the segmented cellular region and its opening with a size of 30. The percentage of RNAs detected in the residuum was then divided by the total number of cytoplasmic mRNAs. Enrichment values were calculated with respect to a uniform distribution of mRNAs molecules.
-%Foci were detected with the DBSCAN algorithm on the detected spots (Ester et al., 1996). We defined foci as sets of at least 5 points where for each point there is at least one other point closer than 350 nm that is also part of the focus. All foci overlapping the nuclear area in the projected 2D images were removed from the analysis. Percentages of RNA in foci were then calculated as number of RNA inside the cytoplasmic foci divided by the number of cytoplasmic RNAs.
+\ac{RNA} detection is performed with a Python implementation of FISH-quant v1~\cite{mueller_fish-quant_2013}.
+I apply a \ac{LoG} filter on the 3D \ac{smFISH} images, then a local maximum detection algorithm.
+However, a threshold value has to be set manually for every experiment to discriminate the actual spots from the noisy background blobs.
+Large agglomeration of spots are decomposed with a gaussian mixture model, following~\cite{samacoits_computational_2018}.
+Ultimately, \ac{RNA} clusters - namely foci - are detected with a DBSCAN algorithm~\cite{ester_density-based_1996} applied on the detected spots.
+According to the way a DBSCAN cluster samples, a foci is then defined as a set of at least 5 points where for each point there is at least one other point from the foci within a 350 nanometers distance.
+All foci overlapping the nuclear area in the projected 2D images are considered as a transcription site and removed from the analysis.
+Percentages of \ac{RNA} in foci are then calculated as number of \ac{RNA} inside the cytoplasmic foci divided by the number of cytoplasmic \ac{RNA}s.
+
+There are two main differences compared to the current detection methods implemented in FISH-quant and presented in Chapter~\ref{ch:chapter2}: a detection threshold has to be set manually and the decomposition of agglomerated spots has since been simplified.
 
 \subsubsection{Cell and nucleus segmentation}
 
+Nucleus segmentation is performed from the DAPI channel and cell segmentation from the cell autofluorescence in the \ac{smFISH} channel.
+Segmentation is performed in 2D for both nuclei and cells, thus 3D images are projected in two dimensions using their maximal local focus values~\cite{tsanov_smifish_2016}.
+
+Nuclei are segmented with NucleAIzer~\cite{hollandi_nucleaizer_2020}, a deep neural network pipeline trained with the annotations from the Data Science Bowl 2018 challenge\footnote{\url{https://www.kaggle.com/c/data-science-bowl-2018}}.
+This pipeline is based on a Mask R-CNN architecture~\cite{He_2017_ICCV}, with optionally a fine-tuning of the segmented boundaries with a U-Net model~\cite{Ronneberger_unet}.
+After a first round of segmentation, some nuclei are missing, so I remove the segmented nuclei from the DAPI channel and feed NucleAIzer with the remaining nuclei for a second round of segmentation.
+Removing the segmented nuclei from the original image implies some morphological mathematics techniques as described in Chapter~\ref{ch:chapter3}.
+This technique is now implemented in FISH-quant.
+
+Cells are segmented with a watershed algorithm using nuclei masks as seeds.
+A threshold value is set manually for every experiment to discriminate the cell surface from the background.
+In case of poor results, some segmentation masks are corrected manually.
+This is especially the case for transcript that tend to localize in cell protrusion.
+Indeed, such localization pattern is highly sensitive to the segmentation accuracy.
+
 \subsubsection{Binary classification models}
 
-%Automated Classification of RNA Localization Patterns
-%From the segmentation results and the spot locations, we filtered out cells with less than 30 mRNAs and then calculated the following features, which describe the spatial distribution of points inside the cell: (i) average mRNA distance to the cytoplasmic membrane (normalized to the value obtained under a uniform distribution); (ii) average mRNA distance to the nuclear membrane (normalized to the value obtained under a uniform distribution); (iii) proportion of RNA inside the nucleus; (iv) number of foci (detected as described above); (v) proportion of RNA inside foci; (vi) average foci distance to the cytoplasmic membrane (normalized to the value obtained under a uniform foci distribution); (vii) average foci distance to the nuclear membrane (normalized to the value obtained under a uni- form foci distribution); (viii) peripheral dispersion index, defined as the expectation of the squared point distance to the centroid of the cell; (ix) proportion of RNA inside protrusion (detected as described above); (x) number of mRNA within 515 nm from the nuclear membrane (normalized to the value obtained under a uniform distribution); (xi) number of RNA between 515 nm and 1030 nm from the nuclear membrane (normalized to the value obtained under a uniform distribution); (xii) number of RNA between 1030 nm and 1545 nm from the nuclear membrane (normalized to the value obtained under a uniform distribution); (xiii) number of RNA between 0 and 515 nm from the cytoplasmic membrane (normalized to the value obtained under a uniform distribution); (xiv)
-%number of RNA between 515 nm and 1030 nm from the cytoplasmic membrane (normalized to the value obtained under a uniform distribution); (xv) number of RNA between 1030 nm and 1545 nm from the cytoplasmic membrane (normalized to the value obtained under a uniform distribution).
-%In order to visually explore the structure in the data, we perform t-Distributed Stochastic Neighbor Embedding (t-SNE; Van der Maaten and Hinton, 2008). Perplexity was chosen to 30 according to their guidelines.
-%For manual annotation, we generated small panels with the original single cell images and the segmentation and RNA detection results. These images were then classified manually into different class corresponding to their localization patterns. The manual clas- sification result was then independently checked by several trained microscopists. The manual annotations were visualized in the t- SNE plot and used as a training set for training an automated classifier for the recognition of RNA localization patterns.
-%For supervised learning, we trained 5 binary Random Forest classifiers (Breiman, 2001), where the actual training set (320 to 750 cells) was composed of all the cells of one class and a subsampling of cells from the union of all other classes such that the imbalance was 1:5. This strategy is known as ‘‘one vs. all’’. Importantly, the classifiers were independent, and for this reason allowed to assign several patterns to the same cell. Training parameters were 100 trees with a maximum depth of 3 and a minimum number of samples per splitter node of 2. For each split, we consider a subset of 10 features and entropy criterion. Percentages were then calculated and visualized in a heatmap. P-values were calculated with Fisher’s exact test (see code in GitHub for details). For the single-gene heat- map visualizations, we assigned to each cell a vector of classification probabilities. Note that the vectors do not sum to one because classifiers are independent. The classification vectors were then hierarchically clustered using Average method with Euclidean dis- tance. All visualizations were done with Matplotlib. The code was written in Python and together with the preprocessed image data is accessible at GitHub (https://github.com/Henley13/paper_translation_factories_2020). For t-SNE and Random Forests, we used the scikit-learn implementations (Pedregosa et al., 2011), and for basic image analysis scikit-image (Van Der Walt et al., 2014). All the pattern quantifications were done using the random forest classifiers except for Figures 4B, 5D, 6E, 7E, and 7F, where cells were manually annotated to assign them a pattern type. Statistical details are given in the Figure legends (Figures 4B, 5D, 6E, 7E, and 7F) or with the code at GitHub.
+Based on the segmentation masks and the coordinates of the detected spots, I identify 9710 individual cells with an average of 346 \ac{RNA}s per cell.
+For each cell, I collect the cell and nucleus masks in 2D, the \ac{RNA} and the potential clusters coordinates in 3D.
+In addition I save an image of the cell, for visualization purpose, and different information about the experiment (the presence of a treatment, the targeted gene, etc.).
+Cropped cells, empty cells or cells with less than 30 \ac{RNA} detected inside are removed.
+At this point, I have a coordinate representation of every cell, as presented in Chapter~\ref{ch:chapter4}.
+
+I design and compute a set of 15 features to describe the spatial distribution of points inside the cell:
+\begin{itemize}
+	\setlength\itemsep{0.1em}
+	\item The number of foci.
+	\item The proportion of \ac{RNA} inside foci.
+	\item The proportion of \ac{RNA} inside the nucleus.
+	\item The average \ac{RNA} distance to the cell membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The average \ac{RNA} distance to the nucleus membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The average foci distance to the cell membrane, normalized by the value obtained under a uniform foci distribution.
+	\item The average foci distance to the nucleus membrane, normalized by the value obtained under a uniform foci distribution.
+	\item The proportion of \ac{RNA} inside cell protrusion.
+	A protrusion region is defined by calculating the difference between the segmented cellular region and its morphological opening with a large window.
+	\item The peripheral dispersion index, defined as the squared point distance to the centroid of the cell and normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The number of \ac{RNA}s within 515 nm from the nucleus membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The number of \ac{RNA}s between 515 nm and 1030 nm from the nucleus membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The number of \ac{RNA}s between 1030 nm and 1545 nm from the nucleus membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The number of \ac{RNA}s between 0 nm and 515 nm from the cell membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The number of \ac{RNA}s between 515 nm and 1030 nm from the cell membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+	\item The number of \ac{RNA}s between 1030 nm and 1545 nm from the cell membrane, normalized by the value obtained under a uniform \ac{RNA} distribution.
+\end{itemize}
 
 \begin{figure}[h]
 	\centering
@@ -108,8 +181,135 @@ This last section mainly describes results presented in:
 	\label{fig:localization_patterns_racha_features}
 \end{figure}
 
+The apparent precision of the nanometer distances is just an artifact as the concentric regions are delimited visually from a sample of cell images.
+Therefore, the width of these regions are defined in pixels, more precisely, with a 5 pixels width and a pixel size of 103 nm.
+I use these hand-crafted features to train several binary classifiers, one for each localization pattern we want to recognize.
+Five specific localization patterns are defined - foci, intranuclear, nuclear edge, perinuclear, protrusion - and the random pattern is considered as a default one.
+Figure~\ref{fig:localization_patterns_racha_features} illustrates an example of these patterns with a coordinate representation.
+
+To train the classifiers, manual annotations are needed as a ground truth.
+I generate panels with the cropped original image of the individual cells and their coordinate representations.
+These panels are then manually tag with the appropriate localization pattern.
+The manual classification result has been independently checked by several trained microscopists.
+Ultimately, I end up with 810 annotated cells.
+Counts of the annotations are presented in Table~\ref{table:real_dataset_chapter5}.
+
+\begin{wraptable}{R}{0.50\textwidth}
+	\centering
+	\begin{tabular}{| c | c |}
+		\hline
+		Pattern & \# of cells \\
+		\hline
+		Random & 372\\
+		Foci & 198\\
+		Intranuclear & 73\\
+		Nuclear edge & 87\\
+		Perinuclear & 64\\
+		Protrusion & 83\\
+		\hline
+	\end{tabular}
+	\caption{Annotated cells}
+	\label{table:real_dataset_chapter5}
+\end{wraptable}
+
+I define a supervised learning problem with the training of 5 independent binary Random Forest classifiers~\cite{breiman_random_2001}.
+The choice to design the problem as several binary ones instead of one multi-class problem allows me to define the localization patterns as non mutually exclusives.
+Indeed, an individual cell can display several patterns at the same time, like \ac{RNA} clusters (foci) localizing around the nuclear membrane (nuclear edge).
+For each model, I build a training set including all the cells of one class and a subsampling of cells from others classes, such that the imbalance is 1:5 for the positive class.
+This is a ''one vs.\ all'' training strategy.
+Eventually, I exploit the \ac{OOB} error allowed by the random forest design.
+In such manner, the model can ''be fit in one sequence, with cross-validation being performed along the way.''~\cite{hastie_elements_2009}.
+Random forest is an ensemble model of tree classifiers.
+Each tree is trained on a subsample of the observations and a subset of features.
+This ensembling framework makes random forest quite robust to overfitting.
+For every sample, an \ac{OOB} prediction can be computed using only the trees fitted without the sample.
+I initialize the random forests with 100 trees, a maximal depth of 3 and a minimum number of samples per splitter node of 2.
+During the training, for each split, I consider a subset of 10 features and entropy criterion.
+In addition, input dataset is rescaled to have zero mean and unit variance.
+
 \subsection{Results}
 \label{subsec:results_general_pattern}
+
+% results classification
+% results tsne
+% results heatmap
+% biological conclusions
+
+% paper racha
+
+% We recently developed a pipeline to analyze RNA localization in a quantitative
+% and unbiased manner (Samacoits et al., 2018; Fig- ure 3A). Here, we further extended and improved the pipeline.
+% In particular, unlike our previous approach, we now explicitly allow for pattern mixtures, i.e., each cell can belong to several cate- gories.
+% Our method first segments cells and nuclei, detects single RNA molecules, and
+% then calculates a series of features that describe the spatial properties of the RNA point cloud,
+% both with respect to inter-point distance distributions and the distance to landmarks,
+% here, the nuclear and cytoplasmic membranes (Fig- ure 3A; see details in STAR Methods).
+% These features are mostly invariant to RNA concentration, and they allow to use unsuper- vised or supervised approaches to classify each cell in a series of patterns.
+% For this analysis, we first generated a manually anno- tated dataset.
+% We selected several localized mRNAs together with several genes annotated as random (KIF20B, MYO18A, SYNE2, and PLEC),
+% and we then manually annotated individual cells falling into the different patterns (810 cells in total).
+% We then investigated the distributions of these annotated cells in the multi-dimensional feature space.
+% After reducing dimensionality with a t-SNE plot (Figure 3B), cells with different patterns were situated
+% in different regions of the embedded feature space. Moreover, cells with the same annotations clustered
+% in the same region whether they corresponded to the same gene or not. Thus, the features
+% captured key parameters of the localization pattern that recapitu- lated the manual annotations.
+% Next, we developed a pipeline able to assign multiple patterns to a single cell.
+% For this, we trained several random forest classi- fiers, each one recognizing one pattern
+% (‘‘protrusion,’’ ‘‘foci,’’ ‘‘nu- clear edge,’’ ‘‘perinuclear,’’ and ‘‘intranuclear’’),
+% reaching an average classification accuracy between 92% to 100% (see Fig- ure S6C).
+% We then analyzed all the cells of the different genes (9,710 cells and 27 genes).
+% To investigate the agreement between unsupervised and supervised analysis and to understand
+% the bio- logical signal corresponding to different regions of the t-SNE plot, we
+% determined the probabilities of cells to be in a particular pattern, using each of
+% the classifier, and plotted this probability on top of the t-SNE representation (Figure 3C).
+% Remarkably, cells with a high probability of a given pattern concentrated in the
+% same area of the t-SNE plot, thus, providing a direct interpretation of the regions
+% with respect to the localization pattern they represent (Fig- ure 3C).
+% This also indicated that the assignments of the classifiers were consistent with the manual annotations.
+% Finally, we analyzed RNA localization at the gene level. Individ- ual cells were
+% assigned to a pattern if the probability given by the random forest classifier for
+% that pattern was higher than 0.5. The fractions of cells in each pattern were then
+% represented in a heat- map, either directly (Figure S6E) or after filtering out
+% cases where the proportion of cells with localized mRNA was not statistically different
+% from that of the control random genes (Figure 3D, threshold: p value < 103).
+% There was a remarkable agreement between the automated and manual classification.
+% Except for FLNA and KIF5B, all the manual annotations were confirmed with high
+% degree of statistical significance (p value < 103). FLNA was the only mRNA
+% manually annotated as ‘‘cell edge,’’ and we decided not to study it further.
+% KIF5B indeed localized weakly in protrusions of HeLa cells (i.e., in a small number of cells),
+% although the localization pattern was nicely seen in neuronal cells (Figure S2B).
+% The other protrusion mRNAs were statistically different than the controls (p value < 103),
+% with 14% (DYNLL2) and up to 62% (RAB13) of the cells classified in that pattern.
+% The two genes manually annotated as ‘‘intranu- clear’’ had more than 55% of the cells assigned in that category.
+% Likewise, the two ‘‘nuclear edge’’ genes, ASPM and SPEN, had 50% and 55% of cells
+% in this category, respectively, while the ‘‘perinuclear’’ genes (AKAP1, AKAP9, AP1S2, ATP6A2, and HSP90B1)
+% ranged from 13% (HSP90B1) to 93% (AKAP9). The former value may seem low, but it is nevertheless highly statisti- cally significant (p value of 7.1015).
+% Also note that HSP90B1
+% mRNAs co-localized with their encoded proteins, providing further evidence that they are localized (see below).
+% For the pattern ‘‘foci,’’ the non-P-body genes (ASPM, BUB1, CTNNB1, and DYNC1H1)
+% had a high proportion of cells classified in that pattern (24% for BUB1 and up to 69% for ASPM)
+% and an average proportion of mRNA in foci varying from 9% (BUB1) to 28% (CTNNB1; Figure S6B).
+% In contrast, the mRNAs accumulating in P-bodies had a comparatively smaller fraction of
+% cells classi- fied in the ‘‘foci’’ pattern (7% to 31%), as well as a smaller frac- tion
+% of the mRNAs in foci (2% to 15%). Note that our estimation of the fraction of mRNA in
+% foci correspond to a lower bound because we only counted groups of molecules where each molecule was closer than 350 nm to the group, while foci can be larger.
+% Nevertheless, and taking into account our stringent cri- terion, our quantification was in the
+% lower range of previously re- ported quantifications of P-body mRNAs (10%–20% of the total mRNAs; Pillai et al., 2005; Hubstenberger et al., 2017).
+% When comparing individual cells, the quantifications indicated that RNA localization
+% can be highly variable even for the same mRNA. For instance, the fraction of CTNNB1 mRNA
+% in foci varied from 0% to more than 60%. To analyze this phenomenon in more details,
+% we plotted the cells of each single gene on t-SNE plots (Figure S7), and we also
+% generated heatmaps depicting the probabilities of the different patterns for all the individual cells (Figures 3E and S7).
+% This provided a very detailed view of RNA localization at the level of single cells.
+% It confirmed the intercel- lular variability of RNA localization as cells of a given
+% gene were dispersed of the t-SNE plot, although an accumulation in the expected area of the plot was visible (Figure S7).
+% Likewise, the pattern probabilities varied greatly from cell to cell (Figure S7).
+% It was also apparent that a large number of cells had several pat- terns simultaneously.
+% In particular, many DYNC1H1 cells were classified as both ‘‘perinuclear’’ and ‘‘foci,’’
+% and many ASPM cells were both ‘‘nuclear edge’’ and ‘‘foci’’ (in agreement with the manual annotations).
+% Likewise, MYH3 cells were frequently ‘‘intranuclear’’ and ‘‘protrusion.’’
+% In conclusion, this quantitative analysis corroborated the manual annotations and revealed a high degree of heterogeneity of RNA localization across different cells.
+% This heterogeneity is a general phenomenon since it is seen with nearly all the genes analyzed here.
 
 \subsubsection{Unsupervised visualization}
 
@@ -123,15 +323,14 @@ This last section mainly describes results presented in:
     \label{fig:tsne_annotation_racha}
 \end{figure}
 
-\subsubsection{Gene aggregated results}
+% Automated Classification of RNA Localization Patterns
+% paper racha
+~\cite{vandermaaten_2008}
 
-\begin{wrapfigure}{L}{0.50\textwidth}
-	\begin{center}
-	\includegraphics[width=\linewidth]{figures/chapter5/heatmap_racha}
-    \caption{Heat map from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern}
-	\label{fig:heatmap_racha_2}
-	\end{center}
-\end{wrapfigure}
+%In order to visually explore the structure in the data, we perform t-Distributed Stochastic Neighbor Embedding (t-SNE; Van der Maaten and Hinton, 2008).
+Perplexity was chosen to 30 according to their guidelines.
+
+% reports first year
 
 %3.4 Unsupervised visualization
 %Another part of our work concerns the representation of thousands of cells
@@ -153,6 +352,29 @@ This last section mainly describes results presented in:
 %time CEP192 mRNAs are kept inside the nucleus, they are periodically released
 %in the cytoplasm.
 
+\subsubsection{Gene aggregated results}
+
+\begin{wrapfigure}{L}{0.50\textwidth}
+	\begin{center}
+	\includegraphics[width=\linewidth]{figures/chapter5/heatmap_racha}
+    \caption{Heat map from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern}
+	\label{fig:heatmap_racha_2}
+	\end{center}
+\end{wrapfigure}
+
+% racha paper
+% heatmap
+% Percentages were then calculated and visualized in a heatmap.
+% P-values were calculated with Fisher’s exact test (see code in GitHub for details).
+% For the single-gene heat- map visualizations, we assigned to each cell a vector of classification probabilities.
+% Note that the vectors do not sum to one because classifiers are independent.
+% The classification vectors were then hierarchically clustered using Average method with Euclidean dis- tance.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Translation factories}
 \label{sec:translation_factories}
 
@@ -166,12 +388,46 @@ This last section mainly describes results presented in:
 \subsection{Materials and methods}
 \label{subsec:materials_translation_factories}
 
+% paper Racha
+
+% To measure the degree of spatial overlap between mRNA (by smFISH) and protein
+% (by the GFP fluorescence), we calculated an enrichment ratio. Cells and nuclei
+% were outlined manually in 2D based on the GFP and DAPI image, respectively.
+% The subsequent analysis was restricted to the cytoplasm. FISH-quant was used
+% to detect mRNAs in 3D and each cell was post-processed separately.
+% First, we calculated the median pixel intensity in the GFP image at the identified RNA positions.
+% Second, we estimated a normalization factor as the median GFP intensity of the outlined cytoplasm within the z-range of the detected mRNAs.
+% The enrichment ratio was then estimated as the ratio of the median GFP intensity at the RNA positions divided by the mean cytoplasmic GFP intensity.
+
 \subsubsection{Puromycin drug}
 
 \subsubsection{Cluster detection}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/translation_factory}
+    \caption{Colocalization between the DYNC1H1 transcript and its nascent protein, from~\cite{pichon_visualization_2016}.
+	Transcripts and proteins are targeted with smFISH probes (\textit{Left}) and SunTag (\textit{Right}) respectively.
+	\textit{Scale bar} is 10μm}
+    \label{fig:translation_factory}
+\end{figure}
+
 \subsection{Results}
 \label{subsec:results_translation_factories}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/plot_puromycin}
+    \caption{Impact of treatment with translational inhibitor puromycin on the number of detected RNA clusters}
+    \label{fig:plot_puromycin}
+\end{figure}
+
+% paper fq2
+% HMMR shows a similar number of clusters, while all other genes have significantly fewer, indicating an implication of translation in cluster formation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Centrosomal pattern}
 \label{sec:centrosomal}
@@ -183,10 +439,29 @@ This last section mainly describes results presented in:
 \subsection{Introduction}
 \label{subsec:introduction_centrosomal}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/centrosomes}
+    \caption{Contrasted image with detected RNAs on a smFISH channel (\textit{left}) and detected centrosome on a GFP channel (\textit{right}).
+	Targeted transcript is BICD2.
+	Plot build with \emph{bigfish}}
+    \label{fig:centrosomes}
+\end{figure}
+
 \subsection{Materials and methods}
 \label{subsec:materials_centrosomal}
 
 \subsubsection{Experimental data}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/FoV_BICD2}
+    \caption{Contrasted image with CellMask\textsuperscript{\texttrademark} (\textit{left}), smFISH (\textit{center}) and GFP (\textit{right}) channels.
+	Targeted transcript is BICD2.
+	Images are projected in 2D.
+	Plot build with \emph{bigfish}}
+    \label{fig:fov_adham}
+\end{figure}
 
 \subsubsection{Centrosome detection}
 
@@ -197,7 +472,30 @@ This last section mainly describes results presented in:
 
 \subsubsection{Centrosomal mRNAs}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/plot_rna_centrosome}
+    \caption{Box plot with the proportion of centrosomal mRNAs in cells, for different genes and treatments.
+	The \textit{whiskers} equal 1.5 the interquartile range.
+	HMMR (in \textit{gray}) is an endogenous centrosomal mRNAs, the rest are BAC-transcribed mRNAs.
+	A one-sided Welch’s t test is used to evaluate significance}
+    \label{fig:plot_rna_centrosome}
+\end{figure}
+
+% Box plots depicting the proportion of centrosomal mRNAs in cells (interphase and mitotic),
+% for the indicated mRNAs and cell treatments. Values were computed for each cell and the
+% number of cells analyzed is indicated. The distribution of the values is depicted in the boxed plot.
+% The colored area corresponds to the second and third quartiles, the mean to the black vertical bar,
+% and the median to the red diamond. The whiskers equal 1.5 the interquartile range.
+% The right graph represents endogenous centrosomal mRNAs, while the left one represents
+% BAC-transcribed mRNAs. Significance was evaluated with a one-sided Welch’s t test.
+% ***: null hypothesis rejected with a 0.1% significance level, and -: null hypothesis not rejected.
+
 \subsubsection{Influence of mitosis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Protrusion pattern}
 \label{sec:protrusion}
