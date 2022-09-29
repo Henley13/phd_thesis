@@ -194,7 +194,7 @@ The manual classification result has been independently checked by several train
 Ultimately, I end up with 810 annotated cells.
 Counts of the annotations are presented in Table~\ref{table:real_dataset_chapter5}.
 
-\begin{wraptable}{R}{0.50\textwidth}
+\begin{wraptable}{L}{0.50\textwidth}
 	\centering
 	\begin{tabular}{| c | c |}
 		\hline
@@ -212,10 +212,15 @@ Counts of the annotations are presented in Table~\ref{table:real_dataset_chapter
 	\label{table:real_dataset_chapter5}
 \end{wraptable}
 
-I define a supervised learning problem with the training of 5 independent binary Random Forest classifiers~\cite{breiman_random_2001}.
+One way to evaluate how relevant is the feature space is to investigate the distribution of the annotated cells within it.
+To do so, I reduce the dimensionality with a \ac{t-SNE} transformation~\cite{vandermaaten_2008} in order to visualize the features point cloud.
+From the multi-dimensional feature space, I obtain a 2D vector representation I can plot.
+In term of setting, I initialize the \ac{t-SNE} with a PCA transformation first and use a perplexity value of 30.
+
+I also define a supervised learning problem with the training of 5 independent binary Random Forest classifiers~\cite{breiman_random_2001}.
 The choice to design the problem as several binary ones instead of one multi-class problem allows me to define the localization patterns as non mutually exclusives.
 Indeed, an individual cell can display several patterns at the same time, like \ac{RNA} clusters (foci) localizing around the nuclear membrane (nuclear edge).
-For each model, I build a training set including all the cells of one class and a subsampling of cells from others classes, such that the imbalance is 1:5 for the positive class.
+For each model, I build a training set including all the cells of one class and a subsampling of cells from others classes, such that the imbalance is 1:4 for the positive class.
 This is a ''one vs.\ all'' training strategy.
 Eventually, I exploit the \ac{OOB} error allowed by the random forest design.
 In such manner, the model can ''be fit in one sequence, with cross-validation being performed along the way.''~\cite{hastie_elements_2009}.
@@ -230,33 +235,103 @@ In addition, input dataset is rescaled to have zero mean and unit variance.
 \subsection{Results}
 \label{subsec:results_general_pattern}
 
-% results classification
-% results tsne
+Thanks to their design or their normalization, the spatial features selected are mostly invariant to \ac{RNA} concentration.
+They allow the use of unsupervised or supervised methods to classify cells among several localization patterns.
+
+\subsubsection{Unsupervised visualization}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/tsne_annotation_legend}
+    \caption{t-SNE embedding from~\cite{CHOUAIB_2020}.
+	Each point is a cell in the feature space after a t-SNE transformation.
+	Manually annotated cells are colored according to their localization pattern.
+	Cells that were not annotated or that had multiple patterns are colored in gray}
+    \label{fig:tsne_annotation_racha}
+\end{figure}
+
+The resulting embedding from the \ac{t-SNE} algorithm can be observed in Figure~\ref{fig:tsne_annotation_racha}.
+Cells with different patterns are localized in different regions of the embedded feature space.
+Moreover, cells with the same annotations clustered in the same regions whether they correspond to the same gene or not.
+With these observations it seems the hand-crafted features capture key information of the localization patterns and summarize well the manual annotations.
+
+Initialized with a PCA transformation, a \ac{t-SNE} algorithm preserves better the global structure, thus allowing more relevant global interpretation.
+In particular, we can discriminate on the top a large cluster of cells with a potential foci pattern from the rest of the cell population.
+The resulting embedding also seems to polarize between nucleus-related patterns (bottom left) and the cell-related patterns (top right).
+This polarization remains even among the subpopulation with potential foci pattern.
+Such conclusion validates the design to let a cell being classified with several non-exclusive localization patterns.
+Indeed, a foci can be localized in a relevant subcellular compartment.
+
+\subsubsection{Gene aggregated classifications}
+
 % results heatmap
 % biological conclusions
+% add an appendix with tsne plot colored with random forest probabilities?
 
-% paper racha
+Not surprisingly, a feature space that discriminates well between classes also performs well when fed into a robust random forest classifier.
+The \ac{OOB} accuracy score obtained for the different patterns is between 0.93 and 0.99, while a dummy classifier would return a 0.8 accuracy score (the dataset is built with 20\% positive samples).
+The intranuclear pattern is the easiest to recognize.
+In fact, it could be predicted by just thresholding the proportion of \ac{RNA} inside nucleus (almost all intranuclear cells have more than 80\% of their\ac{RNA}s that localize inside the nucleus).
+On the opposite, the nuclear edge and perinuclear patterns are the most difficult to classify due to possible confusion with a random pattern or the lake of annotated cells.
 
-% We recently developed a pipeline to analyze RNA localization in a quantitative
-% and unbiased manner (Samacoits et al., 2018; Fig- ure 3A). Here, we further extended and improved the pipeline.
-% In particular, unlike our previous approach, we now explicitly allow for pattern mixtures, i.e., each cell can belong to several cate- gories.
-% Our method first segments cells and nuclei, detects single RNA molecules, and
-% then calculates a series of features that describe the spatial properties of the RNA point cloud,
-% both with respect to inter-point distance distributions and the distance to landmarks,
-% here, the nuclear and cytoplasmic membranes (Fig- ure 3A; see details in STAR Methods).
-% These features are mostly invariant to RNA concentration, and they allow to use unsuper- vised or supervised approaches to classify each cell in a series of patterns.
-% For this analysis, we first generated a manually anno- tated dataset.
-% We selected several localized mRNAs together with several genes annotated as random (KIF20B, MYO18A, SYNE2, and PLEC),
-% and we then manually annotated individual cells falling into the different patterns (810 cells in total).
-% We then investigated the distributions of these annotated cells in the multi-dimensional feature space.
-% After reducing dimensionality with a t-SNE plot (Figure 3B), cells with different patterns were situated
-% in different regions of the embedded feature space. Moreover, cells with the same annotations clustered
-% in the same region whether they corresponded to the same gene or not. Thus, the features
-% captured key parameters of the localization pattern that recapitu- lated the manual annotations.
+\begin{wraptable}{R}{0.50\textwidth}
+	\centering
+	\begin{tabular}{| c | c |}
+		\hline
+		Pattern & Accuracy score\\
+		\hline
+		Random & -\\
+		Foci & 0.95\\
+		Intranuclear & 0.99\\
+		Nuclear edge & 0.93\\
+		Perinuclear & 0.93\\
+		Protrusion & 0.94\\
+		\hline
+		\textit{Dummy classifier} & \textit{0.80}\\
+		\hline
+	\end{tabular}
+	\caption{Random forest accuracy (OOB)}
+	\label{table:accuracy_oob}
+\end{wraptable}
+
+For each cell, I can compute 5 binary predictions, one per pattern.
+If no pattern is detected, cell is classified as random.
+
+
+
+
+
+
+\begin{wrapfigure}{L}{0.40\textwidth}
+	\begin{center}
+	\includegraphics[width=\linewidth]{figures/chapter5/heatmap_racha}
+    \caption{Heat map from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern}
+	\label{fig:heatmap_racha_2}
+	\end{center}
+\end{wrapfigure}
+
+% results heatmap
+
+
+
+
+% racha paper
+
+% heatmap p-value
+
+% Percentages were then calculated and visualized in a heatmap.
+% P-values were calculated with Fisher’s exact test (see code in GitHub for details).
+% For the single-gene heat- map visualizations, we assigned to each cell a vector of classification probabilities.
+% Note that the vectors do not sum to one because classifiers are independent.
+% The classification vectors were then hierarchically clustered using Average method with Euclidean dis- tance.
+
+% results classification & tsne
+
 % Next, we developed a pipeline able to assign multiple patterns to a single cell.
 % For this, we trained several random forest classi- fiers, each one recognizing one pattern
 % (‘‘protrusion,’’ ‘‘foci,’’ ‘‘nu- clear edge,’’ ‘‘perinuclear,’’ and ‘‘intranuclear’’),
 % reaching an average classification accuracy between 92% to 100% (see Fig- ure S6C).
+
 % We then analyzed all the cells of the different genes (9,710 cells and 27 genes).
 % To investigate the agreement between unsupervised and supervised analysis and to understand
 % the bio- logical signal corresponding to different regions of the t-SNE plot, we
@@ -266,6 +341,16 @@ In addition, input dataset is rescaled to have zero mean and unit variance.
 % same area of the t-SNE plot, thus, providing a direct interpretation of the regions
 % with respect to the localization pattern they represent (Fig- ure 3C).
 % This also indicated that the assignments of the classifiers were consistent with the manual annotations.
+
+% random
+
+% For this analysis, we first generated a manually anno- tated dataset.
+% We selected several localized mRNAs together with several genes annotated as random (KIF20B, MYO18A, SYNE2, and PLEC),
+% and we then manually annotated individual cells falling into the different patterns (810 cells in total).
+
+
+% heatmap
+
 % Finally, we analyzed RNA localization at the gene level. Individ- ual cells were
 % assigned to a pattern if the probability given by the random forest classifier for
 % that pattern was higher than 0.5. The fractions of cells in each pattern were then
@@ -311,65 +396,6 @@ In addition, input dataset is rescaled to have zero mean and unit variance.
 % In conclusion, this quantitative analysis corroborated the manual annotations and revealed a high degree of heterogeneity of RNA localization across different cells.
 % This heterogeneity is a general phenomenon since it is seen with nearly all the genes analyzed here.
 
-\subsubsection{Unsupervised visualization}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter5/tsne_annotation_legend}
-    \caption{t-SNE embedding from~\cite{CHOUAIB_2020}.
-	Each point is a cell in the feature space after a t-SNE transformation.
-	Manually annotated cells are colored according to their localization pattern.
-	Cells that were not annotated or that had multiple patterns are colored in gray}
-    \label{fig:tsne_annotation_racha}
-\end{figure}
-
-% Automated Classification of RNA Localization Patterns
-% paper racha
-~\cite{vandermaaten_2008}
-
-%In order to visually explore the structure in the data, we perform t-Distributed Stochastic Neighbor Embedding (t-SNE; Van der Maaten and Hinton, 2008).
-Perplexity was chosen to 30 according to their guidelines.
-
-% reports first year
-
-%3.4 Unsupervised visualization
-%Another part of our work concerns the representation of thousands of cells
-%based on localization features. We adopt an unsupervised approach. From the
-%hand-crafted features or those built automatically by the neural network, we
-%have a representation of each cell in a multidimensional point cloud. We use
-%a t-distributed stochastic neighbour embedding (t-SNE) [38] to get a 2-dimensional
-%projection of such a point cloud. The algorithm computes the probability distribution
-%relative to the similarities of different observations in our high-dimensional
-%space and the same probability distribution for observations in a 2-dimensional
-%space. The 2-dimensional projection which minimizes the KL-divergence between
-%both distributions is returned. Figure 13 is a 2-dimensional projection of the
-%high-dimensional vectors returned by the neural network we describe in the
-%previous section. The point cloud represents 4,000 real cells extracted from
-%experimental images. Some clusters appear, especially for the foci, nuclear
-%retention and extension patterns. Examples of relative input images are given
-%in the figure. Different genes can present the same pattern. On the contrary,
-%a same gene can present heterogeneous patterns. For example, if most of the
-%time CEP192 mRNAs are kept inside the nucleus, they are periodically released
-%in the cytoplasm.
-
-\subsubsection{Gene aggregated results}
-
-\begin{wrapfigure}{L}{0.50\textwidth}
-	\begin{center}
-	\includegraphics[width=\linewidth]{figures/chapter5/heatmap_racha}
-    \caption{Heat map from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern}
-	\label{fig:heatmap_racha_2}
-	\end{center}
-\end{wrapfigure}
-
-% racha paper
-% heatmap
-% Percentages were then calculated and visualized in a heatmap.
-% P-values were calculated with Fisher’s exact test (see code in GitHub for details).
-% For the single-gene heat- map visualizations, we assigned to each cell a vector of classification probabilities.
-% Note that the vectors do not sum to one because classifiers are independent.
-% The classification vectors were then hierarchically clustered using Average method with Euclidean dis- tance.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -378,12 +404,17 @@ Perplexity was chosen to 30 according to their guidelines.
 \section{Translation factories}
 \label{sec:translation_factories}
 
+
+
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
 
 \subsection{Introduction}
 \label{subsec:introduction_translation_factories}
+
+
+
 
 \subsection{Materials and methods}
 \label{subsec:materials_translation_factories}
@@ -402,6 +433,8 @@ Perplexity was chosen to 30 according to their guidelines.
 \subsubsection{Puromycin drug}
 
 \subsubsection{Cluster detection}
+
+% distinct  from the dense decomposition
 
 \begin{figure}[h]
     \centering
