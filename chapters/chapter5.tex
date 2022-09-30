@@ -126,7 +126,7 @@ Indeed, such localization pattern is highly sensitive to the segmentation accura
 
 \subsubsection{Binary classification models}
 
-Based on the segmentation masks and the coordinates of the detected spots, I identify 9710 individual cells with an average of 346 \ac{RNA}s per cell.
+Based on the segmentation masks and the coordinates of the detected spots, I identify 9,710 individual cells with an average of 346 \ac{RNA}s per cell.
 For each cell, I collect the cell and nucleus masks in 2D, the \ac{RNA} and the potential clusters coordinates in 3D.
 In addition I save an image of the cell, for visualization purpose, and different information about the experiment (the presence of a treatment, the targeted gene, etc.).
 Cropped cells, empty cells or cells with less than 30 \ac{RNA} detected inside are removed.
@@ -264,9 +264,9 @@ Indeed, a foci can be localized in a relevant subcellular compartment.
 
 \subsubsection{Gene aggregated classifications}
 
-% results heatmap
+% results heatmap (gene level)
+% reference to appendix (cell level and consistency unsupervised-supervised)
 % biological conclusions
-% add an appendix with tsne plot colored with random forest probabilities?
 
 Not surprisingly, a feature space that discriminates well between classes also performs well when fed into a robust random forest classifier.
 The \ac{OOB} accuracy score obtained for the different patterns is between 0.93 and 0.99, while a dummy classifier would return a 0.8 accuracy score (the dataset is built with 20\% positive samples).
@@ -296,11 +296,12 @@ On the opposite, the nuclear edge and perinuclear patterns are the most difficul
 
 For each cell, I can compute 5 binary predictions, one per pattern.
 If no pattern is detected, cell is classified as random.
-
-
-
-
-
+In total, I analyze 27 different genes through a population of 9,710 cells, with only one kind of transcript being targeted per cell.
+The number of cells identified per gene varies, thus predictions are aggregated at the gene level.
+This aggregation also facilitates the validation of biological insights and helps understanding the mechanism at stake for specific group of genes.
+For every gene, I compute the proportion of cells displaying each indicated localization pattern.
+Results are eventually reported in a heat map~\ref{fig:heatmap_racha_2}, for every gene and pattern.
+Importantly, row values does not sum to one because classifiers (and so columns predictions) are  independent.
 
 \begin{wrapfigure}{L}{0.40\textwidth}
 	\begin{center}
@@ -310,29 +311,36 @@ If no pattern is detected, cell is classified as random.
 	\end{center}
 \end{wrapfigure}
 
-% results heatmap
+We manually identify a group of random genes that can be used as a control group: KIF20B, MYO18A, SYNE2 and PLEC.
 
+FLNA transcripts are manually identified with a potential cell edge pattern.
+However, such localization is difficult to recognize with the quantitative pipeline, mostly because the pattern is visible in 3D while my cell segmentation, and the spatial features resulting from it, is in 2D.
+For these reason we do not study in depth this localization pattern.
 
+Therefore, it is possible, but not shown here, to perform statistical testing over the aggregated predictions.
+A Fisher's exact test can measure if the proportion of cells observed with a pattern is significantly greater thant the proportion observed with the control group.
 
+% p_bodies = ["AURKA", "AURKA_puro",
+% 			"HMMR", "HMMR_puro",
+% 			"CEP170P1", "CRKL", "PAK2"]
+% translation_factory = ["DYNC1H1", "DYNC1H1_puro",
+% 					   "BUB1", "BUB1_puro",
+% 					   "CTNNB1", "CTNNB1_puro"]
+% nuclear_edge = ["SPEN", "ASPM", "ASPM_puro"]
+% perinuclear = ["ATP6A2", "AP1S2", "AKAP9", "HSP90B1", "AKAP1"]
+% intranuclear = ["MYH3", "MYH3_puro", "CEP192"]
+% protrusion = ["KIF1C", "KIF1C_puro",
+% 			  "KIF4A", "KIF4A_puro",
+% 			  "RAB13", "KIF5B", "DYNLL2"]
+% random = ["KIF20B", "MYO18A", "MYSNE2", "PLEC", "FLNA"]
+
+%Figure~\ref{fig:tsne_proba_gene}
+%Figure~\ref{fig:heatmap_racha_cells}
 
 % racha paper
 
-% heatmap p-value
-
-% Percentages were then calculated and visualized in a heatmap.
-% P-values were calculated with Fisher’s exact test (see code in GitHub for details).
-% For the single-gene heat- map visualizations, we assigned to each cell a vector of classification probabilities.
-% Note that the vectors do not sum to one because classifiers are independent.
-% The classification vectors were then hierarchically clustered using Average method with Euclidean dis- tance.
-
 % results classification & tsne
 
-% Next, we developed a pipeline able to assign multiple patterns to a single cell.
-% For this, we trained several random forest classi- fiers, each one recognizing one pattern
-% (‘‘protrusion,’’ ‘‘foci,’’ ‘‘nu- clear edge,’’ ‘‘perinuclear,’’ and ‘‘intranuclear’’),
-% reaching an average classification accuracy between 92% to 100% (see Fig- ure S6C).
-
-% We then analyzed all the cells of the different genes (9,710 cells and 27 genes).
 % To investigate the agreement between unsupervised and supervised analysis and to understand
 % the bio- logical signal corresponding to different regions of the t-SNE plot, we
 % determined the probabilities of cells to be in a particular pattern, using each of
@@ -341,12 +349,6 @@ If no pattern is detected, cell is classified as random.
 % same area of the t-SNE plot, thus, providing a direct interpretation of the regions
 % with respect to the localization pattern they represent (Fig- ure 3C).
 % This also indicated that the assignments of the classifiers were consistent with the manual annotations.
-
-% random
-
-% For this analysis, we first generated a manually anno- tated dataset.
-% We selected several localized mRNAs together with several genes annotated as random (KIF20B, MYO18A, SYNE2, and PLEC),
-% and we then manually annotated individual cells falling into the different patterns (810 cells in total).
 
 
 % heatmap
@@ -404,17 +406,40 @@ If no pattern is detected, cell is classified as random.
 \section{Translation factories}
 \label{sec:translation_factories}
 
+A second important results unveiled in~\cite{CHOUAIB_2020} is the identification and the quantification of a cluster-based localization pattern we name \emph{translation factory}.
 
+\subsection{Introduction}
+\label{subsec:introduction_translation_factories}
 
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
 
-\subsection{Introduction}
-\label{subsec:introduction_translation_factories}
+% paper FQ2
 
+% In Chouaib et al. (2020), we performed a high-content screen in HeLa cells and analyzed 10,000 segmented cells.
+% FISH-quant v2 was used for spot detection, cell segmenta- tion and the computation of localization features
+% that al- lowed us to apply supervised and unsupervised machine learning to identify localization patterns and
+% classify single cells into predefined pattern classes. We observed several distinct mRNA localization patterns,
+% including RNA accu- mulating (i) in foci, (ii) in cytoplasmic protrusions, (iii) in the perinuclear area
+% (which could be subdivided in endo- somal, RE, Golgi and centrosome associate), (iv) forming a rim at the nuclear edge, or (v) inside the nucleus (Fig. 2).
+% Interestingly, automated classification done on a single-cell level revealed a high degree of
+% cell-to-cell het- erogeneity in RNA localization, with 10% to 80% of the cells displaying the
+% expected pattern depending on the RNA (Fig. 5A). In addition, for each pattern, only a fraction of
+% the mRNA appeared to localize, revealing a high degree of plasticity in RNA localization mechanisms.
+% This appears to be specific to cell lines as RNA localization in embryos is usually much more stereotyped.
+% We also quantified how translation inhibition affected RNA localization and found that most mRNAs localize in a
+% translation-dependent man- ner, which is unexpected (Fig. 5B). This also enabled us to discover translation factories,
+% small cytoplasmic structures where specific mRNAs accumulate to be translated.
 
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/translation_factory}
+    \caption{Colocalization between the DYNC1H1 transcript and its nascent protein, from~\cite{pichon_visualization_2016}.
+	Transcripts and proteins are targeted with smFISH probes (\textit{Left}) and SunTag (\textit{Right}) respectively.
+	\textit{Scale bar} is 10μm}
+    \label{fig:translation_factory}
+\end{figure}
 
 \subsection{Materials and methods}
 \label{subsec:materials_translation_factories}
@@ -435,15 +460,6 @@ If no pattern is detected, cell is classified as random.
 \subsubsection{Cluster detection}
 
 % distinct  from the dense decomposition
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter5/translation_factory}
-    \caption{Colocalization between the DYNC1H1 transcript and its nascent protein, from~\cite{pichon_visualization_2016}.
-	Transcripts and proteins are targeted with smFISH probes (\textit{Left}) and SunTag (\textit{Right}) respectively.
-	\textit{Scale bar} is 10μm}
-    \label{fig:translation_factory}
-\end{figure}
 
 \subsection{Results}
 \label{subsec:results_translation_factories}
