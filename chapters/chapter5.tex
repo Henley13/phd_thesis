@@ -2,7 +2,7 @@
 
 \graphicspath{{./figures/chapter5/}}
 
-\chapter{Transcript localization}
+\chapter{RNA localization by the numbers}
 \label{ch:chapter5}
 
 \minitoc
@@ -252,7 +252,7 @@ They allow the use of unsupervised or supervised methods to classify cells among
 
 The resulting embedding from the \ac{t-SNE} algorithm can be observed in Figure~\ref{fig:tsne_annotation_racha}.
 Cells with different patterns are localized in different regions of the embedded feature space.
-Moreover, cells with the same annotations clustered in the same regions whether they correspond to the same gene or not.
+Moreover, cells with the same annotations cluster in the same regions whether they correspond to the same gene or not.
 With these observations it seems the hand-crafted features capture key information of the localization patterns and summarize well the manual annotations.
 
 Initialized with a PCA transformation, a \ac{t-SNE} algorithm preserves better the global structure, thus allowing more relevant global interpretation.
@@ -263,10 +263,6 @@ Such conclusion validates the design to let a cell being classified with several
 Indeed, a foci can be localized in a relevant subcellular compartment.
 
 \subsubsection{Gene aggregated classifications}
-
-% results heatmap (gene level)
-% reference to appendix (cell level and consistency unsupervised-supervised)
-% biological conclusions
 
 Not surprisingly, a feature space that discriminates well between classes also performs well when fed into a robust random forest classifier.
 The \ac{OOB} accuracy score obtained for the different patterns is between 0.93 and 0.99, while a dummy classifier would return a 0.8 accuracy score (the dataset is built with 20\% positive samples).
@@ -295,118 +291,81 @@ On the opposite, the nuclear edge and perinuclear patterns are the most difficul
 \end{wraptable}
 
 For each cell, I can compute 5 binary predictions, one per pattern.
-If no pattern is detected, cell is classified as random.
+Individual cell is assigned to a pattern if the probability given by the random forest classifier for that pattern is higher than 0.5.
+If no pattern is detected, cell is classified with a random localization pattern.
 In total, I analyze 27 different genes through a population of 9,710 cells, with only one kind of transcript being targeted per cell.
 The number of cells identified per gene varies, thus predictions are aggregated at the gene level.
 This aggregation also facilitates the validation of biological insights and helps understanding the mechanism at stake for specific group of genes.
 For every gene, I compute the proportion of cells displaying each indicated localization pattern.
-Results are eventually reported in a heat map~\ref{fig:heatmap_racha_2}, for every gene and pattern.
-Importantly, row values does not sum to one because classifiers (and so columns predictions) are  independent.
+Results are eventually reported in a heat map~\ref{fig:heatmap_racha}, for every gene and pattern.
+Importantly, row values does not sum to one because classifiers (and so columns predictions) are independent.
 
-\begin{wrapfigure}{L}{0.40\textwidth}
-	\begin{center}
-	\includegraphics[width=\linewidth]{figures/chapter5/heatmap_racha}
-    \caption{Heat map from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern}
-	\label{fig:heatmap_racha_2}
-	\end{center}
-\end{wrapfigure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/heatmap_racha_2}
+    \caption{Heat maps from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern.
+	(\textit{Top heat map}) Genes whose RNAs shows a localization preference.
+	Only values significantly different from negative controls are colored (p-value computed with Fisher's exact test).
+	(\textit{Bottom heat map}) Negative control with genes whose RNAs localize randomly.
+	(\textit{Left bars}) Manual annotations of the genes are indicated with the same color scheme than Figure~\ref{fig:tsne_annotation_racha}}
+    \label{fig:heatmap_racha}
+\end{figure}
 
 We manually identify a group of random genes that can be used as a control group: KIF20B, MYO18A, SYNE2 and PLEC.
+Therefore, it is possible to perform statistical testing over the aggregated predictions.
+A Fisher's exact test can measure if the proportion of cells observed with a pattern is significantly greater than the proportion observed in the control group (with a $\text{p-value} < 10^{-3}$).
+Genes whose transcripts present a significant localization preference are reported in Figure~\ref{fig:heatmap_racha}.
 
+Overall, we observe consistent results with the manual annotations performed by the biologists (the colored annotations in the \ac{t-SNE} plot~\ref{fig:tsne_annotation_racha} and the vertical colored bars next to the heat map~\ref{fig:heatmap_racha}).
+The agreement between automated and manual classification holds with a high degree of statistical significance, except for FLNA and KIF5B.
 FLNA transcripts are manually identified with a potential cell edge pattern.
 However, such localization is difficult to recognize with the quantitative pipeline, mostly because the pattern is visible in 3D while my cell segmentation, and the spatial features resulting from it, is in 2D.
 For these reason we do not study in depth this localization pattern.
 
-Therefore, it is possible, but not shown here, to perform statistical testing over the aggregated predictions.
-A Fisher's exact test can measure if the proportion of cells observed with a pattern is significantly greater thant the proportion observed with the control group.
+Apart from KIF5B, others transcripts localizing in the protrusions are correctly identified: KIF1C, KIF4A, RAB13 and DYNLL2.
+The frequency of this pattern varies a lot, between 14\% and 62\% of cells classified, respectively for DYNLL2 and RAB13.
 
-% p_bodies = ["AURKA", "AURKA_puro",
-% 			"HMMR", "HMMR_puro",
-% 			"CEP170P1", "CRKL", "PAK2"]
-% translation_factory = ["DYNC1H1", "DYNC1H1_puro",
-% 					   "BUB1", "BUB1_puro",
-% 					   "CTNNB1", "CTNNB1_puro"]
-% nuclear_edge = ["SPEN", "ASPM", "ASPM_puro"]
-% perinuclear = ["ATP6A2", "AP1S2", "AKAP9", "HSP90B1", "AKAP1"]
-% intranuclear = ["MYH3", "MYH3_puro", "CEP192"]
-% protrusion = ["KIF1C", "KIF1C_puro",
-% 			  "KIF4A", "KIF4A_puro",
-% 			  "RAB13", "KIF5B", "DYNLL2"]
-% random = ["KIF20B", "MYO18A", "MYSNE2", "PLEC", "FLNA"]
+Intranuclear pattern is the most easily recognizable.
+More than 55\% of cells spotting MYH3 and CEP192 \ac{RNA}s show a
 
-%Figure~\ref{fig:tsne_proba_gene}
-%Figure~\ref{fig:heatmap_racha_cells}
+The two genes observed with a nuclear edge pattern, ASPM and SPEN, have 50\% and 55\% of cells identified with this localization, respectively.
 
-% racha paper
+Several genes are identified with \ac{RNA}s in the perinuclear area: AKAP1, AKAP9, AP1S2, ATP6A2, and HSP90B1.
+They ranged from 13\% (HSP90B1) to 93\% (AKAP9) of cells classify with said pattern.
+Even with a small number of cells HSP90B1 shows a significant perinuclear pattern compare to the control group.
+Such observation is consistent with previous biological information about this gene: it contains a signal peptide that leads the translation (and the subsequent protein) on the endoplasmic reticulum, resulting in a perinuclear pattern through a 2D \ac{smFISH} experiment.
+This also suggests that HSP90B1 transcript co-localizes with its protein.
 
-% results classification & tsne
+A large number of transcripts exhibit a cluster-like localization pattern we call foci.
+We classify them in two groups we detail in the next Section~\ref{sec:translation_factories}.
+The first group gathers transcripts accumulating in \ac{P-bodies}: AURKA, HMMR, CEP170P1, CRKL and PAK2.
+The second group includes ASPM, DYNC1H1, BUB1 and CTNNB1 transcripts, accumulating in non-\ac{P-bodies} clusters we call translation factories.
+It is noteworthy to mention that a number of genes exhibit foci with another localization preference in parallel like ASPM (nuclear edge), DYNC1H1, AP1S2, AKAP1, HSP90B1 (perinuclear), KIF1C and RAB13 (protrusion).
+In general, non-\ac{P-bodies} genes have a higher proportion of cells classified with a foci pattern: between 24\% (BUB1) and 69\% (ASPM) cells while \ac{P-bodies} genes have between 7\% (AURKA) and 31\% (HMMR) cells.
+Likewise, in term of molecule concentration, non-\ac{P-bodies} genes present a higher proportion of \ac{mRNA} in foci, varying from 9\% (BUB1) to 28\% (CTNNB1), while \ac{P-bodies} accumulate between 2\% to 15\% of cell \ac{mRNA}s.
+This foci quantification is in line with the previously reported estimations in the literature of 10\% to 20\% \ac{mRNA}s clustered in foci~\cite{Pillai_2005, Hubstenberger_2017}.
 
-% To investigate the agreement between unsupervised and supervised analysis and to understand
-% the bio- logical signal corresponding to different regions of the t-SNE plot, we
-% determined the probabilities of cells to be in a particular pattern, using each of
-% the classifier, and plotted this probability on top of the t-SNE representation (Figure 3C).
-% Remarkably, cells with a high probability of a given pattern concentrated in the
-% same area of the t-SNE plot, thus, providing a direct interpretation of the regions
-% with respect to the localization pattern they represent (Fig- ure 3C).
-% This also indicated that the assignments of the classifiers were consistent with the manual annotations.
+\subsubsection{Cell-to-cell variability}
 
+If we focus on the individual cells instead of the gene, \ac{RNA} localization appears highly variable.
+For example, with CTNNB1 transcripts there is no foci at all or more than 60\% of \ac{mRNA}s clustered, depending of the cell observed.
+For a better quantification of this intercellular variability, additional figures are presented in Appendix~\ref{ch:cell_pattern_classification}.
+Cells of specific genes are plotted on \ac{t-SNE}~\ref{fig:tsne_proba_gene} and single cell results are summarized in heat maps~\ref{fig:heatmap_racha_cells}.
+Pattern probabilities returned by classification models vary from cell to cell.
+For a given gene, cells are dispersed on the \ac{t-SNE} plot, although a majority of them still accumulate in the expected area.
+Finally, some cells have several localization patterns simultaneously.
+As listed before, it the case for the cells with localized \ac{RNA} clusters, combining a foci pattern with a protrusion or a nucleus-related pattern.
+Likewise, MYH3 cells frequently show an intranuclear and protrusion pattern.
 
-% heatmap
+In conclusion, my quantitative pipeline corroborates the manual observations and measures a high degree of heterogeneity of \ac{RNA} localization across different cells.
+This variability is a general phenomenon since it is seen with nearly all the genes analyzed in~\cite{CHOUAIB_2020}.
 
-% Finally, we analyzed RNA localization at the gene level. Individ- ual cells were
-% assigned to a pattern if the probability given by the random forest classifier for
-% that pattern was higher than 0.5. The fractions of cells in each pattern were then
-% represented in a heat- map, either directly (Figure S6E) or after filtering out
-% cases where the proportion of cells with localized mRNA was not statistically different
-% from that of the control random genes (Figure 3D, threshold: p value < 103).
-% There was a remarkable agreement between the automated and manual classification.
-% Except for FLNA and KIF5B, all the manual annotations were confirmed with high
-% degree of statistical significance (p value < 103). FLNA was the only mRNA
-% manually annotated as ‘‘cell edge,’’ and we decided not to study it further.
-% KIF5B indeed localized weakly in protrusions of HeLa cells (i.e., in a small number of cells),
-% although the localization pattern was nicely seen in neuronal cells (Figure S2B).
-% The other protrusion mRNAs were statistically different than the controls (p value < 103),
-% with 14% (DYNLL2) and up to 62% (RAB13) of the cells classified in that pattern.
-% The two genes manually annotated as ‘‘intranu- clear’’ had more than 55% of the cells assigned in that category.
-% Likewise, the two ‘‘nuclear edge’’ genes, ASPM and SPEN, had 50% and 55% of cells
-% in this category, respectively, while the ‘‘perinuclear’’ genes (AKAP1, AKAP9, AP1S2, ATP6A2, and HSP90B1)
-% ranged from 13% (HSP90B1) to 93% (AKAP9). The former value may seem low, but it is nevertheless highly statisti- cally significant (p value of 7.1015).
-% Also note that HSP90B1
-% mRNAs co-localized with their encoded proteins, providing further evidence that they are localized (see below).
-% For the pattern ‘‘foci,’’ the non-P-body genes (ASPM, BUB1, CTNNB1, and DYNC1H1)
-% had a high proportion of cells classified in that pattern (24% for BUB1 and up to 69% for ASPM)
-% and an average proportion of mRNA in foci varying from 9% (BUB1) to 28% (CTNNB1; Figure S6B).
-% In contrast, the mRNAs accumulating in P-bodies had a comparatively smaller fraction of
-% cells classi- fied in the ‘‘foci’’ pattern (7% to 31%), as well as a smaller frac- tion
-% of the mRNAs in foci (2% to 15%). Note that our estimation of the fraction of mRNA in
-% foci correspond to a lower bound because we only counted groups of molecules where each molecule was closer than 350 nm to the group, while foci can be larger.
-% Nevertheless, and taking into account our stringent cri- terion, our quantification was in the
-% lower range of previously re- ported quantifications of P-body mRNAs (10%–20% of the total mRNAs; Pillai et al., 2005; Hubstenberger et al., 2017).
-% When comparing individual cells, the quantifications indicated that RNA localization
-% can be highly variable even for the same mRNA. For instance, the fraction of CTNNB1 mRNA
-% in foci varied from 0% to more than 60%. To analyze this phenomenon in more details,
-% we plotted the cells of each single gene on t-SNE plots (Figure S7), and we also
-% generated heatmaps depicting the probabilities of the different patterns for all the individual cells (Figures 3E and S7).
-% This provided a very detailed view of RNA localization at the level of single cells.
-% It confirmed the intercel- lular variability of RNA localization as cells of a given
-% gene were dispersed of the t-SNE plot, although an accumulation in the expected area of the plot was visible (Figure S7).
-% Likewise, the pattern probabilities varied greatly from cell to cell (Figure S7).
-% It was also apparent that a large number of cells had several pat- terns simultaneously.
-% In particular, many DYNC1H1 cells were classified as both ‘‘perinuclear’’ and ‘‘foci,’’
-% and many ASPM cells were both ‘‘nuclear edge’’ and ‘‘foci’’ (in agreement with the manual annotations).
-% Likewise, MYH3 cells were frequently ‘‘intranuclear’’ and ‘‘protrusion.’’
-% In conclusion, this quantitative analysis corroborated the manual annotations and revealed a high degree of heterogeneity of RNA localization across different cells.
-% This heterogeneity is a general phenomenon since it is seen with nearly all the genes analyzed here.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% add biological conclusion
 
 \section{Translation factories}
 \label{sec:translation_factories}
 
-A second important results unveiled in~\cite{CHOUAIB_2020} is the identification and the quantification of a cluster-based localization pattern we name \emph{translation factory}.
+A second important results unveiled in~\cite{CHOUAIB_2020} is the identification and the quantification of a cluster-like localization pattern we name \emph{translation factory}.
 
 \subsection{Introduction}
 \label{subsec:introduction_translation_factories}
@@ -444,6 +403,10 @@ A second important results unveiled in~\cite{CHOUAIB_2020} is the identification
 \subsection{Materials and methods}
 \label{subsec:materials_translation_factories}
 
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
+
 % paper Racha
 
 % To measure the degree of spatial overlap between mRNA (by smFISH) and protein
@@ -457,12 +420,24 @@ A second important results unveiled in~\cite{CHOUAIB_2020} is the identification
 
 \subsubsection{Puromycin drug}
 
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
+
 \subsubsection{Cluster detection}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
 % distinct  from the dense decomposition
 
 \subsection{Results}
 \label{subsec:results_translation_factories}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
 \begin{figure}[h]
     \centering
@@ -474,9 +449,42 @@ A second important results unveiled in~\cite{CHOUAIB_2020} is the identification
 % paper fq2
 % HMMR shows a similar number of clusters, while all other genes have significantly fewer, indicating an implication of translation in cluster formation.
 
+% paper racha
+
+% For the pattern ‘‘foci,’’ the non-P-body genes (ASPM, BUB1, CTNNB1, and DYNC1H1)
+% had a high proportion of cells classified in that pattern (24% for BUB1 and up to 69% for ASPM)
+% and an average proportion of mRNA in foci varying from 9% (BUB1) to 28% (CTNNB1; Figure S6B).
+% In contrast, the mRNAs accumulating in P-bodies had a comparatively smaller fraction of
+% cells classi- fied in the ‘‘foci’’ pattern (7% to 31%), as well as a smaller frac- tion
+% of the mRNAs in foci (2% to 15%). Note that our estimation of the fraction of mRNA in
+% foci correspond to a lower bound because we only counted groups of molecules where each molecule was closer than 350 nm to the group, while foci can be larger.
+% Nevertheless, and taking into account our stringent cri- terion, our quantification was in the
+% lower range of previously re- ported quantifications of P-body mRNAs (10%–20% of the total mRNAs; Pillai et al., 2005; Hubstenberger et al., 2017).
+% When comparing individual cells, the quantifications indicated that RNA localization
+% can be highly variable even for the same mRNA. For instance, the fraction of CTNNB1 mRNA
+% in foci varied from 0% to more than 60%.
+
+% p_bodies = ["AURKA", "AURKA_puro",
+% 			"HMMR", "HMMR_puro",
+% 			"CEP170P1", "CRKL", "PAK2"]
+% translation_factory = ["DYNC1H1", "DYNC1H1_puro",
+% 					   "BUB1", "BUB1_puro",
+% 					   "CTNNB1", "CTNNB1_puro"]
+% nuclear_edge = ["SPEN", "ASPM", "ASPM_puro"]
+% perinuclear = ["ATP6A2", "AP1S2", "AKAP9", "HSP90B1", "AKAP1"]
+% intranuclear = ["MYH3", "MYH3_puro", "CEP192"]
+% protrusion = ["KIF1C", "KIF1C_puro",
+% 			  "KIF4A", "KIF4A_puro",
+% 			  "RAB13", "KIF5B", "DYNLL2"]
+% random = ["KIF20B", "MYO18A", "MYSNE2", "PLEC", "FLNA"]
+
+%\ac{P-bodies}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% add biological conclusion
 
 \section{Centrosomal pattern}
 \label{sec:centrosomal}
@@ -602,3 +610,13 @@ A second important results unveiled in~\cite{CHOUAIB_2020} is the identification
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
+
+% racha paper
+
+% In conclusion, this quantitative analysis corroborated the manual annotations and revealed a high degree of heterogeneity of RNA localization across different cells.
+% This heterogeneity is a general phenomenon since it is seen with nearly all the genes analyzed here.
+
+% adham paper
+
+% xavier paper
+
