@@ -47,145 +47,37 @@ This work is published in~\cite{CHOUAIB_2020}.
 \subsection{Introduction}
 \label{subsec:introduction_general_pattern}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+Most of \ac{mRNA}s have a random distribution throughout the cytoplasm, but some of them localize in specific subcellular regions.
+This phenomenon has been previously reviewed in different papers~\cite{Blower_2013, Jung_2014, Eliscovich_2017, Bovaird_2018}.
 
-% paper FQ2
+Such localization can be related to either the \ac{RNA} metabolism, for example with untranslated \ac{mRNA}s stored and repressed in \ac{P-bodies} (but not degraded~\cite{Hubstenberger_2017}), or the protein metabolism with locally translated proteins.
+This local synthesis concerns both mature proteins and nascent peptides.
+Different cellular processes imply the delivery of mature proteins in specific subcellular regions and a local regulation of the proteome.
+Local translation can contributes to cell fate determination during metazoan development, as observed in~\cite{melton_translocation_1987} with a clear modification of the Vg1 \ac{RNA} spatial distribution between mature and immature Xenopus oocytes.
+In these same Xenopus embryos, cyclin B1 \ac{mRNA}s localized at the mitotic apparatus could also play an important role in the rapid cell division cycles observed during early embryogenesis~\cite{Groisman_2000}.
+In mammal cells, \ac{RNA} localization influences cell polarization and motility, usually through actin localization at the cell edge~\cite{Lawrence_1986}.
+Locally translated proteins are also known to be involved in axonal growth and so neural plasticity~\cite{VanDriesche_2018}.
+Finally, by precisely controlling the \ac{mRNA} localization and the subsequent translation process, cells can avoid to release proteins at inappropriate places~\cite{Muller_myelin_2013} and help the synthesis of protein complexes~\cite{pichon_visualization_2016}.
 
-% In Chouaib et al. (2020), we performed a high-content screen in HeLa cells and analyzed 10,000 segmented cells.
-% FISH-quant v2 was used for spot detection, cell segmenta- tion and the computation of localization features
-% that al- lowed us to apply supervised and unsupervised machine learning to identify localization patterns and
-% classify single cells into predefined pattern classes. We observed several distinct mRNA localization patterns,
-% including RNA accu- mulating (i) in foci, (ii) in cytoplasmic protrusions, (iii) in the perinuclear area
-% (which could be subdivided in endo- somal, RE, Golgi and centrosome associate), (iv) forming a rim at the nuclear edge, or (v) inside the nucleus (Fig. 2).
-% Interestingly, automated classification done on a single-cell level revealed a high degree of
-% cell-to-cell het- erogeneity in RNA localization, with 10% to 80% of the cells displaying the
-% expected pattern depending on the RNA (Fig. 5A). In addition, for each pattern, only a fraction of
-% the mRNA appeared to localize, revealing a high degree of plasticity in RNA localization mechanisms.
-% This appears to be specific to cell lines as RNA localization in embryos is usually much more stereotyped.
-% We also quantified how translation inhibition affected RNA localization and found that most mRNAs localize in a
-% translation-dependent man- ner, which is unexpected (Fig. 5B). This also enabled us to discover translation factories,
-% small cytoplasmic structures where specific mRNAs accumulate to be translated.
+Several mechanisms will drive the localization of \ac{mRNA}s.
+Sometimes the nascent peptide can serve as a targeting signal, but most of the time the \ac{RNA} molecule itself will initiate its localization.
+\ac{RNA} can also be trapped in specific subcellular compartments.
+The molecule often include a zip-code sequence that is read by a \ac{RBP} and starts the assembly of a transport complex comprising different organelles or motor proteins.
+Such complex can then directly convey the \ac{RNA} along the cytoskeleton~\cite{Blower_2013}.
+Coupled with an anchoring mechanism at the targeted destination, it provides a better stability of the \ac{RNA} localization.
 
-~\cite{Blower_2013}
-~\cite{Bovaird_2018}
-~\cite{Eliscovich_2017}
-~\cite{Jung_2014}
-~\cite{pichon_kinesin_2021}
-~\cite{pichon_kinesin_2021}
-~\cite{pichon_kinesin_2021}
-~\cite{pichon_kinesin_2021}
-~\cite{pichon_kinesin_2021}
-
-Most of \ac{mRNA}s have a random distribution throughout the cytoplasm, but some of them localize in specific subcellular regions~\cite{Blower_2013, Jung_2014, Eliscovich_2017, Bovaird_2018}.
-
-% paper racha
-
-how
-- rna metabolism
-- protein metabolism (mature protein or nascent protein)
-
-why
-- storage of untranslated rna
-- local translation
-- rapid cell division cycle (linked to local translation of cyclin B mRNAs)
-- cell polarization
-- cell motility (actin at the leading edge)
-- axonal growth and synaptic plasticity of neurons
-- assembly of protein complexes
-- avoid proteins in wrong place
-
-how
-- targeting signal of nascent protein
-- targeting from rna zip-code sequence (with RNA-binding proteins)
-- direct transport on the cytoskeleton by molecular motors
-- anchoring mechanism
-- diffusion, trapping, degradation and local rna stabilization
-
-claim
-- lack a global view of local translation in the entire cellular space or at the genomic level
-- need a systematic manner
-
-examples
-- pioneering study in Drosophila
-- human cell lines
-
-limitations
-- information on RNA localization but did not directly investigate local translation as the encoded proteins were not detected
-
-% Most mRNAs are distributed randomly throughout the cytoplasm, but some localize to specific
-% subcellular areas (Blower, 2013; Bovaird et al., 2018; Eliscovich and Singer, 2017; Jung et al., 2014 for reviews).
-
-% This phenomenon is linked to either RNA metabolism, when untranslated mRNAs are stored in P- bodies or other cellular structures (Hubstenberger et al., 2017),
-% or to protein metabolism, when a protein is synthesized locally.
-
-% Local translation has been observed from bacteria and yeast to humans (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018).
-
-% It is commonly involved in the delivery of mature proteins to specific cellular compartments, while allowing local regulation, and this is involved in many processes.
-% For instance, it contributes to patterning and cell fate determination during metazoan development, mainly through asymmetric cell division
-% (Melton, 1987; Driever and Nu€sslein- Volhard, 1988).
-% In Xenopus embryos, local translation of cyclin B mRNAs at the mitotic spindle is also believed to be important for the rapid cell
-% division cycles occurring during early embryo- genesis (Groisman et al., 2000).
-% In mammals, mRNA localization is involved in cell polarization and motility, mainly through the localization of actin and related mRNAs at the leading edge (Lawrence and Singer, 1986), and it is also involved in axonal
-% growth and synaptic plasticity of neurons (Van Driesche and Martin, 2018).
-
-% Importantly, local translation can also be linked to the
-% metabolism of the nascent peptide rather than to directly localize the mature protein. For instance, translation of secreted proteins
-% at the endoplasmic reticulum (ER) allows nascent pro- teins to translocate through the membrane to reach the ER lumen (Aviram and Schuldiner, 2017).
-% Translation of mRNAs at specific sites may also be important for the assembly of protein complexes (Pichon et al., 2016) or
-% to avoid the deleterious effects of releasing free proteins at inappropriate places (Mu€ller et al., 2013).
-
-% RNA localization can be accomplished through several mech- anisms. In the case of secreted proteins, the nascent peptide serves as a
-% targeting signal, via the signal recognition particle (SRP) and its receptor on the ER (Aviram and Schuldiner, 2017).
-
-% In most other cases, targeting is an RNA-driven process (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018 for reviews).
-% Localized mRNAs often contain a zip-code sequence, frequently located within their 30-UTR, which is necessary and sufficient to transport them to their destination.
-% The zip code is recognized by one or several RNA-binding proteins (RBPs), and it drives the formation of a transport complex sometimes called locasome.
-% This complex can be transported by centrosomes, endosomal vesicles, or other cellular structures (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018).
-
-% However, direct transport on the cytoskeleton by molecular motors is a frequent mechanism (Blower, 2013; Bovaird et al., 2018; Eliscovich and Singer, 2017; Jung et al., 2014).
-
-% Once at destination, an anchoring mechanism may limit diffusion away from the target site.
-
-% Alternatives to these transport mechanisms include diffusion and trap- ping at specific locations and degradation coupled to local RNA stabilization.
-
-% Localized mRNAs are often subjected to a spatial control of translation (Besse and Ephrussi, 2008).
-% In the case of Ash1 mRNA in yeast and b-actin mRNA in neurons, translation is repressed during transport and
-% is activated at their final location by phosphorylation-dependent mechanisms (Hu€ttelmaier et al., 2005; Paquin et al., 2007).
-% This spatial regulation of translation provides an additional layer of control ensuring that mRNAs are translated only at the desired location.
-
-% The first locally translated mRNAs were found by chance or using a candidate approach.
-% Purification of cellular structures and localized RBPs have significantly increased the number of known localized mRNAs
-% (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018).
-
-% However, only specific compartments or RBPs were examined, and we currently lack a global view of local translation in the entire cellular space or at the genomic level.
-% Few reports described attempts to characterize mRNA localization in a systematic manner.
-
-% A pioneering study in Drosophila used whole-mount fluorescent in situ hybrid- ization (FISH) to analyze the localization of more than 2,000 mRNAs (Lecuyer et al., 2007).
-% As many as 71\% of them had a non-random distribution, and a range of new localization patterns were observed.
-% More recent reports confirmed that RNA localization is widespread during Drosophila development (Jam- bor et al., 2015; Wilk et al., 2016).
-
-% However, it is not known whether this is also true in other organisms, particularly in humans. Few recent studies addressed this question in cell lines
-% using the more sensitive single-molecule FISH technique (smFISH). Several thousands of mRNAs were analyzed, which
-% showed a correlation of intracellular mRNA distribution with gene annotation (Battich et al., 2013; Chen et al., 2015; Eng et al., 2019; Xia et al., 2019).
-% Specifically, these studies identified three groups of localized mRNAs, in the perinuclear area, the mitochondria, and the cell periphery,
-% the latter being possibly linked to actin metabolism (Chen et al., 2015).
-
-% These studies provided information on RNA localization but did not directly investigate local translation as the encoded proteins were not detected.
-% Thus, we still lack a good understanding of the various functions played by local translation at the cellular level.
-
-% In this study, we developed a smFISH screen to specifically address this issue. Using a set of 523 GFP-tagged cell lines spanning
-% a variety of cellular functions and an approach that allows simultaneous visualization of mRNA and proteins,
-% we found that local translation occurs at various unanticipated locations. In particular, we discovered specialized
-% translation factories, where specific mRNAs are translated. These factories are remarkable in that they provide
-% a unique mean to regulate the metabolism of nascent proteins and also create a fine granular compartmentalization of translation.
+In~\cite{CHOUAIB_2020}, we claim that a global view of local translation in the whole cell and at the genomic level is still to come, despite recent progress.
+In a pioneering work on Drosophila embryogenesis~\cite{lecuyer_global_2007}, authors analyze 3,370 genes and find that 71\% of them encode a transcript with a non-uniform localization pattern.
+In human cell lines recent studies exploit and improve \ac{smFISH} techniques to image thousands of \ac{mRNA}s in the perinuclear region, the mitochondria and the cell membrane~\cite{battich_image-based_2013, Chen_2015, eng_seqfish_2019, Xia_2019}.
+We take a step forward in studying \ac{mRNA} localization with human cell lines and a systematic approach.
+We perform a quantitative analysis leveraging supervised and unsupervised methods in order to recognize up to 6 different localization patterns.
+The current section emphasizes this quantitative pipeline that contributes to make our analysis scalable and more robust.
 
 \subsection{Materials and methods}
 \label{subsec:materials_general_pattern}
 
 The quantitative pipeline used in this study and the existing work in FISH-quant V1 are the building blocks of FISH-quant V2.
-Therefore, the various methods presented here were not yet packaged in \emph{bigfish}, but Python packages that formed its foundation are already in used.
+Therefore, the various methods presented here were not yet packaged in \emph{bigfish}, but Python libraries that formed its foundation are already in used.
 This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_translation_factories_2020}}.
 
 \subsubsection{Experimental data}
