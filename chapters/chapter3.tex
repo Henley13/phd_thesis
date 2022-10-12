@@ -1,44 +1,70 @@
 %!TEX root = ../main.tex
 
-\graphicspath{{../../figures/chapter_3/}}
+\graphicspath{{./figures/chapter3/}}
 
 
-\chapter{Segmentation} \label{ch:chapter3}
+\chapter{Single-cell segmentation}
+\label{ch:chapter3}
+
 \minitoc
 \newpage
 
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
-\section{State of the art}
+\section{Segmentation of fluorescence microscopy}
+\label{sec:segmentation_introduction}
 
+\subsection{Instance segmentation}
+\label{subsec:segmentation_instance_introduction}
 
-\subsection{Watershed and thresholding}
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
-\subsection{Nucleaizer}
+\subsection{Related work}
+\label{subsec:segmentation_related_work}
 
-\subsection{Stardist}
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
-\subsection{Cellpose}
+% tresholding, watershed, superpixel,
+% Unet
+% deep watershed, Peter model
+% single and two pass
+% Nucleaizer, maskRCNN
+% Stardist, Cellpose+limitations, densepose?
+% embedseg, equivalent model to natural image
+% TissueNet
 
-\subsection{Embedseg}
+\subsubsection{From mathematical morphology\dots}
 
+\subsubsection{\dots to deep learning models}
 
-\section{A variant of deep watershed}
+% adaptated from natural image model
+% importance of dataset
+% better performance
 
+\section{Nucleus and cell segmentation}
+\label{sec:segmentation_nuc_cell}
 
-\subsection{Deep watershed and distance prediction}
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
-\subsection{Nucleus-cell joint segmentation}
+\subsection{A new multichannel dataset}
+\label{subsec:segmentation_data}
 
+% data description
 
-\section{Benchmark on \ac{FISH} images}
+\subsection{Nucleus segmentation}
+\label{subsec:segmentation_nuc}
 
-
-\subsection{A 4-channel dataset}
-
-\subsection{Benchmark}
-
-
-\section{Postprocessing}
+% tresholding
+% deep learning model + results
+% removing segmented nuclei
 
 % bigfish.segmentation.remove_segmented_nuc
 
@@ -54,10 +80,33 @@ Fourth, I subtract the reconstructed image from the original one to get an appro
 The latter is used to threshold a binary mask of the missing nuclei and ultimately extract their original pixel intensity from the original image.
 Lastly, I merge the masks obtained from the two rounds of segmentation.
 
-% related work (nucleaizer, mask rcnn, unet, single and two pass, coordinates and mask, cellpose, embedseg, Tissuenet)
-% related work (watershed, watershed-like model)
-% limitation of cellpose
-% our small model (single or double input) + fail attempt of deep snake -> consistency nuc/cell
-% scale-dependency (peter work ?)
+\subsection{Cell segmentation}
+\label{subsec:segmentation_cell}
+
+% watershed
+% deep learning model + results
+% clean segmentation
+
+\section{Improving cell segmentation}
+\label{sec:segmentation_improvements}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
+
+\subsection{Snake-like model}
+\label{subsec:segmentation_snake}
+
+% deep snake + appendix
+
+\subsection{In silico pre-training}
+\label{subsec:segmentation_insilico}
+
 % in silico labelling
-% postprocessing (bigfish)
+
+\section{Conclusion}
+\label{sec:segmentation_conclusion}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
