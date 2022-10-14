@@ -47,20 +47,28 @@
 % importance of dataset
 % better performance
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Nucleus and cell segmentation}
 \label{sec:segmentation_nuc_cell}
+
+\subsection{A new multichannel dataset}
+\label{subsec:segmentation_data}
 
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
 
-\subsection{A new multichannel dataset}
-\label{subsec:segmentation_data}
-
 % data description
 
 \subsection{Nucleus segmentation}
 \label{subsec:segmentation_nuc}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
 % tresholding
 % deep learning model + results
@@ -80,29 +88,151 @@ Fourth, I subtract the reconstructed image from the original one to get an appro
 The latter is used to threshold a binary mask of the missing nuclei and ultimately extract their original pixel intensity from the original image.
 Lastly, I merge the masks obtained from the two rounds of segmentation.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% report first year
+
+%Nuclei segmentation is usually the first task in cellular image analysis.
+%In many cases, the segmentation of nuclei is trivial for fluorescence microscopy.
+%However, when cells cluster together, the segmentation of nuclei can be very complicated.
+%This is the case for some of the perturbation experiments that we have to analyze.
+%In addition, it is important to note that the entire workflow is very sensitive to errors in nuclear segmentation (in particular to missed nuclei or split nuclei).
+%Currently, the research community benefits from an online challenge organized last year by \href{https://www.kaggle.com/c/data-science-bowl-2018}{Kaggle} with 739 different teams, the 2018 Data Science Bowl.
+%They provide a large dataset with nuclei images from different acquisitions (histopathology images, fluorescent microscopic images, etc.).
+%The best contributions apply variant of two famous deep learning models used for segmentation: Mask R-CNN \cite{He2017} and U-net \cite{Ronneberger2015}.
+%A recent paper \cite{Hollandi2019} proposed a model inspired combining these two models, plus a simulation framework based on pix2pix \cite{Isola2016} and CycleGAN \cite{Zhu2018} models.
+%It outperforms (post competition) all the submitted methods of the 2018 challenge.
+%We partially based our pipeline on their framework.
+
+%\paragraph{Deep learning segmentation}
+
+%Deep learning models, initially designed for image classification can be effectively used for image segmentation.
+%\textbf{Mask R-CNN} is a convolutional neural network which efficiently suggests regions of interest, detects object instances within these regions and performs instance segmentation with a fully convolutional branch.
+%When released in 2017, the model was state-of-the-art on the COCO dataset \cite{Lin2014} for these different tasks.
+%\textbf{U-net} was originally designed for biological image segmentation.
+%It is also a fully convolutional neural network with an encoder-decoder architecture.
+%Unlike Mask R-CNN, the original version of the U-net does not perform instance segmentation, but it can return a binary segmentation mask.
+
+%The reference pipeline \cite{Hollandi2019} starts by segmenting the nuclei using a Mask R-CNN pretrained on COCO dataset (a large dataset of natural images).
+%The objective of this first pass is to get an estimation of the nuclear size to cope with the variations between experiments and modalities.
+%The next step is to train on the annotated data set containing more than $80,000$ nuclei for $1,102$ images.
+%Using \ac{GAN} based models, pix2pix and CycleGAN, new images are simulated to augment again the dataset.
+%A Mask R-CNN is trained from scratch with this nuclei dataset.
+%Additionally, a set of U-net models (with different parameters) are also trained to refine the segmented boundaries of the Mask R-CNN.
+
+%The method was designed for detecting nuclei for arbitrary modalities and resolutions, and we therefore hypothesized that we did not necessarily need the entire workflow with several sequential rounds of deep learning.
+%In addition, the authors used both MATLAB and Python in their implementation, which makes their software difficult to integrate in practical workflows.
+%We therefore re-implemented a simplified version of their method, which we detail in the next paragraph.
+%We only used the Mask R-CNN with the final weights they have obtained by their training.
+
+%\paragraph{A two-round segmentation}
+
+%We observed that in general, the Mask R-CNN trained on a variety of modalities was often sufficient to obtain good segmentation results in our images.
+%However, when nuclei were cluttered, the DAPI signal highly variable between cells or the shape of the nuclei unusual, there were a few nuclei missed by the algorithm.
+%Importantly, it was not clear why exactly the nuclei were missed; it seemed therefore difficult to address this issue by dedicated filtering approaches.
+%We hypothesized that repetitive application of the neural network on a residue image could potentially solve this issue: we thus apply a two-rounds segmentation.
+%After a first run, we remove the segmented nuclei from the image and apply the network on an image that only contains the missed nuclei.
+%We finally merge the two segmentation results returned.
+
+We denote $f_{\theta}(\cdot)$ the trained Mask R-CNN with trained weights $\theta$ that predicts a label image from an image $X$.
+We then calculate a marker image:
+
+\begin{equation}
+M_{i,j} =
+\begin{cases}
+    X_{i,j},& \text{if } L^{(1)}_{i,j} > 0 \\
+    0,              & \text{otherwise}
+\end{cases}
+\end{equation}
+
+where $L^{(1)}=f_{\theta}(X)$.
+We then calculate the morphological reconstruction by dilation of the marker image $M$ under the original image $X$ and subtract this image to obtain a residue image $R$:
+
+\begin{equation}
+R = X - \delta_X^{\infty}(M)
+\end{equation}
+
+By a simple threshold, we obtain candidate regions which are kept for a subsequent application of the same Mask R-CNN:
+
+\begin{eqnarray}
+C_{i,j} &=&
+\begin{cases}
+	X_{i,j},& \text{if } R_{i,j} > 0\\
+	0, & \text{otherwise}
+\end{cases} \\
+L^{(2)} &=&
+\begin{cases}
+	f_{\theta}(C) + \max(L^{(1)}), & \text{if } f_{\theta}(C) > 0\\
+	0, & \text{otherwise}
+\end{cases}\\
+Nuc &=& L^{(1)} + L^{(2)}
+\end{eqnarray}
+
 \subsection{Cell segmentation}
 \label{subsec:segmentation_cell}
-
-% watershed
-% deep learning model + results
-% clean segmentation
-
-\section{Improving cell segmentation}
-\label{sec:segmentation_improvements}
 
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
 
+% watershed
+% deep learning model + results
+% clean segmentation
+
+%Even if our images are in three dimensions, we currently run the cell segmentation in two dimensions, mainly because we used wide-field microscopy for image acquisition.
+%Consequently, the out-of-focus contributions do not allow for a straightforward strategy for 3D segmentation.
+%In addition, the dataset we are currently working on (which is under review) does not contain a dedicated channel to segment the cytoplasm.
+%We therefore need to infer the cellular region from the background signal of free probes in the FISH channel.
+
+%\paragraph{Watershed segmentation}
+
+%In the Watershed algorithm, an image is interpreted as a local topography (higher values are peaks and crests, lower values valleys and basins).
+%By simulating a flooding from selected minima, usually referred to as seeds, it partitions the image into disjoint regions, separated by the watershed line.
+%There are many variants of this method, but basically the algorithm requires three elements: the starting points from which we flood the image (the markers or seeds), a relevant topographic representation of our image where the boundaries of the cell have higher pixel values, and a binary mask limiting the flooding area (the mask).
+
+%As markers, we use the result of nuclei segmentation.
+%Unfortunately, if we miss some nuclei at the beginning, the error impacts the rest of the computational pipeline: not only would we miss potentially interesting cells, we also wrongly assign the cytoplasmic regions to cells they do not belong to.
+%For this reason, it is important that the nuclei detection works close to $100\%$.
+%For the mask, we apply a threshold on the original image, to discriminate the background from the cytoplasm.
+%The image used for the flooding is obtained as follows:
+
+%\begin{enumerate}
+%	\item We first apply a 2-dimensional projection to the image, with a local focus projection method published by our team \cite{Tsanov2016} and briefly summarized below.
+%	This image is inverted, such that background pixels get higher values.
+%	The nuclear regions are set to 0.
+%	\item We compute a Euclidean distance map of the mask image with respect to the segmented nuclei.
+%	The idea is that in the absence of any usable signal, we would simply assign each pixel to the closest nucleus.
+%	\item The image we apply the Watershed algorithm to is then simply a linear combination of the $[0,1]$ normalized images introduced above.
+%\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Improving cell segmentation}
+\label{sec:segmentation_improvements}
+
 \subsection{Snake-like model}
 \label{subsec:segmentation_snake}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
 % deep snake + appendix
 
 \subsection{In silico pre-training}
 \label{subsec:segmentation_insilico}
 
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
+
 % in silico labelling
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusion}
 \label{sec:segmentation_conclusion}

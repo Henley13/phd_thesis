@@ -492,9 +492,41 @@ My contribution consists in quantifying the centrosomal localization pattern obs
 \subsection{Introduction}
 \label{subsec:introduction_centrosomal}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Most of \ac{mRNA}s have a random distribution throughout the cytoplasm, but some of them localize in specific subcellular regions.
+This phenomenon has been previously reviewed in different papers~\cite{Blower_2013, Jung_2014, Eliscovich_2017, Bovaird_2018}.
+
+Such localization can be related to either the \ac{RNA} metabolism, for example with untranslated \ac{mRNA}s stored and repressed in \ac{P-bodies} (but not degraded~\cite{Hubstenberger_2017}), or the protein metabolism with locally translated proteins.
+This local synthesis concerns both mature proteins and nascent peptides.
+Different cellular processes imply the delivery of mature proteins in specific subcellular regions and a local regulation of the proteome.
+Local translation can contributes to cell fate determination during metazoan development, as observed in~\cite{melton_translocation_1987} with a clear modification of the Vg1 \ac{RNA} spatial distribution between mature and immature Xenopus oocytes.
+In these same Xenopus embryos, cyclin B1 \ac{mRNA}s localized at the mitotic apparatus could also play an important role in the rapid cell division cycles observed during early embryogenesis~\cite{Groisman_2000}.
+In mammal cells, \ac{RNA} localization influences cell polarization and motility, usually through actin localization at the cell edge~\cite{Lawrence_1986}.
+Locally translated proteins are also known to be involved in axonal growth and so neural plasticity~\cite{VanDriesche_2018}.
+Finally, by precisely controlling the \ac{mRNA} localization and the subsequent translation process, cells can avoid to release proteins at inappropriate places~\cite{Muller_myelin_2013} and help the synthesis of protein complexes~\cite{pichon_visualization_2016}.
+
+Several mechanisms will drive the localization of \ac{mRNA}s.
+Sometimes the nascent peptide can serve as a targeting signal, but most of the time the \ac{RNA} molecule itself will initiate its localization.
+\ac{RNA} can also be trapped in specific subcellular compartments.
+The molecule often include a zip-code sequence that is read by a \ac{RBP} and starts the assembly of a transport complex comprising different organelles or motor proteins.
+Such complex can then directly convey the \ac{RNA} along the cytoskeleton~\cite{Blower_2013}.
+Coupled with an anchoring mechanism at the targeted destination, it provides a better stability of the \ac{RNA} localization.
+
+In~\cite{CHOUAIB_2020}, we claim that a global view of local translation in the whole cell and at the genomic level is still to come, despite recent progress.
+In a pioneering work on Drosophila embryogenesis~\cite{lecuyer_global_2007}, authors analyze 3,370 genes and find that 71\% of them encode a transcript with a non-uniform localization pattern.
+In human cell lines recent studies exploit and improve \ac{smFISH} techniques to image thousands of \ac{mRNA}s in the perinuclear region, the mitochondria and the cell membrane~\cite{battich_image-based_2013, Chen_2015, eng_seqfish_2019, Xia_2019}.
+We take a step forward in studying \ac{mRNA} localization with human cell lines and a systematic approach.
+We perform a quantitative analysis leveraging supervised and unsupervised methods in order to recognize up to 6 different localization patterns.
+The current section emphasizes this quantitative pipeline that contributes to make our analysis scalable and more robust.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We keep exploring specific \ac{RNA} localization patterns and local translation in~\cite{safieddine_choreography_2021}.
+The paper focuses on transcripts localizing at the \ac{MTOC}.
+
+These \ac{mRNA}s combine both a spatial and a temporal distribution patterns.
+
 
 % \ac{MTOC} ==  centrosome
 
@@ -531,6 +563,60 @@ My contribution consists in quantifying the centrosomal localization pattern obs
 % pancreas, colorectal, head, neck and stomach cancers, choriocarcinoma, hepatocellular carcinoma,
 % myeloma and leukaemia and prostate, among others [19, 43,44,45,46,47,48,49].
 % In all cases, the deregulation of this protein has been associated with poor prognosis and tumour progression.
+
+% paper adham
+
+% Messenger RNA localization is a post-transcriptional process by which cells target certain mRNAs to spe- cific subcellular compartments.
+% The trafficking of mRNA molecules is linked to its metabolism and function1. Indeed, the subcellular localization of a transcript
+% an influence its maturation, translation, and degradation. On one hand, mRNAs can be stored in a translationally repressed state
+% in dedicated structures such as P-bodies2,3. On the other hand, some mRNAs can localize to be translated locally.
+% Such a local protein synthesis can be used to localize the mature polypeptide, and in this case, it can contribute to a wide range of functions,
+% such as cell migration, cell polarity, synaptic plasticity, asymmetric cell divisions, embryonic patterning, and others4–6.
+% Recently, local translation has also been linked to the metabolism of the nascent protein, rather than to localize the mature polypeptide.
+% This is for instance the case for mRNAs translated in distinct foci termed translation factories, which correspond to small cytoplasmic
+% aggregates containing multiple mRNA molecules of a given gene7,8.
+% Specific subcellular localization of mRNA molecules can be achieved by several mechanisms. Passive diffusion coupled with local
+% entrapment and/or selective local protection from degra- dation are two strategies that can establish specific distributions of mRNA molecules6.
+% In most cases, however, mRNA transport and localization occurs via motor-driven transport on the cytoskeleton9–11. Molecular elements
+% that regulate and control mRNA localization include cis- and trans-acting elements. Cis- acting elements are referred to as zip codes
+% and are often found within the 3′UTR of the transcript12–14. Many types of zip codes have been described based on primary sequence, number,
+% redundancy, and secondary/tertiary structure. Zip codes are defined by their ability to carry sufficient information for localizing the transcript.
+% They bind one or several trans-acting RNA-binding proteins (RBPs), which mediate diverse aspects of RNA metabolism such as motor binding and translational
+% regulation6. Indeed, mRNAs in transit are often subjected to spatial control of translation15. A long-standing notion in the field is that the transport
+% of localized mRNAs occurs in a translationally repressed state, which serves to spatially restrict protein synthesis16,17. Local translational
+% derepression occurs once the transcript has reached its destination, for instance by phosphorylation events and/or competition with pre-existing local proteins18–20.
+% While active transport of transcripts through RNA zip codes appears to be a frequent mechanism, mRNA localization can also involve the nascent
+% polypeptide, as in the case of secreted proteins. Here, the signal recognition particle (SRP) binds the nascent signal peptide, inhibits
+% translation elongation, and mediates anchoring of the nascent polysome to the SRP receptor on the endoplasmic reticulum, where translation
+% elongation resumes21–23. Recently, a few hints, such as puromycin sensitivity, suggested that translation may play a role in the localization
+% of some other types of mRNAs8,24. Whether this is indeed the case and the mechanisms involved remain, however, unknown.
+% Centrosomes are ancient and evolutionary conserved orga- nelles that function as microtubule (MT) organizing centers in most animal cells.
+% They play key roles in cell division, signaling, polarity, and motility25,26. A centrosome is composed of two centrioles and their surrounding
+% pericentriolar material (PCM). In cycling cells, centriole duplication is tightly coupled to the cell cycle to ensure a constant number of
+% centrioles in each cell after mitosis27. Briefly, G1 cells contain one centrosome with two centrioles connected by a linker. At the beginning
+% of S phase, each parental centriole orthogonally assembles one new procentriole. This configuration is termed engagement and prevents redupli- cation
+% of the parental centrioles. Procentrioles elongate as the cell
+
+% is progressing through S and G2. In G2, the two centriolar pairs mature and PCM expands, in preparation of mitotic spindle
+% formation . The G2/M transition marks the disruption of the centriole linker and centrosome separation. The first clues sug- gesting
+% the importance of mRNA localization and local transla- tion at the centrosomes were discovered almost 20 years ago in Xenopus early embryos28.
+% It was found that cyclin B mRNAs concentrated on the mitotic spindle and that this localization was dependent on the ability of cytoplasmic
+% polyadenylation element- binding protein (CPEB) to associate with MTs and centrosomes. A more global view was obtained by purifying mitotic
+% MT-bound mRNAs in Xenopus eggs and synchronized HeLa cells29. It was also shown that 3′UTR CPEs regulate the localized translation activation
+% of spindle enriched mRNAs that is essential for the first meiotic division in Xenopus oocytes30. Another approach used microscopy and
+% systematic in situ hybridization to image RNA localization in Drosophila embryos31. Although this study did not reach single-molecule
+% sensitivity, it revealed that six mRNAs localized at centrosomes across different stages of early Droso- phila development. In the
+% following study, 13 mRNAs were annotated as enriched on Drosophila centrosomes in at least one stage or tissue over the full course
+% of embryogenesis32. Finally, two natural antisense mRNAs (cen and ik2) were recently shown to co-localize to centrosomes in a co-dependent
+% manner via 3′ UTR interactions in Drosophila embryos33. In humans, four mRNAs (PCNT, HMMR, ASPM, and NUMA1), and two trans- lation factors
+% (eIF4E and the phosphorylated ribosomal protein p-RPS6) were recently found to localize at centrosomes8,24. These mRNAs all code for
+% centrosomal proteins, suggesting that they are translated locally.
+% Here, we performed a systematic single-molecule fluorescent in situ hybridization (smFISH) screen of almost all human mRNAs coding for
+% centrosomal proteins and we described a total of eight transcripts localizing at centrosomes. Remarkably, all eight mRNAs required
+% synthesis of the nascent protein to localize and, by imaging single ASPM and NUMA1 mRNAs and poly- somes, we demonstrate that
+% localization occurs by active trans- port of polysomes. Moreover, the Drosophila orthologs of the human centrosomal mRNAs also
+% localized to centrosomes in a similar translation-dependent manner. This work thus identifies a conserved family of centrosomal
+% mRNAs that become localized by active polysome transport.
 
 \subsection{Materials and methods}
 \label{subsec:materials_centrosomal}
