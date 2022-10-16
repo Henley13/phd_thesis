@@ -53,7 +53,7 @@ In addition, we can notice that the assignments of the classifiers are consisten
 		\includegraphics[width=\linewidth]{figures/appendix/tsne_protrusion_RAB13}
 		\subcaption{RAB13}
 	\endminipage
-	\caption{(\textit{Top}) Visualization of random forest classification probabilities in the t-SNE, from~\cite{CHOUAIB_2020}.
+	\caption[Cell-wise localization pattern classification results]{(\textit{Top}) Visualization of random forest classification probabilities in the t-SNE, from~\cite{CHOUAIB_2020}.
 	Color indicates the probabilities of the cell to be classified in the indicated localization pattern.
 	The darker, the higher the probability is.
 	(\textit{Bottom}) Visualization of cells for some specific genes with the indicated localization pattern above.
@@ -84,10 +84,10 @@ Such results are consistent with the observed impact of the puromycin for genes 
 \label{sec:pattern_heterogeneity}
 
 Another way to visualize the heterogeneity in terms of localization patterns is to plot the predicted probabilities for every cell in a heat map.
-In Figure~\ref{fig:heatmap_racha_cells} I adapt the results aggregated by genes from Figure~\ref{fig:heatmap_racha}.
-It clearly appear that for a given gene, the localization patterns observed are noisy.
+In Figure~\ref{fig:heatmap_racha_cells}, I adapt the results aggregated by genes from Figure~\ref{fig:heatmap_racha}.
+It clearly appears that, for a given gene, the observed localization patterns are noisy.
 Even if SPEN transcripts localize most of the time along the nucleus membrane, they also can be observed forming a cluster of \ac{RNA}s.
-For some cells we do not even observed a specific pattern.
+For some cells we do not even observe a specific pattern.
 Such heterogeneity justifies the use of a quantitative pipeline to produce statistical results over a large population of cells.
 
 These heat maps also confirm that different localization patterns can coexist for the same transcript but not necessarily within the same cells at the same time.
@@ -96,7 +96,7 @@ For example with ASPM transcripts, cells are identified with a foci pattern, a n
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/appendix/heatmap_cell_racha}
-    \caption{Three heat maps from~\cite{CHOUAIB_2020} with the probability of single cells to have each patterns.
+    \caption[Heat maps with cell-wise classification results]{Three heat maps from~\cite{CHOUAIB_2020} with the probability of single cells to have each patterns.
 	Only cells where we visualized SPEN, MYH3 and ASPM transcripts are represented.
 	Each row corresponds to a cell and the color indicates the probabilities of the cell to be classified in the indicated localization pattern}
     \label{fig:heatmap_racha_cells}

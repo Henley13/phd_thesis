@@ -22,7 +22,7 @@ Here we present the improvements we obtained with convolutional features and the
 \label{sec:learn_cnn_features}
 
 A deep learning framework presents the advantage to simplify our feature engineering pipeline.
-To this end, we directly train a convolutional neural network to classify different localization patterns from a 3-channels image.
+To this end, we directly train a convolutional neural network to classify different localization patterns from a 3-channel image.
 Instead of an usual RGB image, we build an input image from the coordinate representation of the cell.
 More specifically, we use the \ac{RNA} point cloud (projected in 2D), the 2D cell boundary and the 2D nucleus boundary.
 The original paper stacks three layers: one image that assigns to each pixel the number of \ac{RNA}s detected in the pixel, one image with the nucleus boundary and one with the cell boundary.
@@ -32,7 +32,7 @@ Eventually, best results were obtained with binary masks.
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/appendix/surface_layers}
-    \caption{Input images for the convolutional model}
+    \caption[Input images for the convolutional model]{Input images for the convolutional model}
     \label{fig:surface_layers}
 \end{figure}
 
@@ -47,7 +47,7 @@ Unlike the original paper, we only simulate 5 different patterns: polarization p
 
 We use SqueezeNet~\cite{Iandola_2016} for the image classification task.
 This model integrates compression techniques to keep a reasonable accuracy, but drastically reduces the number of parameters to train.
-These techniques includes squeeze operations to decrease the feature dimension of the layers or a more efficient mix of different convolution kernel sizes.
+These techniques include squeeze operations to decrease the feature dimension of the layers or a more efficient mix of different convolution kernel sizes.
 
 \section{Results}
 \label{sec:results_cnn_features}
@@ -55,12 +55,12 @@ These techniques includes squeeze operations to decrease the feature dimension o
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/appendix/tsne_cnn}
-    \caption{t-SNE projection of the learned features}
+    \caption[t-SNE projection of the learned features]{t-SNE projection of the learned features}
     \label{fig:tsne_cnn}
 \end{figure}
 
 We can evaluate the classification predictions for the simulated test dataset.
-We observe on the confusion matrix~\ref{fig:confusion_matrix_cnn} that the model performs well with the foci pattern, the protrusion pattern (\emph{cellext}) and the intranuclear pattern (\emph{inNUC})).
+We observe on the confusion matrix~\ref{fig:confusion_matrix_cnn} that the model performs well with the foci pattern, the protrusion pattern (\emph{cellext}) and the intranuclear pattern (\emph{inNUC}).
 On the opposite, we fail to predict nuclear edge pattern (\emph{nuc2D}) and random patterns are often confused with foci or intranuclear.
 Globally, results are not as good as expected and do not generalize to all the frequent localization patterns observed in the transcriptome.
 
@@ -74,7 +74,7 @@ However, distinct clusters can be observed, relevant with the frequent pattern o
   \begin{center}
     \includegraphics[width=0.33\textwidth]{figures/appendix/confusion_matrix_cnn}
   \end{center}
-  \caption{Confusion matrix}
+  \caption[Confusion matrix]{Confusion matrix}
   \label{fig:confusion_matrix_cnn}
 \end{wrapfigure}
 

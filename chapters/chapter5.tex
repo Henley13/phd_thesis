@@ -8,7 +8,7 @@
 \minitoc
 \newpage
 
-In this chapter I present several applications of the pipeline described in the previous chapters.
+In this chapter, I present several applications of the pipeline described in the previous chapters.
 More specifically, I analyze experimental datasets in order to explore, quantify and validate biological insights about \ac{mRNA} localization.
 Results from this chapter are computed from three different high content screening studies, totaling tens of transcripts observed through thousands of bioimages.
 
@@ -41,7 +41,7 @@ This last section mainly describes results presented in:
 \section{A systemic quantification of RNA localization}
 \label{sec:general_pattern_recognition}
 
-In~\cite{CHOUAIB_2020} I have implemented a quantitative pipeline to analyze the localizations of \ac{mRNA} molecules.
+In~\cite{CHOUAIB_2020}, I have implemented a quantitative pipeline to analyze the localizations of \ac{mRNA} molecules.
 This work lays the foundation of the future Python packages developed in FISH-quant V2~\cite{Imbert_fq_2022}.
 My contribution consists in classifying individual cells with one or several \ac{RNA} localization patterns.
 
@@ -78,7 +78,7 @@ The current section emphasizes this quantitative pipeline that contributes to ma
 \label{subsec:materials_general_pattern}
 
 The quantitative pipeline used in this study and the existing work in FISH-quant V1 are the building blocks of FISH-quant V2.
-Therefore, the various methods presented here were not yet packaged in \emph{bigfish}, but Python libraries that formed its foundation are already in used.
+Therefore, the various methods presented here were not yet packaged in \emph{bigfish}, but Python libraries that formed its foundation were already in used.
 This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_translation_factories_2020}}.
 
 \subsubsection{Experimental data}
@@ -93,10 +93,10 @@ In total, this dataset is built from 57 independent experiments gathering observ
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/FoV_DYNLL2}
-    \caption{Contrasted image with Dapi (\textit{left}) and smFISH (\textit{right}) channels.
+    \caption[Contrasted image with Dapi and smFISH channels]{Contrasted image with Dapi (\textit{left}) and smFISH (\textit{right}) channels.
 	Images are projected in 2D.
 	Targeted transcript is DYNLL2.
-	Plot build with \emph{bigfish}}
+	Plot built with \emph{bigfish}}
     \label{fig:fov_racha}
 \end{figure}
 
@@ -124,7 +124,7 @@ After a first round of segmentation, some nuclei are missing, so I remove the se
 Removing the segmented nuclei from the original image implies some morphological mathematics techniques as described in Chapter~\ref{ch:chapter3}.
 This technique is now implemented in FISH-quant.
 
-Cells are segmented with a watershed algorithm using nuclei masks as seeds.
+Cells are segmented with a watershed algorithm using nucleus masks as seeds.
 A threshold value is set manually for every experiment to discriminate the cell surface from the background.
 In case of poor results, some segmentation masks are corrected manually.
 This is especially the case for transcript that tend to localize in cell protrusion.
@@ -133,9 +133,9 @@ Indeed, such localization pattern is highly sensitive to the segmentation accura
 \subsubsection{Localization feature engineering}
 
 Based on the segmentation masks and the coordinates of the detected spots, I identify 9,710 individual cells with an average of 346 \ac{RNA}s per cell.
-For each cell, I collect the cell and nucleus masks in 2D, the \ac{RNA} and the potential clusters coordinates in 3D.
+For each cell, I collect the cell and nucleus masks in 2D, the \ac{RNA} and the potential cluster coordinates in 3D.
 In addition I save an image of the cell, for visualization purpose, and different information about the experiment (the presence of a treatment, the targeted gene, etc.).
-Cropped cells, empty cells or cells with less than 30 \ac{RNA} detected inside are removed.
+Cropped cells, empty cells or cells with less than 30 detected \ac{RNA} inside are removed.
 At this point, I have a coordinate representation of every cell, as presented in Chapter~\ref{ch:chapter4}.
 
 I design and compute a set of 15 features to describe the spatial distribution of points inside the cell:
@@ -186,7 +186,7 @@ Therefore, the width of these regions are defined in pixels, more precisely, wit
 		\includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm},clip,width=\linewidth]{figures/chapter5/plot_protrusion}
 		\subcaption{Protrusion}
 	\endminipage
-	\caption{RNA localization patterns from~\cite{CHOUAIB_2020}.
+	\caption[RNA localization patterns]{RNA localization patterns from~\cite{CHOUAIB_2020}.
 	Coordinate representations with RNA spots (\textit{red}), cell membrane (\textit{black}) and nuclear membrane (\textit{blue}).
 	Detection and segmentation results are extracted and visualized with \emph{bigfish}}
 	\label{fig:localization_patterns_racha_features}
@@ -198,7 +198,7 @@ Figure~\ref{fig:localization_patterns_racha_features} illustrates an example of 
 
 To train the classifiers, manual annotations are needed as a ground truth.
 I generate panels with the cropped original image of the individual cells and their coordinate representations.
-These panels are then manually tag with the appropriate localization pattern.
+These panels are then manually tagged with the appropriate localization pattern.
 The manual classification result has been independently checked by several trained microscopists.
 Ultimately, I end up with 810 annotated cells.
 Counts of the annotations are presented in Table~\ref{table:real_dataset_chapter5}.
@@ -217,7 +217,7 @@ Counts of the annotations are presented in Table~\ref{table:real_dataset_chapter
 		Protrusion & 83\\
 		\hline
 	\end{tabular}
-	\caption{Annotated cells}
+	\caption[Count of annotated cells]{Annotated cells}
 	\label{table:real_dataset_chapter5}
 \end{wraptable}
 
@@ -244,15 +244,15 @@ In addition, input dataset is rescaled to have zero mean and unit variance.
 \subsection{Results}
 \label{subsec:results_general_pattern}
 
-Thanks to their design or their normalization, the spatial features selected are mostly invariant to \ac{RNA} concentration.
-They allow the use of unsupervised or supervised methods to classify cells among several localization patterns.
+Thanks to their design or their normalization, the selected spatial features are mostly invariant to \ac{RNA} concentration.
+They enable the use of unsupervised or supervised methods to classify cells among several localization patterns.
 
 \subsubsection{Unsupervised visualization}
 
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/tsne_annotation_legend}
-    \caption{t-SNE embedding from~\cite{CHOUAIB_2020}.
+    \caption[t-SNE embedding of experimental cells]{t-SNE embedding from~\cite{CHOUAIB_2020}.
 	Each point is a cell in the feature space after a t-SNE transformation.
 	Manually annotated cells are colored according to their localization pattern.
 	Cells that were not annotated or that had multiple patterns are colored in gray}
@@ -264,8 +264,8 @@ Cells with different patterns are localized in different regions of the embedded
 Moreover, cells with the same annotations cluster in the same regions whether they correspond to the same gene or not.
 With these observations it seems the hand-crafted features capture key information of the localization patterns and summarize well the manual annotations.
 
-Initialized with a PCA transformation, a \ac{t-SNE} algorithm preserves better the global structure, thus allowing more relevant global interpretation.
-In particular, we can discriminate on the top a large cluster of cells with a potential foci pattern from the rest of the cell population.
+Initialized with a PCA transformation, a \ac{t-SNE} algorithm better preserves the global structure, thus enabling more relevant global interpretation.
+In particular, we can discriminate at the top a large cluster of cells with a potential foci pattern from the rest of the cell population.
 The resulting embedding also seems to polarize between nucleus-related patterns (bottom left) and the cell-related patterns (top right).
 This polarization remains even among the subpopulation with potential foci pattern.
 Such conclusion validates the design to let a cell being classified with several non-exclusive localization patterns.
@@ -277,7 +277,7 @@ Not surprisingly, a feature space that discriminates well between classes also p
 The \ac{OOB} accuracy score obtained for the different patterns is between 0.93 and 0.99, while a dummy classifier would return a 0.8 accuracy score (the dataset is built with 20\% positive samples).
 The intranuclear pattern is the easiest to recognize.
 In fact, it could be predicted by just thresholding the proportion of \ac{RNA} inside nucleus (almost all intranuclear cells have more than 80\% of their\ac{RNA}s that localize inside the nucleus).
-On the opposite, the nuclear edge and perinuclear patterns are the most difficult to classify due to possible confusion with a random pattern or the lake of annotated cells.
+On the opposite, the nuclear edge and perinuclear patterns are the most difficult to classify due to possible confusion with a random pattern or the lack of annotated cells.
 
 \begin{wraptable}{R}{0.50\textwidth}
 	\centering
@@ -295,7 +295,7 @@ On the opposite, the nuclear edge and perinuclear patterns are the most difficul
 		\textit{Dummy classifier} & \textit{0.80}\\
 		\hline
 	\end{tabular}
-	\caption{Random forest accuracy (OOB)}
+	\caption[Random forest accuracy]{Random forest accuracy (OOB)}
 	\label{table:accuracy_oob}
 \end{wraptable}
 
@@ -312,7 +312,7 @@ Importantly, row values does not sum to one because classifiers (and so columns 
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/heatmap_racha_2}
-    \caption{Heat maps from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern.
+    \caption[Heat maps with localization pattern classification results]{Heat maps from~\cite{CHOUAIB_2020} with the fraction of cells classified in the indicated pattern.
 	(\textit{Top heat map}) Genes whose RNAs shows a localization preference.
 	Only values significantly different from negative controls are colored (p-value computed with Fisher's exact test).
 	(\textit{Bottom heat map}) Negative control with genes whose RNAs localize randomly.
@@ -337,7 +337,7 @@ Apart from KIF5B, others transcripts localizing in cytoplasmic extensions (or pr
 The frequency of this pattern varies a lot, between 14\% and 62\% of cells classified, respectively for DYNLL2 and RAB13.
 Interestingly, this pattern concerns four \ac{RNA}s encoding motor proteins: the three kinesins KIF1C, KIF4A, KIF5B and DYNLL2.
 
-MYH3, another transcript encoding motor protein, localizes partially in protrusions, although it's not its most frequent localization pattern.
+MYH3, another transcript encoding motor protein, localizes partially in protrusions, although it is not its most frequent localization pattern.
 Most of the time, MYH3 transcripts remain in the nucleus, exhibiting an intranuclear pattern.
 This is the most easily recognizable pattern: more than 55\% of cells spotting MYH3 and CEP192 \ac{RNA}s show an accumulation of transcripts inside nucleus.
 
@@ -345,23 +345,23 @@ The two genes observed with a nuclear edge pattern, ASPM and SPEN, have 50\% and
 
 Several genes are identified with \ac{RNA}s in the perinuclear area: AKAP1, AKAP9, AP1S2, ATP6A2, and HSP90B1.
 They ranged from 13\% (HSP90B1) to 93\% (AKAP9) of cells classify with said pattern.
-Even with a small number of cells HSP90B1 shows a significant perinuclear pattern compare to the control group.
+Even with a small number of cells, HSP90B1 shows a significant perinuclear pattern compared to the control group.
 Such observation is consistent with previous biological information about this gene: it contains a signal peptide that leads the translation (and the subsequent protein) on the endoplasmic reticulum, resulting in a perinuclear pattern through a 2D \ac{smFISH} experiment.
 This also suggests that HSP90B1 transcript co-localizes with its protein.
 
 A large number of transcripts exhibit a cluster-like localization pattern we call foci.
-We classify them in two groups we detail in the next Section~\ref{sec:translation_factories}.
+We classify them in two groups that we detail in the next Section~\ref{sec:translation_factories}.
 The first group gathers transcripts accumulating in \ac{P-bodies}: AURKA, HMMR, CEP170P1, CRKL and PAK2.
 The second group includes ASPM, DYNC1H1, BUB1 and CTNNB1 transcripts, accumulating in non-\ac{P-bodies} clusters we call translation factories.
-It is noteworthy to mention that a number of genes exhibit foci with another localization preference in parallel like ASPM (nuclear edge), DYNC1H1, AP1S2, AKAP1, HSP90B1 (perinuclear), KIF1C and RAB13 (protrusion).
+It is noteworthy to mention that a number of genes exhibits foci with another localization preference in parallel like ASPM (nuclear edge), DYNC1H1, AP1S2, AKAP1, HSP90B1 (perinuclear), KIF1C and RAB13 (protrusion).
 In general, non-\ac{P-bodies} genes have a higher proportion of cells classified with a foci pattern: between 24\% (BUB1) and 69\% (ASPM) cells while \ac{P-bodies} genes have between 7\% (AURKA) and 31\% (HMMR) cells.
-Likewise, in term of molecule concentration, non-\ac{P-bodies} genes present a higher proportion of \ac{mRNA} in foci, varying from 9\% (BUB1) to 28\% (CTNNB1), while \ac{P-bodies} accumulate between 2\% to 15\% of cell \ac{mRNA}s.
+Likewise, in term of molecule concentration, non-\ac{P-bodies} genes present a higher proportion of \ac{mRNA} in foci, varying from 9\% (BUB1) to 28\% (CTNNB1), while \ac{P-bodies} accumulate between 2\% to 15\% of \ac{mRNA}s.
 This foci quantification is in line with the previously reported estimations in the literature of 10\% to 20\% \ac{mRNA}s clustered in foci~\cite{Pillai_2005, Hubstenberger_2017}.
 
 \subsubsection{Cell-to-cell variability}
 
-If we focus on the individual cells instead of the gene, \ac{RNA} localization appears highly variable.
-For example, with CTNNB1 transcripts there is no foci at all or more than 60\% of \ac{mRNA}s clustered, depending of the cell observed.
+If we focus on the individual cell instead of the gene, \ac{RNA} localization appears highly variable.
+For example, with CTNNB1 transcripts, there is either no foci at all or more than 60\% of \ac{mRNA}s clustered, depending of the cell observed.
 For a better quantification of this intercellular variability, additional figures are presented in Appendix~\ref{ch:cell_pattern_classification}.
 Cells of specific genes are plotted on \ac{t-SNE}~\ref{fig:tsne_proba_gene} and single cell results are summarized in heat maps~\ref{fig:heatmap_racha_cells}.
 Pattern probabilities returned by classification models vary from cell to cell.
@@ -390,11 +390,12 @@ More precisely, we exploit a library of HeLa cell lines with a \ac{BAC} includin
 In parallel, and without compromising the localization of the \ac{mRNA}, the tag can be targeted with a \ac{smFISH} probe, allowing us to spot the \ac{mRNA} molecules.
 
 Along with \ac{RNA} localization patterns, we observe occurrences of local translation in several subcellular areas.
-Some are expected, like HSP90B1 (an endoplasmic reticulum protein), ATP6A2 (in endolysosomes) or AKAP1 (an \ac{RBP} at the surface of mitochondria).
+For example, the phenomenon is observed in the nuclear membrane with the ASPM and SPEN transcripts.
+Some local translations are expected, like HSP90B1 (an endoplasmic reticulum protein), ATP6A2 (in endolysosomes) or AKAP1 (an \ac{RBP} at the surface of mitochondria).
 Others are discoveries like AKAP9 or AP1S2, whose \ac{mRNA}s are known to localized respectively in the Golgi or on endosomes.
-For example the phenomenon is observed in the nuclear membrane with the ASPM and SPEN transcripts.
+
 Previous studies have exploited SunTag to visualize single molecules of nascent proteins~\cite{pichon_visualization_2016, Pichon_2018, Wu_2016}.
-Here, this techniques allows us to confirm that both ASPM \ac{mRNA}s and nascent proteins localized in nuclear membrane, thus suggesting a local translation.
+Here, this technique allows us to confirm that both ASPM \ac{mRNA}s and nascent proteins localized in nuclear membrane, thus suggesting a local translation.
 
 The rest of this section goes a bit further by focusing on a translation-dependent foci pattern that differs from the more common \ac{P-bodies}.
 We find four transcripts that accumulate in clusters, but do not colocalized with \ac{P-bodies} markers: BUB1, DYNC1H1, CTNNB1 and ASPM.
@@ -405,7 +406,7 @@ Finally, my second contribution to~\cite{CHOUAIB_2020} consists in quantify this
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/translation_factory}
-    \caption{Colocalization between the DYNC1H1 transcript and its nascent protein, from~\cite{pichon_visualization_2016}.
+    \caption[smFISH and SunTag images of DYNC1H1]{Colocalization between the DYNC1H1 transcript and its nascent protein, from~\cite{pichon_visualization_2016}.
 	Transcripts and proteins are targeted with smFISH probes (\textit{Left}) and SunTag (\textit{Right}) respectively.
 	\textit{Scale bar} is 10$\mu$m}
     \label{fig:translation_factory}
@@ -444,14 +445,14 @@ Such areas can indeed be processed in a way that no cluster is detected afterwar
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/plot_puromycin}
-    \caption{Box plot with the number of detected RNA clusters for different genes and treatments.
+    \caption[Box plot with the number of detected RNA clusters]{Box plot with the number of detected RNA clusters for different genes and treatments.
 	Red diamonds are the mean and the \textit{whiskers} equal 1.5 the interquartile range}
     \label{fig:plot_puromycin}
 \end{figure}
 
 An obvious indicator to assess if a foci pattern is disrupted is the number of \ac{RNA} clusters detected per cell.
 When I compare treated and untreated cells, the difference is clear for the four genes BUB1, DYNC1H1, CTNNB1 and ASPM.
-Their transcripts usually accumulate in foci, but with the presence of puromycin drug, \ac{mRNA}s are dispersed within the cell and the number of clusters detected drops.
+Their transcripts usually accumulate in foci, but with the presence of puromycin drug, \ac{mRNA}s are dispersed within the cell and the number of detected clusters drops.
 This is what we call translation factories: noteworthy cluster-like complexes where specific \ac{mRNA}s are translated.
 
 As a comparison, in Figure~\ref{fig:plot_puromycin}, I perform the same analysis with HMMR, a gene classified as \ac{P-bodies}.
@@ -482,7 +483,7 @@ Moreover, these components accumulate in the foci.
 CTNNB1 translation factories are altogether sites of both $\beta$-catenin synthesis and degradation.
 As~\cite{Chin_2020} summarizes it, these factories are ''sites of co-translational protein degradation, where CTNNB1 protein rapidly comes into contact with the destruction complex, offering an elegant mechanism to tightly control the cellular levels of potent signaling pathway effectors''.
 
-\section{Centrosomal pattern}
+\section{A translation and cell cycle dependent centrosomal pattern}
 \label{sec:centrosomal}
 
 In~\cite{safieddine_choreography_2021} the analysis pipeline is far more mature.
@@ -492,152 +493,48 @@ My contribution consists in quantifying the centrosomal localization pattern obs
 \subsection{Introduction}
 \label{subsec:introduction_centrosomal}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Most of \ac{mRNA}s have a random distribution throughout the cytoplasm, but some of them localize in specific subcellular regions.
-This phenomenon has been previously reviewed in different papers~\cite{Blower_2013, Jung_2014, Eliscovich_2017, Bovaird_2018}.
-
-Such localization can be related to either the \ac{RNA} metabolism, for example with untranslated \ac{mRNA}s stored and repressed in \ac{P-bodies} (but not degraded~\cite{Hubstenberger_2017}), or the protein metabolism with locally translated proteins.
-This local synthesis concerns both mature proteins and nascent peptides.
-Different cellular processes imply the delivery of mature proteins in specific subcellular regions and a local regulation of the proteome.
-Local translation can contributes to cell fate determination during metazoan development, as observed in~\cite{melton_translocation_1987} with a clear modification of the Vg1 \ac{RNA} spatial distribution between mature and immature Xenopus oocytes.
-In these same Xenopus embryos, cyclin B1 \ac{mRNA}s localized at the mitotic apparatus could also play an important role in the rapid cell division cycles observed during early embryogenesis~\cite{Groisman_2000}.
-In mammal cells, \ac{RNA} localization influences cell polarization and motility, usually through actin localization at the cell edge~\cite{Lawrence_1986}.
-Locally translated proteins are also known to be involved in axonal growth and so neural plasticity~\cite{VanDriesche_2018}.
-Finally, by precisely controlling the \ac{mRNA} localization and the subsequent translation process, cells can avoid to release proteins at inappropriate places~\cite{Muller_myelin_2013} and help the synthesis of protein complexes~\cite{pichon_visualization_2016}.
-
-Several mechanisms will drive the localization of \ac{mRNA}s.
-Sometimes the nascent peptide can serve as a targeting signal, but most of the time the \ac{RNA} molecule itself will initiate its localization.
-\ac{RNA} can also be trapped in specific subcellular compartments.
-The molecule often include a zip-code sequence that is read by a \ac{RBP} and starts the assembly of a transport complex comprising different organelles or motor proteins.
-Such complex can then directly convey the \ac{RNA} along the cytoskeleton~\cite{Blower_2013}.
-Coupled with an anchoring mechanism at the targeted destination, it provides a better stability of the \ac{RNA} localization.
-
-In~\cite{CHOUAIB_2020}, we claim that a global view of local translation in the whole cell and at the genomic level is still to come, despite recent progress.
-In a pioneering work on Drosophila embryogenesis~\cite{lecuyer_global_2007}, authors analyze 3,370 genes and find that 71\% of them encode a transcript with a non-uniform localization pattern.
-In human cell lines recent studies exploit and improve \ac{smFISH} techniques to image thousands of \ac{mRNA}s in the perinuclear region, the mitochondria and the cell membrane~\cite{battich_image-based_2013, Chen_2015, eng_seqfish_2019, Xia_2019}.
-We take a step forward in studying \ac{mRNA} localization with human cell lines and a systematic approach.
-We perform a quantitative analysis leveraging supervised and unsupervised methods in order to recognize up to 6 different localization patterns.
-The current section emphasizes this quantitative pipeline that contributes to make our analysis scalable and more robust.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 We keep exploring specific \ac{RNA} localization patterns and local translation in~\cite{safieddine_choreography_2021}.
-The paper focuses on transcripts localizing at the \ac{MTOC}.
+The paper focuses on transcripts localizing at the centrosomes.
+They are the \ac{MTOC} in most animal cells and are composed of two centrioles surrounded with a \ac{PCM} - a highly structured mass of proteins.
+These organelles are a heritage from ancient eukaryotic cells.
+Plants, fungi (and some species of flatworm and flies) use a different mechanism to structure their \ac{MT}.
 
-These \ac{mRNA}s combine both a spatial and a temporal distribution patterns.
+Centrosomes have an important role in cell division, in addition to regulate cell motility and polarity~\cite{wu_2017}.
+Concerning cell division, centriole duplication ensures that each daughter cell inherits two centrioles after mitosis.
+In G1 phase, there is one centrosome per cell, with two centrioles connected by a linker.
+During S phase, nucleation of the procentrioles (the daughter centrioles) happens.
+By G2 phase, these procentrioles elongate.
+After the two centrioles pairs mature and the \ac{PCM} expands, the two centrosomes are separated during the G2-M transition.
 
+First observations of a \ac{mRNA} accumulation at the centrosomes are made on Xenopus early embryos~\cite{Groisman_2000}, with cyclin B1 \ac{mRNA}s concentrating at the mitotic apparatus.
+Subsequent approaches of microscopy with \ac{FISH} techniques allow to image \ac{mRNA} localization in Drosophila~\cite{lecuyer_global_2007, wilk_diverse_2016} and human cell lines~\cite{Sepulveda_2018, CHOUAIB_2020}.
+As these \ac{mRNA}s encode for known centrosomal proteins, these studies suggest a phenomenon of local translation.
 
-% \ac{MTOC} ==  centrosome
-
-% paper racha (centrosome rna)
-
-% The HMMR protein is known to localize on microtubules and centrosomes and to have spindle-promoting activities
-% (Groen et al., 2004; Maxwell et al., 2003). The HMMR mRNAs accumu- lated in the peri-centrosomal region
-% in interphase and much more strongly so in mitosis, and it co-localized at the centrosome with its protein
-% (Figures 2C and S8A). Moreover, using a RPE1 cell line stably expressing a Centrin2-GFP protein, we confirmed
-% hat the endogenous HMMR mRNAs preferentially localized near centrosomes (Figure S8B).
-% The other mRNAs localizing at centrosomes were ASPM and NUMA1. Both proteins control spindle
-% function during mitosis (Kouprina et al., 2005; Radulescu and Cleveland, 2010). Interestingly,
-% these two proteins had similar localization patterns. In interphase, both localized to the nucleoplasm while
-% during mitosis, they concentrated on the spindle poles and weakly stained microtubules (Figure 2C; pink arrow
-% points to cells in pro- phase). Remarkably, the localization of ASPM and NUMA1 mRNA displayed a similar dynamic
-% during the cell cycle (Fig- ure 2C). In interphase, these mRNAs were dispersed throughout the cytoplasm,
-% with ASPM mRNAs additionally localized in foci and decorated the nuclear edge. However, both mRNAs re-localized
-% to centrosomes during mitosis, where they became highly concentrated and co-localized with their GFP-tagged
-% pro- teins (Figure 2C, pink arrow indicates cells in early mitosis). Iden- tical localization patterns were observed for the endogenous mRNAs (Figures S8C and S8D).
-% The co-localization of HMMR, ASPM, and NUMA1 mRNAs with their proteins suggested that they were translated
-% locally at cen- trosomes. To confirm this possibility, we analyzed the localization of two translation factors:
-% eIF4E and the phosphorylated form of the ribosomal protein RPS6 (p-RPS6). Immunofluorescence showed that the
-% endogenous eIF4E and p-RPS6 proteins were present throughout the cells but also accumulated at mitotic centrosomes
-% (Figure S4C, see cells in prophase). Therefore, not only mRNAs but also the translational apparatus was present
-% at the spindle poles. This suggests the presence of a specific transla- tional program occurring on mitotic centrosomes.
-
-% new citation
-
-% Recently, it has been demonstrated that RHAMM, together with ASPM, and NUMA1
-% are directly translated at the spindle poles during mitosis, and its localisation at the centrosome is temporally regulated
-% Considering that RHAMM is a cell-cycle-regulated gene product [30, 31], it is
-% not surprising that it is poorly expressed in most homoeostatic adult tissues [41, 42],
-% but it is overexpressed in several tumours, such as breast, endometrial, ovarian, bladder,
-% pancreas, colorectal, head, neck and stomach cancers, choriocarcinoma, hepatocellular carcinoma,
-% myeloma and leukaemia and prostate, among others [19, 43,44,45,46,47,48,49].
-% In all cases, the deregulation of this protein has been associated with poor prognosis and tumour progression.
-
-% paper adham
-
-% Messenger RNA localization is a post-transcriptional process by which cells target certain mRNAs to spe- cific subcellular compartments.
-% The trafficking of mRNA molecules is linked to its metabolism and function1. Indeed, the subcellular localization of a transcript
-% an influence its maturation, translation, and degradation. On one hand, mRNAs can be stored in a translationally repressed state
-% in dedicated structures such as P-bodies2,3. On the other hand, some mRNAs can localize to be translated locally.
-% Such a local protein synthesis can be used to localize the mature polypeptide, and in this case, it can contribute to a wide range of functions,
-% such as cell migration, cell polarity, synaptic plasticity, asymmetric cell divisions, embryonic patterning, and others4–6.
-% Recently, local translation has also been linked to the metabolism of the nascent protein, rather than to localize the mature polypeptide.
-% This is for instance the case for mRNAs translated in distinct foci termed translation factories, which correspond to small cytoplasmic
-% aggregates containing multiple mRNA molecules of a given gene7,8.
-% Specific subcellular localization of mRNA molecules can be achieved by several mechanisms. Passive diffusion coupled with local
-% entrapment and/or selective local protection from degra- dation are two strategies that can establish specific distributions of mRNA molecules6.
-% In most cases, however, mRNA transport and localization occurs via motor-driven transport on the cytoskeleton9–11. Molecular elements
-% that regulate and control mRNA localization include cis- and trans-acting elements. Cis- acting elements are referred to as zip codes
-% and are often found within the 3′UTR of the transcript12–14. Many types of zip codes have been described based on primary sequence, number,
-% redundancy, and secondary/tertiary structure. Zip codes are defined by their ability to carry sufficient information for localizing the transcript.
-% They bind one or several trans-acting RNA-binding proteins (RBPs), which mediate diverse aspects of RNA metabolism such as motor binding and translational
-% regulation6. Indeed, mRNAs in transit are often subjected to spatial control of translation15. A long-standing notion in the field is that the transport
-% of localized mRNAs occurs in a translationally repressed state, which serves to spatially restrict protein synthesis16,17. Local translational
-% derepression occurs once the transcript has reached its destination, for instance by phosphorylation events and/or competition with pre-existing local proteins18–20.
-% While active transport of transcripts through RNA zip codes appears to be a frequent mechanism, mRNA localization can also involve the nascent
-% polypeptide, as in the case of secreted proteins. Here, the signal recognition particle (SRP) binds the nascent signal peptide, inhibits
-% translation elongation, and mediates anchoring of the nascent polysome to the SRP receptor on the endoplasmic reticulum, where translation
-% elongation resumes21–23. Recently, a few hints, such as puromycin sensitivity, suggested that translation may play a role in the localization
-% of some other types of mRNAs8,24. Whether this is indeed the case and the mechanisms involved remain, however, unknown.
-% Centrosomes are ancient and evolutionary conserved orga- nelles that function as microtubule (MT) organizing centers in most animal cells.
-% They play key roles in cell division, signaling, polarity, and motility25,26. A centrosome is composed of two centrioles and their surrounding
-% pericentriolar material (PCM). In cycling cells, centriole duplication is tightly coupled to the cell cycle to ensure a constant number of
-% centrioles in each cell after mitosis27. Briefly, G1 cells contain one centrosome with two centrioles connected by a linker. At the beginning
-% of S phase, each parental centriole orthogonally assembles one new procentriole. This configuration is termed engagement and prevents redupli- cation
-% of the parental centrioles. Procentrioles elongate as the cell
-
-% is progressing through S and G2. In G2, the two centriolar pairs mature and PCM expands, in preparation of mitotic spindle
-% formation . The G2/M transition marks the disruption of the centriole linker and centrosome separation. The first clues sug- gesting
-% the importance of mRNA localization and local transla- tion at the centrosomes were discovered almost 20 years ago in Xenopus early embryos28.
-% It was found that cyclin B mRNAs concentrated on the mitotic spindle and that this localization was dependent on the ability of cytoplasmic
-% polyadenylation element- binding protein (CPEB) to associate with MTs and centrosomes. A more global view was obtained by purifying mitotic
-% MT-bound mRNAs in Xenopus eggs and synchronized HeLa cells29. It was also shown that 3′UTR CPEs regulate the localized translation activation
-% of spindle enriched mRNAs that is essential for the first meiotic division in Xenopus oocytes30. Another approach used microscopy and
-% systematic in situ hybridization to image RNA localization in Drosophila embryos31. Although this study did not reach single-molecule
-% sensitivity, it revealed that six mRNAs localized at centrosomes across different stages of early Droso- phila development. In the
-% following study, 13 mRNAs were annotated as enriched on Drosophila centrosomes in at least one stage or tissue over the full course
-% of embryogenesis32. Finally, two natural antisense mRNAs (cen and ik2) were recently shown to co-localize to centrosomes in a co-dependent
-% manner via 3′ UTR interactions in Drosophila embryos33. In humans, four mRNAs (PCNT, HMMR, ASPM, and NUMA1), and two trans- lation factors
-% (eIF4E and the phosphorylated ribosomal protein p-RPS6) were recently found to localize at centrosomes8,24. These mRNAs all code for
-% centrosomal proteins, suggesting that they are translated locally.
-% Here, we performed a systematic single-molecule fluorescent in situ hybridization (smFISH) screen of almost all human mRNAs coding for
-% centrosomal proteins and we described a total of eight transcripts localizing at centrosomes. Remarkably, all eight mRNAs required
-% synthesis of the nascent protein to localize and, by imaging single ASPM and NUMA1 mRNAs and poly- somes, we demonstrate that
-% localization occurs by active trans- port of polysomes. Moreover, the Drosophila orthologs of the human centrosomal mRNAs also
-% localized to centrosomes in a similar translation-dependent manner. This work thus identifies a conserved family of centrosomal
-% mRNAs that become localized by active polysome transport.
+In~\cite{safieddine_choreography_2021}, we identify 8 \ac{mRNA}s with a centrosomal pattern.
+Remarkably, these \ac{mRNA}s combine both spatial and temporal distribution patterns.
+Their localization appear to be translation dependent, through the synthesis of a nascent protein, and cell cycle dependent.
+Moreover, these \ac{mRNA}s conserved their properties in both human and drosophila cell lines.
 
 \subsection{Materials and methods}
 \label{subsec:materials_centrosomal}
 
-The quantitative analysis presented here exploit an improved version of \emph{bigfish}, especially for the spot detection.
+The quantitative analysis presented here exploits an improved version of \emph{bigfish}, especially for the spot detection.
 The main blocks that will be published in FISH-quant V2~\cite{Imbert_fq_2022} are already present.
-This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_translation_factories_2020}}.
+This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_centrosome_2020}}.
 
 \subsubsection{Experimental data}
 
-With an Opera Phenix High-Content Screening System (PerkinElmer) we acquire 3D images with around 35 z-slices and a spacing of 0.3$\nu$m.
+With an Opera Phenix High-Content Screening System (PerkinElmer) we acquire 3D images with around 35 z-slices and a spacing of 0.3$\mu$m.
 In total, and after curation, we collect 3,678 \ac{FoV}s of HeLa cell line spotting 12 different transcripts, sometimes treated with translation inhibitors like puromycin or cycloheximide.
 In addition to the \ac{smFISH}, each image includes three fluorescent labels to visualize the nucleus (DAPI), the cell (CellMask\textsuperscript{\texttrademark}) and the centrosomes (Centrin1-\ac{GFP}) as illustrated in Figure~\ref{fig:fov_adham}.
 
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/FoV_BICD2}
-    \caption{Contrasted image with CellMask\textsuperscript{\texttrademark} (\textit{left}), smFISH (\textit{center}) and GFP (\textit{right}) channels.
+    \caption[Contrasted image with CellMask\textsuperscript{\texttrademark}, smFISH and GFP channels]{Contrasted image with CellMask\textsuperscript{\texttrademark} (\textit{left}), smFISH (\textit{center}) and GFP (\textit{right}) channels.
 	Targeted transcript is BICD2.
 	Images are projected in 2D.
-	Plot build with \emph{bigfish}}
+	Plot built with \emph{bigfish}}
     \label{fig:fov_adham}
 \end{figure}
 
@@ -645,41 +542,41 @@ In addition to the \ac{smFISH}, each image includes three fluorescent labels to 
 
 In~\cite{safieddine_choreography_2021}, and for the first time, I use the threshold-free spot detection described in Chapter~\ref{ch:chapter2}.
 This heuristic helps me to scale the detection to thousands of images.
-\ac{RNA} detection is followed by the decomposition of dense areas and the detection of \ac{RNA} clusters, everything being processed from the \ac{smFISH} channel projected in 2D (for simplicity's sake).
+\ac{RNA} detection is followed by the decomposition of dense areas and the detection of \ac{RNA} clusters, everything being processed from the \ac{smFISH} channel projected in 2D (for the sake of simplicity).
 
 The novelty in this paper is the detection of centrosomes from a \ac{GFP} channel (projected in 2D too).
-Since the centrosome appears as a much larger spot than the individual \ac{RNA} molecule, I detect it like I would detect a \ac{RNA} cluster, but in the \ac{GFP} and with tuned parameters.
-It works surprising well and allows me to scale the centrosome detection as well.
+Since the centrosome appears as a much larger spot than the individual \ac{RNA} molecule, I detect it like I would detect a \ac{RNA} cluster, but in the \ac{GFP} channel and with tuned parameters.
+It works surprisingly well and enables me to scale the centrosome detection as well.
 The final results can be observed in Figure~\ref{fig:centrosomes}.
 
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/centrosomes}
-    \caption{Contrasted image with detected RNAs on a smFISH channel (\textit{left}) and detected centrosome on a GFP channel (\textit{right}).
+    \caption[RNA and centrosome detection results]{Contrasted image with detected RNAs on a smFISH channel (\textit{left}) and detected centrosome on a GFP channel (\textit{right}).
 	Targeted transcript is BICD2.
-	Plot build with \emph{bigfish}}
+	Plot built with \emph{bigfish}}
     \label{fig:centrosomes}
 \end{figure}
 
 \subsubsection{Cell and nucleus segmentation}
 
 Nucleus and cell segmentation is performed with a pretrained cellpose model~\cite{stringer_cellpose_2021}, respectively from the 2D DAPI and CellMask\textsuperscript{\texttrademark} channels.
-It's based on a modified U-Net architecture~\cite{Ronneberger_unet} and trained on a dedicated and diversified dataset released by the authors.
+It is based on a modified U-Net architecture~\cite{Ronneberger_unet} and trained on a dedicated and diversified dataset released by the authors.
 The performance of a deep learning model like cellpose makes the segmentation step scalable with little or no manual intervention.
 Here, I parametrize cellpose to segment nuclei with a diameter of 14.4$\mu$m and cells with a diameter of 22.7$\mu$m, in average.
-It appears that cellpose is quite sensible to the diameter set a priori as the model resizes the input image accordingly.
-Ultimately, I make sure every nucleus matches a segmented cell.
-Isolated cell or nucleus is removed.
+It appears that cellpose is quite sensitive to the diameter set, a priori, as the model resizes the input image accordingly.
+Ultimately, I check that every nucleus matches a segmented cell.
+Isolated cells or isolated nuclei are removed.
 
-I then extract and save the information collected for all individual cells.
+Then, I extract and save the collected information for all individual cells.
 Eventually, 54,263 individual cells are identified, with at least 10 detected \ac{RNA}s and 1 or 2 centrosomes.
 
 \subsubsection{Centrosomal features and cell cycle classification}
 
 I adapt the spatial features developed for~\cite{CHOUAIB_2020} to characterize a centrosomal \ac{RNA} pattern at the single-cell level.
 In particular, I define the centrosomal region as a disk with 2000nm radius around the \ac{MTOC}.
-This distance threshold is set empirically.
-From there, I can compute an potential accumulation of \ac{RNA}s within centrosome's neighborhood, normalized by the expression level observed for each cell.
+This distance threshold is empirically set.
+From there, I can compute any potential accumulation of \ac{RNA}s within centrosome's neighborhood, normalized by the expression level observed for each cell.
 An example of such accumulation can be seen in Figure~\ref{fig:centrosomes}.
 The detail of the different features implemented is described in Section~\ref{subsec:expert_features} and illustrated in Figure~\ref{fig:centrosome_features}.
 All the features are based on the detection and segmentation results previously extracted.
@@ -695,16 +592,17 @@ Completed with manual annotations it allows us to discriminate interphase, early
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/plot_rna_centrosome}
-    \caption{Box plot with the proportion of centrosomal mRNAs in cells (interphase and mitotic phase), for different genes and treatments.
+    \caption[Box plot with the proportion of centrosomal mRNAs]{Box plot with the proportion of centrosomal mRNAs in cells (interphase and mitotic phase), for different genes and treatments.
 	Red diamonds are the mean and the \textit{whiskers} equal 1.5 the interquartile range.
-	HMMR, NUMA1 and ASPM (in \textit{gray}) are endogenous centrosomal mRNAs, the rest are BAC-transcribed mRNAs.
+	HMMR, NUMA1 and ASPM (in \textit{gray}) are endogenous mRNAs, the rest are BAC-transcribed mRNAs.
+	TRIM59, TTBK2, KIF1C and DYNC1H1 are used as control mRNAs.
 	A one-sided Welch’s t-test is used to evaluate significance (***: p-value < 0.001)}
     \label{fig:plot_rna_centrosome}
 \end{figure}
 
 My contribution in~\cite{safieddine_choreography_2021} is to quantify what biologists named and classify as centrosomal \ac{mRNA}s.
 Among the centrosomal protein-coding genes analyzed, we find 8 human \ac{mRNA}s that accumulate in centrosome's neighborhood: BICD2, NIN, CCDC88C, PCNT, CEP350, HMMR, NUMA1 and ASPM.
-To match these manual observations, I design a quantitative pipeline to process a high-content screening dataset and compute the proportion of \ac{mRNA}s detected around a centrosome.
+I design a quantitative pipeline to process a high-content screening dataset and compute the proportion of \ac{mRNA}s detected around a centrosome.
 The results are reported in Figure~\ref{fig:plot_rna_centrosome}.
 In addition to the centrosomal transcripts, I also process control genes without the studied pattern, for comparison purpose.
 While TRIM59 and TTBK2 present no specific localization pattern, KIF1C and DYNC1H1 are respectively and frequently identified with protrusion and foci patterns (among other localizations).
@@ -714,132 +612,93 @@ First, most of the centrosomal \ac{mRNA}s present a higher proportion of transcr
 The difference is less evident with ASPM transcripts, for example, with a lower proportion  of centrosomal \ac{mRNA}s than DYNC1H1 (5.8\% in average).
 As a control, DYNC1H1 transcripts accumulate in clusters and localize within the nuclear region and thus can be easily confused with a centrosomal pattern.
 This can illustrate a limitation of my quantification.
-If the centrosomal pattern is too complex to be characterize with only one spatial feature, the use of several centrosomal features, coupled with a classification pipeline could be beneficial, like in~\cite{CHOUAIB_2020}.
+If the centrosomal pattern is too complex to be characterized with only one spatial feature, the use of several centrosomal features, coupled with a classification pipeline could be beneficial, like in~\cite{CHOUAIB_2020}.
 In addition, performing the spot detection on 2D projected images instead of 3D stacks leads to a loss of information for the final quantitative results.
 Second, we can observe the impact of a puromycin treatment, with a drop of centrosomal \ac{mRNA}s.
+A long puromycin treatment can even prevent the mitosis.
 On the opposite, with a cycloheximide treatment, the pattern remains unchanged for most of the targeted genes.
 Similarly to the translation factories, it suggests that the centrosomal pattern is driven by the presence of nascent peptide chains.
 
-\subsubsection{Influence of mitosis}
+By exploiting live cell imaging and tracking \ac{mRNA} molecules we further demonstrate that their localization implies an active polysome transport.
+In particular, ASPM polysomes appear to move at speeds ranging from 0.5 to 1$\mu$m/s, a rate compatible with motor-driven transport.
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+\subsubsection{A cell cycle regulated localization}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Several iterations between manuel annotations and an automated classifier help to identify mitotic cells according to their mitosis phases, and thus refine and deepen our results.
+Five \ac{mRNA}s exhibit a centrosomal localization pattern during interphase and early mitosis: HMMR, BICD2, CEP350, PCNT and NIN.
+In addition, HMMR is the only gene whose \ac{mRNA}s and proteins co-localized at cytokinetic bridge in telophase.
+Lastly, ASPM and NUMA1 localize only during mitosis and CCDC88C in interphase.
+However, while NUMA1 \ac{mRNA}s localize during early mitosis (prophase and prometaphase), a centrosomal accumulation of ASPM \ac{mRNA}s can be observed for every mitotic phase.
+All in all, these results reveal an elegant \emph{choreography} of \ac{mRNA} localization, cell cycle regulated and translation driven.
 
-\section{Protrusion pattern}
+\section{The key role of KIF1C in protrusion pattern}
 \label{sec:protrusion}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+In~\cite{pichon_kinesin_2021} I benefit from a proven and mature pipeline to extract quantitative results from a \ac{smFISH} high content screening study.
+My contribution consists in quantifying a protrusion pattern manifested by the accumulation of \ac{mRNA}s in cell extensions.
 
-% paper racha (transript encoding motors)
-
-% Surprisingly, the proteins encoded by some of these localized mRNAs did not appear strongly enriched at the site of mRNA accumula- tion.
-% GFP-KIF4A was mostly nuclear with only a faint staining at the cell periphery, while GFP-tagged KIF5B, DYNLL2, and DYNC1H1 proteins
-% localized throughout the cytoplasm without a specific enrichment in protrusions or foci (Figure 1). Co-locali- zation was only observed for KIF1C-GFP, where both the mRNA
-% and the GFP-tagged protein accumulated in cytoplasmic protru- sions. This suggested that the KIF1C-GFP mRNAs were trans- lated locally.
-
-% To confirm the BAC results, endogenous mRNAs were analyzed using smiFISH, an inexpensive variant of smFISH (Tsa- nov et al., 2016).
-% KIF1C mRNAs accumulated in cytoplasmic pro- trusions in all the examined cell lines, including human HeLa cells as well as mouse
-% 3T3 fibroblasts and C2C12 myoblasts (Fig- ure S2A). Furthermore, in differentiated SH-SY5Y neuronal cells, KIF1C mRNA localized
-% in dendritic-like outgrowths, away from the cell body, while a control CRM1 mRNA remained in the soma (Figure S2B)
-
-% To provide a quantitative view of mRNA localization, we developed tools to identify the cytoplasmic protrusions, and we
-% measured both the fraction of cytoplasmic mRNAs located in this compartment and their enrichment as compared with a uniform
-% distribution of molecules (see STAR Methods). This re- vealed a high heterogeneity of mRNA localization in protrusions,
-% with values varying from 0\% to 60\% of the molecules depending on the cell (Figure S3A).
-% On average, the enrichment in protru- sions of KIF1C, KIF4A, DYNLL2, and MYH3 mRNAs was several folds higher than for
-% control motor mRNAs annotated as random (KIF20B and MYO18A; Figure S3A). It was, however, lower than for RAB13 mRNA
-% that we used as a positive control (Mili et al., 2008). Next, we determined whether KIF1C, KIF5B, MYH3, and KIF4A mRNAs accumulated in the same protrusions.
-% Two-color smFISH against the endogenous KIF1C mRNAs and the BAC- tagged mRNAs revealed that this was indeed the case (Fig- ure S3B).
-
-\subsection{Introduction}
+\subsection{KIF1C and APC-dependent mRNAs}
 \label{subsec:introduction_protrusion}
 
-\subsection{Materials and methods}
-\label{subsec:materials_protrusion}
+Three main \ac{RNA} transport mechanisms are reported in the literature: a localized protection from \ac{RNA} degradation, a random diffusion coupled with a targeted entrapment and an active \ac{RNA} transport along the cytoskeleton, with specific motor proteins~\cite{Medioni_2012, Bovaird_2018}.
+In this section, we focus on the active transport mechanism.
+As an example, in vertebrates, the $\beta$-actin \ac{mRNA} has a \emph{zipcode} sequence that the \ac{RBP} ZBP1 will recognize, hence allowing the transport of the \ac{mRNA} molecule along \ac{MT} and actin filaments~\cite{Oleynikov_2003}.
 
-\subsection{Results}
-\label{subsec:results_protrusion}
+More specifically, we investigate the role of the kinesin KIF1C that accumulates in cell protrusion (see Figure~\ref{fig:heatmap_racha}) and encode a microtubule motor protein.
+This protein interacts with a specific group of \ac{mRNA}s defined as APC-dependent (they require the APC protein to localize~\cite{wang_extracellular_2017}).
+KIF1C protein binds a subset of these \ac{mRNA}s and transports them to cell extensions where they exhibit cluster-like structures: NET1, TRAK2 and RAB13 .
+Interestingly, this kinesin protein also actively transports its own transcript to protrusions.
 
-\begin{figure}[h]
+Finally, we demonstrate that KIF1C is needed to transport the APC-dependent \ac{mRNA}s to protrusions along \ac{MT} and to form their clusters.
+Indeed, these foci are not observed in cell extensions when KIF1C motor is absent.
+KIF1C seems to have a dual function as microtubule motor and ''\ac{mRNA} anchoring module promoting clustering''~\cite{pichon_kinesin_2021}.
+
+\subsection{Quantification of peripheral mRNAs}
+\label{subsec:materials_results_protrusion}
+
+This study is an opportunity to exploit a proven FISH-quant V2~\cite{Imbert_fq_2022} and scale a quantitative analysis to identify protrusion \ac{RNA}s from HeLa cells.
+I identify 27,644 individual cells, spotting \ac{mRNA}s from 40 different genes, including KIF1C, APC-dependent \ac{mRNA}s and control transcripts.
+For every cell, I perform an automated spot detection, nucleus and cell segmentation, from 2D projected images.
+I compute RDI Calculator features from~\cite{stueland_rdi_2019}, especially the peripheral distribution index that measures how close the \ac{RNA}s localize to the cell periphery (see Section~\ref{subsec:expert_features}).
+The greater the value of the index, the more concentrated in the protrusion are the transcripts.
+
+\begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter5/helacentrin_distribution_pdi}
-    \caption{Blablabla}
+    \caption[Histogram of the peripheral distribution index]{Histogram of the peripheral distribution index for two group of transcripts.
+	Localized transcripts include: KIF1C, TRAK2 and NET1.
+	Control transcripts include NEK9, NIN, NPM1, OBSL1, OLA1, PAX2, PKHD1, RGS14, SMAD7 and SPAST}
     \label{fig:xavier_pdi}
 \end{figure}
+
+In Figure~\ref{fig:xavier_pdi}, I compare the two groups of transcripts: KIF1C, TRAK2 and NET1, three \ac{mRNA}s that bind to KIF1C protein for active transport to the protrusions, and a control group unrelated to KIF1C.
+For the peripheral distribution index, a completely random distribution has a value of 1.
+Here, as expected, the protrusion \ac{mRNA}s exhibit a biased spatial distribution toward the cell extensions.
+Finally, with RAB13 (that is not included in this analysis), KIF1C, TRAK2 and NET1 are the four transcripts that are enriched in cell protrusion and colocalized with their proteins.
 
 \section{Conclusion}
 \label{sec:conclusion_chapter5}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+In this chapter I present several applications of FISH-quant V2.
+Based on high content screening, from HeLa cell lines, I perform large scale quantitative analysis to support different biological insights.
+In total, several dozens of transcripts have been analyzed across 100,000 individual cells and hundreds of fluorescent bioimages.
 
-% racha paper
+In~\cite{CHOUAIB_2020}, I exhibit the high level of heterogeneity in term of \ac{mRNA}s localization, for a given cell population.
+The classification pipeline designed enables the identification of complex localization patterns: intranuclear, nuclear edge, perinuclear, foci and protrusion.
+The foci pattern itself is gather actually two different cluster-like structures of \ac{mRNA}s.
+The first one repressed transcripts and store them in \ac{P-bodies} until their degradation.
+The second one, the translation factories, is a manifestation of local translation where \ac{mRNA} molecules and proteins co-localized in clusters.
+Remarkably, such phenomenon of locally targeted translation is observed for other \ac{mRNA}s with different localization patterns.
+For some cases, this localization even seems to be translation dependent and tends to disappear once the nascent protein synthesis is inhibited.
+By extrapolating to the 20,000 human genes, we could expect to find a few hundred of translation factory structures may exist in a cell.
 
-% In conclusion, this quantitative analysis corroborated the manual annotations and revealed a high degree of heterogeneity of RNA localization across different cells.
-% This heterogeneity is a general phenomenon since it is seen with nearly all the genes analyzed here.
+In~\cite{safieddine_choreography_2021}, a second set of localized transcript is analyzed with spatial and temporal dynamics.
+I characterize \ac{mRNA}s with a centrosomal localization.
+This pattern presents a temporal dynamic in addition to be translation dependent.
+Cell cycle regulates the choreography and the localization of different \ac{mRNA}s around the centrosomes.
 
-% racha paper (discussion)
+In~\cite{pichon_kinesin_2021}, the importance of the KIF1C motor protein is confirmed concerning the transport of APC-dependent transcripts to cell extensions.
+Surprisingly, this proteins also bind its own \ac{mRNA}s along \ac{MT} which suggests the existence of a positive feedback loop to locally enrich cell protrusion with the needed \ac{mRNA}s.
 
-% In this study, we performed a dual RNA-protein localization screen and analyzed more than 500 genes.
-% We found 32 localized mRNAs, with 15 accumulating in P-bodies and the others being locally translated
-% (Table 1). We also discovered a number of unexpected features, and in particular that: (1) co-translational
-% mRNA targeting is frequent and occurs at unexpected locations; and (2) mRNAs can be translated in specialized
-% translation fac- tories, defined as a polysome aggregates. These factories can perform specific tasks on nascent proteins.
-% Localization of mRNA Shows a High Degree of Heterogeneity in Cell Lines
-% Co-translational RNA Targeting Occurs in Multiple Subcellular Locations
-% A Specific Translational Program Occurs at Mitotic Centrosomes
-% P-Bodies and Translation Factories
-
-% paper racha (introduction)
-
-% These studies provided information on RNA localization but did not directly investigate local translation as the encoded proteins were not detected.
-% Thus, we still lack a good understanding of the various functions played by local translation at the cellular level.
-
-% In this study, we developed a smFISH screen to specifically address this issue. Using a set of 523 GFP-tagged cell lines spanning
-% a variety of cellular functions and an approach that allows simultaneous visualization of mRNA and proteins,
-% we found that local translation occurs at various unanticipated locations. In particular, we discovered specialized
-% translation factories, where specific mRNAs are translated. These factories are remarkable in that they provide
-% a unique mean to regulate the metabolism of nascent proteins and also create a fine granular compartmentalization of translation.
-
-% adham paper
-
-% xavier paper
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%~\cite{lecuyer_global_2007}
-
-%To address this point, we developed and employed a high-resolution fluorescent
-%in situ hybridization procedure to comprehensively evaluate mRNA localization
-%dynamics during early Drosophila embryogenesis. Surprisingly, of the 3370 genes
-%analyzed, 71\% of those expressed encode subcellularly localized mRNAs.
-%Dozens of new and striking localization patterns were observed, implying an
-%equivalent variety of localization mechanisms. Tight correlations between mRNA
-%distribution and subsequent protein localization and function, indicate major
-%roles for mRNA localization in nucleating localized cellular machineries.
-
-%Computational Analysis The annotation data was converted into a binary matrix,
-%containing genes on one axis and localization terms on the other, where the presence
-%of a localization feature for a given gene was indicated numerically as ‘‘1,’’
-%while lack of a feature was annotated as ‘‘0.’’ This matrix was then used for GO
-%term enrichment analysis. Functional GO annotations for all genes were downloaded
-%from Flybase (http://flybase.bio. indiana.edu/genes/lk/function/). Annotations
-%were up-propagated using the GO hierarchy (Ashburner et al., 2000), and calculations
-%were restricted to genes that were both GO annotated and analyzed in this study
-%(1651 genes). The hypergeometric distribution was used to calculate probabilities
-%of overlap between each localization category against all GO categories containing
-%three or more genes. The Benjamini-Hochberg procedure (Benjamini and Hochberg, 1995)
-%was used to control for multiple testing by computing a P-value threshold
-%corresponding to a false discovery rate (FDR) of 0.25. Transcript subgroups
-%were also analyzed independently for GO term enrichments using EASE (Hosack et al., 2003).
-%EASE scores of less that 0.05 were considered significant, as reported previously (Tadros et al., 2007a).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Finally, translation might be compartmentalized to a much higher degree and with a finer granularity than anticipated.
+It progressively reveals spatial and temporal dynamics as well as complex mechanisms to regulate the metabolism of nascent proteins.
