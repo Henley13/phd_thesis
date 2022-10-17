@@ -644,7 +644,7 @@ Three main \ac{RNA} transport mechanisms are reported in the literature: a local
 In this section, we focus on the active transport mechanism.
 As an example, in vertebrates, the $\beta$-actin \ac{mRNA} has a \emph{zipcode} sequence that the \ac{RBP} ZBP1 will recognize, hence allowing the transport of the \ac{mRNA} molecule along microtubules and actin filaments~\cite{Oleynikov_2003}.
 
-More specifically, we investigate the role of the kinesin KIF1C that accumulates in cell protrusion (see Figure~\ref{fig:heatmap_racha}) and encode a microtubule motor protein.
+More specifically, we investigate the role of the kinesin KIF1C that accumulates in cell protrusion (see Figure~\ref{fig:heatmap_racha}) and encodes a microtubule motor protein.
 This protein interacts with a specific group of \ac{mRNA}s defined as APC-dependent (they require the APC protein to localize~\cite{wang_extracellular_2017}).
 KIF1C protein binds a subset of these \ac{mRNA}s and transports them to cell extensions where they exhibit cluster-like structures: NET1, TRAK2 and RAB13 .
 Interestingly, this kinesin protein also actively transports its own transcript to protrusions.
@@ -656,7 +656,7 @@ KIF1C seems to have a dual function as microtubule motor and ''\ac{mRNA} anchori
 \subsection{Quantification of peripheral mRNAs}
 \label{subsec:materials_results_protrusion}
 
-This study is an opportunity to exploit a proven FISH-quant V2~\cite{Imbert_fq_2022} and scale a quantitative analysis to characterize protrusion \ac{RNA}s from HeLa cells.
+This study is an opportunity to exploit a proven FISH-quant V2~\cite{Imbert_fq_2022} and to scale a quantitative analysis that characterizes protrusion \ac{RNA}s from HeLa cells.
 I identify 27,644 individual cells, spotting \ac{mRNA}s from 40 different genes, including KIF1C, APC-dependent \ac{mRNA}s and control transcripts.
 For every cell, I perform an automated spot detection, nucleus and cell segmentation, from 2D projected images.
 I compute RDI Calculator features from~\cite{stueland_rdi_2019}, especially the peripheral distribution index that measures how close the \ac{RNA}s localize to the cell periphery (see Section~\ref{subsec:expert_features}).
@@ -674,12 +674,12 @@ The greater the value of the index, the more concentrated in the protrusion are 
 In Figure~\ref{fig:xavier_pdi}, I compare two groups of transcripts: KIF1C, TRAK2 and NET1, three \ac{mRNA}s that bind to KIF1C protein for active transport to the protrusions, and a control group unrelated to KIF1C.
 For the peripheral distribution index, a completely random distribution has a value of 1.
 Here, as expected, the protrusion \ac{mRNA}s exhibit a biased spatial distribution toward the cell extensions.
-Finally, with RAB13 (that is not included in this analysis), KIF1C, TRAK2 and NET1 are the four transcripts that are enriched in cell protrusion and colocalized with their proteins.
+Finally, RAB13 (that is not included in this analysis), KIF1C, TRAK2 and NET1 are the four transcripts that are enriched in cell protrusion and colocalized with their proteins.
 
 \section{Conclusion}
 \label{sec:conclusion_chapter5}
 
-In this chapter I present several applications of FISH-quant V2.
+In this chapter, I present several applications of FISH-quant V2.
 Based on high content screening, from HeLa cell lines, I perform large scale quantitative analyses to support different biological insights.
 In total, several dozens of transcripts have been analyzed across 100,000 individual cells and hundreds of fluorescent bioimages.
 
