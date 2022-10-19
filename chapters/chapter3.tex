@@ -99,7 +99,7 @@ For this reason, it is important that the nuclei detection returns accurate resu
 Many other segmentation methods have been proposed in the computer vision literature.
 Superpixels approaches, for instance, partition the image into multiple homogeneous regions with enforced compactness~\cite{Ren_2003}.
 Low-level segmentation algorithms such as watershed itself can help cluster pixels together~\cite{Machairas_2014}.
-The segmentation task can also be addressed from the boundaries angle.
+The segmentation task can also be addressed from the boundaries point of view.
 A last example can be given by active contour models (or snake) that rely on energy minimization techniques to deform a spline curve until it delineate the object outline~\cite{kass_snakes_1988}.
 
 For most segmentation benchmarks, these methods have been outdated in recent years, with the emergence of deep learning models trained on large and diverse datasets.
@@ -400,97 +400,87 @@ Interestingly, the addition of nucleus information in input slightly improves ce
 \section{Improving cell segmentation}
 \label{sec:segmentation_improvements}
 
+I have contributed to two projects with the aim to improve specific aspects of biomedical segmentation.
+The first one is a personal project and consists in developing a deep learning version of the active contour algorithm.
+However, this work is not finished and it yields incomplete results, so here I only present the main idea.
+The second project results in a publication~\cite{anonymous_Bonte_2022}.
+It leverages in-silico labelling protocol to pre-train segmentation models.
+
 \subsection{Snake-like model}
 \label{subsec:segmentation_snake}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+This project tries to address potential failures between nucleus and cell segmentation when these two tasks are performed independently.
+Sometimes the cell is correctly segmented, but not the nucleus, sometimes it is the opposite.
+If I can't match a nucleus with a cell, the entire instance is
+In addition, nucleus is often far easier to segment than cell.
 
-% deep snake + appendix
+The idea is to propagate or extend the cell outline from the nucleus one.
+I want to base cell segmentation on a previous successful nucleus segmentation.
+This is kind of what is already happening with watershed algorithm when the nucleus is used as starting seed.
 
-% active contour by by means of energy minimization
-finding contours
-for delineating an object outline
-deformable spline
+Inspired by active contour models, the goal is to deform a spline curve around cell instance, but instead of solving an energy minimization problem a neural network would predict the deformation of the polygon.
+Such method has already been proposed for natural image segmentation like Deep Snake~\cite{Peng_2020_CVPR} or DANCE~\cite{Liu_2021}.
+However, these models need to first detect the candidate object instance and then initialize the deformable polygon from the detected bounding box.
+Their entire pipeline relies on the performance of a detection model.
+In my case, the cell outline would be initialized from the nucleus outline (much easier to segment), before being iteratively distorted by a fully convolutional network.
 
-% ref deepsnake
-% ref dance
-% ref polymorph
-% ref detection model
-
-% idea : consistency nuc - cell
-% nuc easier
-
-% plot pipeline
-% plot cell
-
-~\cite{kass_snakes_1988} % active contour
-~\cite{Peng_2020_CVPR} deep snake
-~\cite{Liu_2021} dance
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{In silico pre-training}
 \label{subsec:segmentation_insilico}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
-
-ISL was first introduced by [4], aiming to predict fluorescent labels from
-bright-field inputs. Fluorescence microscopy is the major technique employed
-in cellular image-based assays, as the use of fluorescence labels allows to high-
-light particular structures or phenotypic cell states. However, the number of
-fluorescent labels is limited (typically up to 4). In addition, phototoxicity and
-photobleaching can also represent serious drawbacks.
-To tackle these limitations, several variants have been proposed. In [5], ISL
-is applied to predict fluorescent labels from transmitted-light images (DIC), or
-immunofluorescence from electron micrographs.
-
-~\cite{anonymous_Bonte_2022} eccv
-~\cite{christiansen_silico_2018} in silico 4
-~\cite{ounkomol_label_free_2018} in silico 5
-
-Inspired by the work of [4], the model is a U-net-shape model [16] with
-a densenet121 architecture [17]. It has been previously trained on ImageNet
-[18], hence it is referred to as ’on steroids’ in the following.
-
-~\cite{Huang_2017_CVPR} densenet
-~\cite{Deng_2009} ImageNet
+We leverage \ac{ISL} task to pre-train segmentation model and mitigate the need for annotated training images.
+\ac{ISL} consists in predicting fluorescent labels from bright-field or transmitted-light images~\cite{christiansen_silico_2018, ounkomol_label_free_2018}.
+We replace an invasive fluorescent labeling by a numerical and computational one, like illustrated in Figure~\ref{fig:example_insilico}.
+Furthermore, fluorescent channels are limited in numbers (up to 4 or 5).
+Therefore, the ability to predict cell morphology from a label-free channel would save fluorescent channels for another probe or stain.
+More complex experiments are possible.
 
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter3/insilico_prediction}
-    \caption[Blablabla]{Blablabla}
-    \label{fig:blabla}
+    \caption[Example of in silico labeling]{Example of in silico labeling.
+	(\textit{Left}) Brightfield input image.
+	(\textit{Center} Ground truth DAPI channel.)
+	(\textit{Right}) Predicted DAPI}
+    \label{fig:example_insilico}
 \end{figure}
+
+In~\cite{anonymous_Bonte_2022}, we use the same model to perform \ac{ISL} and segmentation.
+It is based on a U-Net architecture, with a DenseNet blocks~\cite{Huang_2017_CVPR}.
+The first training on \ac{ISL} makes the model learn relevant visual representations of the cell.
+We speculate that these learned intermediate features are partially similar to the ones learned with a segmentation task.
+In this case, the following segmentation training should be more efficient or shorter.
+
+In Figure~\ref{fig:results_insilico} we compare the \ac{IoU} score of the trained models for different training set size.
+A second model pre-trained with a natural image classification task (from ImageNet~\cite{Deng_2009}) is also displayed for comparison purpose.
+The difference in term of pre-training vanishes when the size of the training set increases.
+However, pre-training a segmentation model clearly compensates a low number of training images.
 
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter3/insilico_training_size}
-    \caption[Blablabla]{Blablabla}
-    \label{fig:blablabla}
+    \caption[Results of in silico pre-training]{Results of in silico pre-training for a nucleus segmentation task.
+	IoU score for different training set size (the higher the better).
+	Segmentation model with in silico pre-training (\textit{green}) is more efficient in low training dataset regime than model with ImageNet pre-training (\textit{red})}
+    \label{fig:results_insilico}
 \end{figure}
-
-% in silico labelling
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusion}
 \label{sec:segmentation_conclusion}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+This chapter details the different algorithms available in \emph{bigfish.segmentation} subpackage to segment nuclei and cells from fluorescent microscopy images.
+The main interest of these methods is to propose in-house segmentation solutions, easy to use in few lines of code, and therefore complete the quantitative pipeline defined in FISH-quant.
+Yet, the research community is quite dynamic concerning biomedical segmentation.
+A lot of publications are released every year, with new datasets and improved techniques.
+Beyond developing a potential state-of-the-art model (which would be surpassed a few months later), the ability to easily integrate results from external resources is essential for FISH-quant.
+To this end, postprocessing methods are also implemented to format and refine segmentation masks.
 
-% paper FQ
-
-% The segmentation subpackage contains several algorithms and utility functions for segmentation and post-processing.
-% It provides deep-learning-based ap- proaches to segment cells and nuclei (Figs. 2, 3F,G; Supplemental Note 2).
-% Furthermore, we provide post- processing tools to refine and clean the segmentation result, such as boundary smoothing, removal of small
-% objects or filling of small holes.
-
-% first year report
-
-% In addition, it is important to note that the entire workflow is very sensitive to errors in nuclear segmentation (in particular to missed nuclei or split nuclei).
+Even if the segmentation has not been my main axis of research, I have explored some methods to alleviate limitations observed in cell segmentation.
+During my PhD I have mainly worked with multichannel images considering both nuclei and cells.
+For this reason, the consistency between nucleus and cell segmentation is critical.
+Such consistency can be directly enforced by the way an algorithm works, like in a watershed transform, or learned through a specific training strategy.
+Additionally, the need for a large amount of annotated images is still a hot topic in deep learning research.
+The use of in silico techniques to pre-train models seems to mitigate this limitation.
