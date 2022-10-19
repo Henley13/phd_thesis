@@ -161,3 +161,210 @@
 	pages = {321--331},
 }
 
+@inproceedings{Lalit_2021,
+	title = 	 {Embedding-based Instance Segmentation in Microscopy},
+	author =       {Lalit, Manan and Tomancak, Pavel and Jug, Florian},
+	booktitle = 	 {Proceedings of the Fourth Conference on Medical Imaging with Deep Learning},
+	pages = 	 {399--415},
+	year = 	 {2021},
+	editor = 	 {Heinrich, Mattias and Dou, Qi and de Bruijne, Marleen and Lellmann, Jan and Schläfer, Alexander and Ernst, Floris},
+	volume = 	 {143},
+	series = 	 {Proceedings of Machine Learning Research},
+	publisher =    {PMLR},
+	pdf = 	 {https://proceedings.mlr.press/v143/lalit21a/lalit21a.pdf},
+	url = 	 {https://proceedings.mlr.press/v143/lalit21a.html},
+	abstract = 	 {Automatic detection and segmentation of objects in 2D and 3D microscopy data is important for countless biomedical applications. In the natural image domain, spatial embedding-based instance segmentation methods are known to yield high-quality results, but their utility for segmenting microscopy data is currently little researched. Here we introduce EmbedSeg, an embedding-based instance segmentation method which outperforms existing state-of-the-art baselines on 2D as well as 3D microscopy datasets. Additionally, we show that EmbedSeg has a GPU memory footprint small enough to train even on laptop GPUs, making it accessible to virtually everyone. Finally, we introduce four new 3D microscopy datasets, which we make publicly available alongside ground truth training labels. Our open-source implementation is available at https://github.com/juglab/EmbedSeg.}
+}
+
+@InProceedings{Neven_2019_CVPR,
+	author = {Neven, Davy and Brabandere, Bert De and Proesmans, Marc and Gool, Luc Van},
+	title = {Instance Segmentation by Jointly Optimizing Spatial Embeddings and Clustering Bandwidth},
+	booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+	year = {2019}
+}
+
+@article{cutler_omnipose_2022,
+	title = {Omnipose: a high-precision morphology-independent solution for bacterial cell segmentation},
+	copyright = {2022 The Author(s)},
+	issn = {1548-7105},
+	shorttitle = {Omnipose},
+	url = {https://www.nature.com/articles/s41592-022-01639-4},
+	doi = {10.1038/s41592-022-01639-4},
+	abstract = {Advances in microscopy hold great promise for allowing quantitative and precise measurement of morphological and molecular phenomena at the single-cell level in bacteria; however, the potential of this approach is ultimately limited by the availability of methods to faithfully segment cells independent of their morphological or optical characteristics. Here, we present Omnipose, a deep neural network image-segmentation algorithm. Unique network outputs such as the gradient of the distance field allow Omnipose to accurately segment cells on which current algorithms, including its predecessor, Cellpose, produce errors. We show that Omnipose achieves unprecedented segmentation performance on mixed bacterial cultures, antibiotic-treated cells and cells of elongated or branched morphology. Furthermore, the benefits of Omnipose extend to non-bacterial subjects, varied imaging modalities and three-dimensional objects. Finally, we demonstrate the utility of Omnipose in the characterization of extreme morphological phenotypes that arise during interbacterial antagonism. Our results distinguish Omnipose as a powerful tool for characterizing diverse and arbitrarily shaped cell types from imaging data.},
+	urldate = {2022-10-19},
+	journal = {Nature Methods},
+	author = {Cutler, Kevin J. and Stringer, Carsen and Lo, Teresa W. and Rappez, Luca and Stroustrup, Nicholas and Brook Peterson, S. and Wiggins, Paul A. and Mougous, Joseph D.},
+	year = {2022},
+	note = {Publisher: Nature Publishing Group},
+	keywords = {Bacteria, Imaging},
+	pages = {1--11}
+}
+
+@inproceedings{schmidt2018,
+	author    = {Uwe Schmidt and Martin Weigert and Coleman Broaddus and Gene Myers},
+	title     = {Cell Detection with Star-Convex Polygons},
+	booktitle = {Medical Image Computing and Computer Assisted Intervention - {MICCAI} 2018 - 21st International Conference, Granada, Spain, September 16-20, 2018, Proceedings, Part {II}},
+	pages     = {265--273},
+	year      = {2018},
+	doi       = {10.1007/978-3-030-00934-2_30}
+}
+
+@inproceedings{weigert2020,
+	author    = {Martin Weigert and Uwe Schmidt and Robert Haase and Ko Sugawara and Gene Myers},
+	title     = {Star-convex Polyhedra for 3D Object Detection and Segmentation in Microscopy},
+	booktitle = {The IEEE Winter Conference on Applications of Computer Vision (WACV)},
+	month     = {March},
+	year      = {2020},
+	doi       = {10.1109/WACV45572.2020.9093435}
+}
+
+@article{Greenwald_2022,
+	title = {Whole-cell segmentation of tissue images with human-level performance using large-scale data annotation and deep learning},
+	volume = {40},
+	copyright = {2021 The Author(s), under exclusive licence to Springer Nature America, Inc.},
+	issn = {1546-1696},
+	url = {https://www.nature.com/articles/s41587-021-01094-0},
+	doi = {10.1038/s41587-021-01094-0},
+	abstract = {A principal challenge in the analysis of tissue imaging data is cell segmentation—the task of identifying the precise boundary of every cell in an image. To address this problem we constructed TissueNet, a dataset for training segmentation models that contains more than 1 million manually labeled cells, an order of magnitude more than all previously published segmentation training datasets. We used TissueNet to train Mesmer, a deep-learning-enabled segmentation algorithm. We demonstrated that Mesmer is more accurate than previous methods, generalizes to the full diversity of tissue types and imaging platforms in TissueNet, and achieves human-level performance. Mesmer enabled the automated extraction of key cellular features, such as subcellular localization of protein signal, which was challenging with previous approaches. We then adapted Mesmer to harness cell lineage information in highly multiplexed datasets and used this enhanced version to quantify cell morphology changes during human gestation. All code, data and models are released as a community resource.},
+	number = {4},
+	urldate = {2022-10-19},
+	journal = {Nature Biotechnology},
+	author = {Greenwald, Noah F. and Miller, Geneva and Moen, Erick and Kong, Alex and Kagel, Adam and Dougherty, Thomas and Fullaway, Christine Camacho and McIntosh, Brianna J. and Leow, Ke Xuan and Schwartz, Morgan Sarah and Pavelchek, Cole and Cui, Sunny and Camplisson, Isabella and Bar-Tal, Omer and Singh, Jaiveer and Fong, Mara and Chaudhry, Gautam and Abraham, Zion and Moseley, Jackson and Warshawsky, Shiri and Soon, Erin and Greenbaum, Shirley and Risom, Tyler and Hollmann, Travis and Bendall, Sean C. and Keren, Leeat and Graf, William and Angelo, Michael and Van Valen, David},
+	year = {2022},
+	keywords = {Image processing, Imaging, Software},
+	pages = {555--565}
+}
+
+@inproceedings{Bai_2017_CVPR,
+	author = {Bai, Min and Urtasun, Raquel},
+	title = {Deep Watershed Transform for Instance Segmentation},
+	booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+	month = {July},
+	year = {2017}
+}
+
+@article{Naylor_2019,
+	author={Naylor, Peter and Laé, Marick and Reyal, Fabien and Walter, Thomas},
+	journal={IEEE Transactions on Medical Imaging},
+	title={Segmentation of Nuclei in Histopathology Images by Deep Regression of the Distance Map},
+	year={2019},
+	volume={38},
+	number={2},
+	pages={448-459},
+	doi={10.1109/TMI.2018.2865709}
+}
+
+@inproceedings{Isola_2017_CVPR,
+	author = {Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A.},
+	title = {Image-To-Image Translation With Conditional Adversarial Networks},
+	booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+	month = {July},
+	year = {2017}
+}
+
+@inproceedings{Zhu_2017_ICCV,
+	author = {Zhu, Jun-Yan and Park, Taesung and Isola, Phillip and Efros, Alexei A.},
+	title = {Unpaired Image-To-Image Translation Using Cycle-Consistent Adversarial Networks},
+	booktitle = {Proceedings of the IEEE International Conference on Computer Vision (ICCV)},
+	month = {Oct},
+	year = {2017}
+}
+
+@inproceedings{Lin_2014,
+	author="Lin, Tsung-Yi
+	and Maire, Michael
+	and Belongie, Serge
+	and Hays, James
+	and Perona, Pietro
+	and Ramanan, Deva
+	and Doll{\'a}r, Piotr
+	and Zitnick, C. Lawrence",
+	editor="Fleet, David
+	and Pajdla, Tomas
+	and Schiele, Bernt
+	and Tuytelaars, Tinne",
+	title="Microsoft COCO: Common Objects in Context",
+	booktitle="Computer Vision -- ECCV 2014",
+	year="2014",
+	publisher="Springer International Publishing",
+	address="Cham",
+	pages="740--755",
+	abstract="We present a new dataset with the goal of advancing the state-of-the-art in object recognition by placing the question of object recognition in the context of the broader question of scene understanding. This is achieved by gathering images of complex everyday scenes containing common objects in their natural context. Objects are labeled using per-instance segmentations to aid in precise object localization. Our dataset contains photos of 91 objects types that would be easily recognizable by a 4 year old. With a total of 2.5 million labeled instances in 328k images, the creation of our dataset drew upon extensive crowd worker involvement via novel user interfaces for category detection, instance spotting and instance segmentation. We present a detailed statistical analysis of the dataset in comparison to PASCAL, ImageNet, and SUN. Finally, we provide baseline performance analysis for bounding box and segmentation detection results using a Deformable Parts Model.",
+	isbn="978-3-319-10602-1"
+}
+
+@inproceedings{Peng_2020_CVPR,
+	author = {Peng, Sida and Jiang, Wen and Pi, Huaijin and Li, Xiuli and Bao, Hujun and Zhou, Xiaowei},
+	title = {Deep Snake for Real-Time Instance Segmentation},
+	booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+	year = {2020}
+}
+
+@inproceedings{Liu_2021,
+	author={Liu, Zichen and Liew, Jun Hao and Chen, Xiangyu and Feng, Jiashi},
+	booktitle={2021 IEEE Winter Conference on Applications of Computer Vision (WACV)},
+	title={DANCE : A Deep Attentive Contour Model for Efficient Instance Segmentation},
+	year={2021},
+	pages={345-354},
+	doi={10.1109/WACV48630.2021.00039}
+}
+
+@inproceedings{anonymous_Bonte_2022,
+	title={Learning with minimal effort: leveraging {ISL} for segmentation},
+	author={Anonymous},
+	booktitle={Submitted to ECCV 2022 Workshop on BioImage Computing},
+	year={2022},
+	url={https://openreview.net/forum?id=5WkeBa2-eD},
+	note={under review}
+}
+
+@article{christiansen_silico_2018,
+	title = {In {Silico} {Labeling}: {Predicting} {Fluorescent} {Labels} in {Unlabeled} {Images}},
+	volume = {173},
+	issn = {0092-8674, 1097-4172},
+	shorttitle = {In {Silico} {Labeling}},
+	url = {https://www.cell.com/cell/abstract/S0092-8674(18)30364-7},
+	doi = {10.1016/j.cell.2018.03.040},
+	number = {3},
+	urldate = {2022-10-19},
+	journal = {Cell},
+	author = {Christiansen, Eric M. and Yang, Samuel J. and Ando, D. Michael and Javaherian, Ashkan and Skibinski, Gaia and Lipnick, Scott and Mount, Elliot and O’Neil, Alison and Shah, Kevan and Lee, Alicia K. and Goyal, Piyush and Fedus, William and Poplin, Ryan and Esteva, Andre and Berndl, Marc and Rubin, Lee L. and Nelson, Philip and Finkbeiner, Steven},
+	year = {2018},
+	pmid = {29656897},
+	note = {Publisher: Elsevier},
+	keywords = {cancer, computer vision, deep learning, machine learning, microscopy, neuroscience, stem cells},
+	pages = {792--803.e19}
+}
+
+@article{ounkomol_label_free_2018,
+	title = {Label-free prediction of three-dimensional fluorescence images from transmitted-light microscopy},
+	volume = {15},
+	copyright = {2018 The Author(s), under exclusive licence to Springer Nature America, Inc.},
+	issn = {1548-7105},
+	url = {https://www.nature.com/articles/s41592-018-0111-2},
+	doi = {10.1038/s41592-018-0111-2},
+	abstract = {Understanding cells as integrated systems is central to modern biology. Although fluorescence microscopy can resolve subcellular structure in living cells, it is expensive, is slow, and can damage cells. We present a label-free method for predicting three-dimensional fluorescence directly from transmitted-light images and demonstrate that it can be used to generate multi-structure, integrated images. The method can also predict immunofluorescence (IF) from electron micrograph (EM) inputs, extending the potential applications.},
+	number = {11},
+	urldate = {2022-10-19},
+	journal = {Nature Methods},
+	author = {Ounkomol, Chawin and Seshamani, Sharmishtaa and Maleckar, Mary M. and Collman, Forrest and Johnson, Gregory R.},
+	year = {2018},
+	keywords = {Cellular imaging, Computational models, Image processing, Machine learning, Organelles},
+	pages = {917--920}
+}
+
+@inproceedings{Huang_2017_CVPR,
+	author = {Huang, Gao and Liu, Zhuang and van der Maaten, Laurens and Weinberger, Kilian Q.},
+	title = {Densely Connected Convolutional Networks},
+	booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+	year = {2017}
+}
+
+@inproceedings{Deng_2009,
+  author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
+  booktitle={2009 IEEE Conference on Computer Vision and Pattern Recognition},
+  title={ImageNet: A large-scale hierarchical image database},
+  year={2009},
+  pages={248-255},
+  doi={10.1109/CVPR.2009.5206848}
+}

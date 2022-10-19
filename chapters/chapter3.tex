@@ -89,7 +89,7 @@ Therefore, a first approach, simple but often successful, is to threshold the im
 To avoid setting the threshold manually for each image, refine methods based on histogram intensity analysis can be exploited, like Otsu thresholding~\cite{Otsu_1979}.
 For nuclei clustered together or images with crowded cells, this method does not work and more reliable algorithms are needed.
 
-Another popular segmentation method is the watershed algorithm~\cite{Vincent_1991}.
+A popular segmentation method is the watershed algorithm~\cite{Vincent_1991}.
 An image is interpreted as a local topography (higher values are peaks and crests, lower values valleys and basins).
 There are several variants of this method, but basically the algorithm requires three elements: the starting points from which we flood the image (the markers or seeds), a relevant topographic representation of our image where the boundaries of the object have higher pixel values, and a binary mask limiting the flooding area (the mask).
 For cell segmentation, we can use a previous result of nucleus segmentation as markers and the cell image with any fluorescent label to which we apply the watershed algorithm (possibly with its intensity values inverted such that background pixels get higher values).
@@ -105,60 +105,50 @@ A last example can be given by active contour models (or snake) that rely on ene
 For most segmentation benchmarks, these methods have been outdated in recent years, with the emergence of deep learning models trained on large and diverse datasets.
 However, mathematical morphology methods remains relevant for some use cases, especially to address unusual image modality or specific shape to segment.
 Most importantly, these methods do not require manual annotation, which is often a bottleneck for medical or biological image segmentation.
-Eventually, such algorithms can also inspire new developments and learning models.
+Eventually, such algorithms can also inspire new learning-based models, like Deep watershed model that predicts a watershed energy map before extracting object instances from it~\cite{Bai_2017_CVPR}.
 
 \subsubsection{\dots to deep learning models}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+% recent successes
+Deep learning literature for image segmentation has provided several powerful and consistent models.
+Mostly based on \ac{CNN}, they have dramatically boosted computer vision applications.
+This trend keeps influencing bioinformatics as well.
 
-% Unet + plot ?
-% deep watershed, Peter model
-% single and two pass
-% Nucleaizer, maskRCNN
-% Stardist, Cellpose+limitations, densepose? + 3D cellpose
-% embedseg, equivalent model to natural image
-% TissueNet
+% U-Net
+One of the seminal neural networks proposed for biomedical segmentation is U-Net~\cite{Ronneberger_unet}.
+The network has a U-shaped architecture with an encoder and a decoder.
+The former combines convolutional layers, non linear activation functions (ReLU) and max pooling operations to reduce spatial information and expand feature information.
+The latter includes upsampling layers to return an output segmentation map that can be postprocessed to build a (semantic) segmentation mask.
+This architecture is now a classic and it is vastly reused by more recent work like StarDist~\cite{schmidt2018} which is trained to predict star-convex polygons for each nucleus or cell instance.
 
-% recent years
-% adaptated from natural image model
 % importance of dataset
-% better performance
+One the main limitations of deep learning methods is the need for a large amount of annotated images to train the models.
+Some of the first successful applications of \ac{CNN} involved large annotated dataset of natural images like ImageNet~\cite{Deng_2009} or COCO dataset~\cite{Lin_2014}.
+Recent publications in biomedical segmentation include sometimes both a trained model and the release of an important dataset with segmented nuclei or cells.
+For example, the research community benefits from an online challenge organized in 2018 about nucleus segmentation: the 2018 Data Science Bowl\footnote{\url{https://www.kaggle.com/c/data-science-bowl-2018}}.
+This competition includes a large collection of images with different modalities (histopathology, fluorescent microscopic).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NucleAIzer
+NucleAIzer~\cite{hollandi_nucleaizer_2020} proposes a model inspired by the winning solutions of the 2018 challenge and trained on the released dataset.
+It combines Mask R-CNN~\cite{He_2017_ICCV} and U-Net.
+Post competition, it outperforms all the submitted methods of the competition.
 
-% first year report
+% Cellpose
+Cellpose~\cite{stringer_cellpose_2021} proposes a U-Net based model for nucleus and cell segmentation.
+The network is trained to predict horizontal and vertical gradients of the topological cell map.
+These gradients form a vector field where each pixel ''belonging to a given cell can be routed to its center''.
+By grouping pixels converging to the same regions, individual instances can be identified.
+Most importantly, authors have collected and manually annotated 608 cell images with various modalities.
+Currently, this solution appears to be one of the most efficient.
+The authors have extended their method by training it with several specialized datasets like TissueNet~\cite{Greenwald_2022} or bacteria images~\cite{cutler_omnipose_2022}.
 
-% Currently, the research community benefits from an online challenge organized last year by \href{https://www.kaggle.com/c/data-science-bowl-2018}{Kaggle} with 739 different teams, the 2018 Data Science Bowl.
-% They provide a large dataset with nuclei images from different acquisitions (histopathology images, fluorescent microscopic images, etc.).
-% The best contributions apply variant of two famous deep learning models used for segmentation: Mask R-CNN \cite{He2017} and U-net \cite{Ronneberger2015}.
-% A recent paper \cite{Hollandi2019} proposed a model inspired combining these two models, plus a simulation framework based on pix2pix \cite{Isola2016} and CycleGAN \cite{Zhu2018} models.
-% It outperforms (post competition) all the submitted methods of the 2018 challenge.
-% We partially based our pipeline on their framework.
-
-%Deep learning models, initially designed for image classification can be effectively used for image segmentation.
-%\textbf{Mask R-CNN} is a convolutional neural network which efficiently suggests regions of interest, detects object instances within these regions and performs instance segmentation with a fully convolutional branch.
-%When released in 2017, the model was state-of-the-art on the COCO dataset \cite{Lin2014} for these different tasks.
-%\textbf{U-net} was originally designed for biological image segmentation.
-%It is also a fully convolutional neural network with an encoder-decoder architecture.
-%Unlike Mask R-CNN, the original version of the U-net does not perform instance segmentation, but it can return a binary segmentation mask.
-
-%The reference pipeline \cite{Hollandi2019} starts by segmenting the nuclei using a Mask R-CNN pretrained on COCO dataset (a large dataset of natural images).
-%The objective of this first pass is to get an estimation of the nuclear size to cope with the variations between experiments and modalities.
-%The next step is to train on the annotated data set containing more than $80,000$ nuclei for $1,102$ images.
-%Using \ac{GAN} based models, pix2pix and CycleGAN, new images are simulated to augment again the dataset.
-%A Mask R-CNN is trained from scratch with this nuclei dataset.
-%Additionally, a set of U-net models (with different parameters) are also trained to refine the segmented boundaries of the Mask R-CNN.
-
-%The method was designed for detecting nuclei for arbitrary modalities and resolutions, and we therefore hypothesized that we did not necessarily need the entire workflow with several sequential rounds of deep learning.
-%In addition, the authors used both MATLAB and Python in their implementation, which makes their software difficult to integrate in practical workflows.
-%We therefore re-implemented a simplified version of their method, which we detail in the next paragraph.
-%We only used the Mask R-CNN with the final weights they have obtained by their training.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% adaptated from natural image model
+Another important factor for progress in segmentation is the state of the literature on natural image segmentation.
+Indeed, several methods published for biomedical segmentations are inspired from a previous model trained on natural images.
+For example, NucleAIzer reuses Mask R-CNN.
+It is a \ac{CNN} which efficiently suggests regions of interest, detects object instances within these regions and performs instance segmentation with a fully convolutional branch.
+When released in 2017, the model was state-of-the-art on the COCO dataset.
+This relationship can also be observed with EmbedSeg~\cite{Lalit_2021} directly inspired by~\cite{Neven_2019_CVPR}.
 
 \section{Nucleus and cell segmentation}
 \label{sec:segmentation_nuc_cell}
@@ -196,7 +186,7 @@ I reuse the 4-channel images from~\cite{safieddine_choreography_2021} to build a
 I a randomly sample 180 \ac{FoV}s.
 Each image include one channel adapted for nucleus segmentation (DAPI) and three channels adapted for cell segmentation (\ac{smFISH}, CellMask\textsuperscript{\texttrademark} and a \ac{GFP} marker for the centrosome).
 An example of these images is illustrated in Figure~\ref{fig:annotated_dataset_segmentation}.
-The ground truth annotation is obtained in two steps: I pre-segment nuclei and cell with a cellpose model~\cite{stringer_cellpose_2021}, then I manually correct these predictions.
+The ground truth annotation is obtained in two steps: I pre-segment nuclei and cell with a Cellpose model~\cite{stringer_cellpose_2021}, then I manually correct these predictions.
 In total, 4,026 cell instances are segmented, with their relative nucleus.
 
 The initial goal for this dataset is to compute some experiments to train or evaluate the consistency of segmentation models.
@@ -221,7 +211,7 @@ Even if thresholding technique is implemented in \emph{bigfish}, a simple deep l
 The model is described in~\cite{Imbert_fq_2022}.
 It uses an encoder-decoder architecture like U-Net~\cite{Ronneberger_unet}, with 4 downsampling stages.
 In total, the spatial resolution of the input image is divided by 16 at the bottom of the model.
-For each stage, I implement residual blocks, mimicking cellpose model~\cite{stringer_cellpose_2021}.
+For each stage, I implement residual blocks, mimicking Cellpose model~\cite{stringer_cellpose_2021}.
 Lastly, the upsampling stage is implemented following deconvolution techniques from~\cite{odena2016deconvolution} to prevent any checkerboard artifacts.
 
 The nucleus segmentation problem is address like a pixel-wise classification problem with three classes: background, foreground and nuclear boundary.
@@ -304,7 +294,7 @@ Instead of the color pixel, the grayscale level of fluorescence intensity is use
 
 \subsubsection{A deep watershed model revisited}
 
-I also implement a deep learning solution for cell segmentation.
+I also implement a deep learning solution for cell segmentation, inpired by Deep Watershed~\cite{Bai_2017_CVPR} and the use of distance maps for nucleus segmentation~\cite{Naylor_2019}.
 Two models are tested, with the same backbone architecture previously presented for nucleus segmentation: an encoder-decoder convolutional neural network with residual blocks.
 
 First model uses only one input image with cell information (in my case, CellMask\textsuperscript{\texttrademark}, \ac{smFISH} or \ac{GFP}).
@@ -368,7 +358,7 @@ nuc_label, cell_label = multistack.match_nuc_cell(
 
 The main advantages of the available deep learning models in \emph{bigfish.segmentation} is to offer a efficient in-house segmentation solution, without the need to use another API, package or framework.
 It is fast to apply and can be a relevant first solution to try.
-However, for more challenging segmentation problems, FISH-quant v2 still enables the use of external resources like cellpose or StarDist.
+However, for more challenging segmentation problems, FISH-quant v2 still enables the use of external resources like Cellpose or StarDist.
 
 Both nucleus and cell segmentation models are trained with Adam optimizer~\cite{Diederik_2015} until validation loss does not improve anymore.
 I evaluate them with the mean Average Precision.
@@ -419,12 +409,53 @@ Interestingly, the addition of nucleus information in input slightly improves ce
 
 % deep snake + appendix
 
+% active contour by by means of energy minimization
+finding contours
+for delineating an object outline
+deformable spline
+
+% ref deepsnake
+% ref dance
+% ref polymorph
+% ref detection model
+
+% idea : consistency nuc - cell
+% nuc easier
+
+% plot pipeline
+% plot cell
+
+~\cite{kass_snakes_1988} % active contour
+~\cite{Peng_2020_CVPR} deep snake
+~\cite{Liu_2021} dance
+
 \subsection{In silico pre-training}
 \label{subsec:segmentation_insilico}
 
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
+
+ISL was first introduced by [4], aiming to predict fluorescent labels from
+bright-field inputs. Fluorescence microscopy is the major technique employed
+in cellular image-based assays, as the use of fluorescence labels allows to high-
+light particular structures or phenotypic cell states. However, the number of
+fluorescent labels is limited (typically up to 4). In addition, phototoxicity and
+photobleaching can also represent serious drawbacks.
+To tackle these limitations, several variants have been proposed. In [5], ISL
+is applied to predict fluorescent labels from transmitted-light images (DIC), or
+immunofluorescence from electron micrographs.
+
+~\cite{anonymous_Bonte_2022} eccv
+~\cite{christiansen_silico_2018} in silico 4
+~\cite{ounkomol_label_free_2018} in silico 5
+
+Inspired by the work of [4], the model is a U-net-shape model [16] with
+a densenet121 architecture [17]. It has been previously trained on ImageNet
+[18], hence it is referred to as ’on steroids’ in the following.
+
+~\cite{Huang_2017_CVPR} densenet
+~\cite{Deng_2009} ImageNet
 
 \begin{figure}[]
     \centering

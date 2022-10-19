@@ -560,11 +560,11 @@ The final results can be observed in Figure~\ref{fig:centrosomes}.
 
 \subsubsection{Cell and nucleus segmentation}
 
-Nucleus and cell segmentation is performed with a pretrained cellpose model~\cite{stringer_cellpose_2021}, respectively from the 2D DAPI and CellMask\textsuperscript{\texttrademark} channels.
+Nucleus and cell segmentation is performed with a pretrained Cellpose model~\cite{stringer_cellpose_2021}, respectively from the 2D DAPI and CellMask\textsuperscript{\texttrademark} channels.
 It is based on a modified U-Net architecture~\cite{Ronneberger_unet} and trained on a dedicated and diversified dataset released by the authors.
-The performance of a deep learning model like cellpose makes the segmentation step scalable with little or no manual intervention.
-Here, I parametrize cellpose to segment nuclei with a diameter of 14.4$\mu$m and cells with a diameter of 22.7$\mu$m, in average.
-It appears that cellpose is quite sensitive to the diameter set, a priori, as the model resizes the input image accordingly.
+The performance of a deep learning model like Cellpose makes the segmentation step scalable with little or no manual intervention.
+Here, I parametrize Cellpose to segment nuclei with a diameter of 14.4$\mu$m and cells with a diameter of 22.7$\mu$m, in average.
+It appears that Cellpose is quite sensitive to the diameter set, a priori, as the model resizes the input image accordingly.
 Ultimately, I check that every nucleus matches a segmented cell.
 Isolated cells or isolated nuclei are removed.
 

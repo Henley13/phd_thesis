@@ -2,86 +2,102 @@
 
 \graphicspath{{../../figures/appendix/}}
 
-\chapter{Convolutional features}
-\label{ch:convolutional_features}
+\chapter{Pattern classification}
+\label{ch:cell_pattern_classification}
 
 \newpage
 
-A paper~\cite{dubois_deep_2019} published at my arrival in the CBIO team proposes to tackle the \ac{RNA} localization problem by learning intermediate features through a convolutional network:
+\section{Supervised and unsupervised analyses}
+\label{sec:consistency_analysis}
 
-\begin{center}
-	\color{green}
-	R. Dubois, A. Imbert, et al. (2019), \textit{A Deep Learning Approach To Identify mRNA Localization Patterns}, in 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), pp. $\operatorname{1386-1390}$, iSSN: $\operatorname{1945-8452}$.
-\end{center}
+To investigate the agreement between supervised and unsupervised analysis I try to interpret the different regions of the \ac{t-SNE} plot from~\cite{CHOUAIB_2020}.
+With the trained classifiers, I compute the probability for each cell to be in a particular pattern and plot these probabilities on top of the \ac{t-SNE}.
+In Figure~\ref{fig:tsne_proba_gene} we can observe that cells with high probability of a given pattern concentrated in the same area of the \ac{t-SNE} plot.
+Therefore, the embedding appears consistent and a direct interpretation of the point cloud regions seems possible.
+In addition, we can notice that the assignments of the classifiers are consistent with the manual annotations illustrated in Figure~\ref{fig:tsne_annotation_racha}.
+
+\begin{figure}[h]
+	\centering
+	\minipage{0.2\textwidth}
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_probability_nocolorbar_foci}
+		\subcaption{Foci}
+		\vfill
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_foci_DYNC1H1}
+		\subcaption{DYNC1H1}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_probability_nocolorbar_intranuclear}
+		\subcaption{Intranuclear}
+		\vfill
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_intranuclear_CEP192}
+		\subcaption{CEP192}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_probability_nocolorbar_nuclear}
+		\subcaption{Nuclear edge}
+		\vfill
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_nuclear_SPEN}
+		\subcaption{SPEN}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_probability_nocolorbar_perinuclear}
+		\subcaption{Perinuclear}
+		\vfill
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_perinuclear_AP1S2}
+		\subcaption{AP1S2}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_probability_nocolorbar_protrusion}
+		\subcaption{Protrusion}
+		\vfill
+		\includegraphics[width=\linewidth]{figures/appendix/tsne_protrusion_RAB13}
+		\subcaption{RAB13}
+	\endminipage
+	\caption[Cell-wise localization pattern classification results]{(\textit{Top}) Visualization of random forest classification probabilities in the t-SNE, from~\cite{CHOUAIB_2020}.
+	Color indicates the probabilities of the cell to be classified in the indicated localization pattern.
+	The darker, the higher the probability is.
+	(\textit{Bottom}) Visualization of cells for some specific genes with the indicated localization pattern above.
+	Cells can be untreated (\textit{blue}) or treated with puromycin (\textit{red})}
+	\label{fig:tsne_proba_gene}
+\end{figure}
+
+On the bottom row we can observed how the cells for 5 different genes localize in the \ac{t-SNE} plot.
+From the results presented in Figure~\ref{fig:heatmap_racha}, we also identify dominant localization patterns for these transcripts:
+\begin{itemize}
+	\setlength\itemsep{0.1em}
+	\item DYNC1H1 with a foci and perinuclear patterns.
+	\item CEP192 with an intranuclear pattern.
+	\item SPEN with a nuclear edge pattern.
+	\item AP1S2 with a perinuclear and a small foci patterns.
+	\item RAB13 with a protrusion and a small foci patterns.
+\end{itemize}
 
 \noindent
-I have participated to this paper by running some experiments to affine the final results, but also by exploring some variants.
-Here we present the improvements we obtained with convolutional features and the last results we reached after the paper publication.
+These localizations observed at the gene level are consistent with the manual annotations in Figure~\ref{fig:tsne_annotation_racha} and \ac{t-SNE} regions interpreted from the top row of Figure~\ref{fig:tsne_proba_gene}.
 
-\section{Localization features learned with convolutional neural network}
-\label{sec:learn_cnn_features}
+A last observation that can be made from Figure~\ref{fig:tsne_proba_gene} is the apparent diversity of patterns observed at the gene level.
+For example, cells where we spot DYNC1H1 transcripts are polarized toward the nucleus-related regions of the point cloud.
+Moreover, a majority of untreated cells are in the foci-related region, while those treated with puromycin present a more uniform distribution across the \ac{t-SNE}.
+Such results are consistent with the observed impact of the puromycin for genes like DYNC1H1 presenting a transcription factory pattern.
 
-A deep learning framework presents the advantage to simplify our feature engineering pipeline.
-To this end, we directly train a convolutional neural network to classify different localization patterns from a 3-channel image.
-Instead of an usual RGB image, we build an input image from the coordinate representation of the cell.
-More specifically, we use the \ac{RNA} point cloud (projected in 2D), the 2D cell boundary and the 2D nucleus boundary.
-The original paper stacks three layers: one image that assigns to each pixel the number of \ac{RNA}s detected in the pixel, one image with the nucleus boundary and one with the cell boundary.
-We also have tested different input designs, replacing the last two boundary images by the binary masks (see figure~\ref{fig:surface_layers}) or the distance map.
-Eventually, best results were obtained with binary masks.
+\section{Cell-wise pattern heterogeneity}
+\label{sec:pattern_heterogeneity}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{figures/appendix/surface_layers}
-    \caption[Input images for the convolutional model]{Input images for the convolutional model}
-    \label{fig:surface_layers}
-\end{figure}
+Another way to visualize the heterogeneity in terms of localization patterns is to plot the predicted probabilities for every cell in a heat map.
+In Figure~\ref{fig:heatmap_racha_cells}, I adapt the results aggregated by genes from Figure~\ref{fig:heatmap_racha}.
+It clearly appears that, for a given gene, the observed localization patterns are noisy.
+Even if SPEN transcripts localize most of the time along the nucleus membrane, they also can be observed forming a cluster of \ac{RNA}s.
+For some cells we do not even observe a specific pattern.
+Such heterogeneity justifies the use of a quantitative pipeline to produce statistical results over a large population of cells.
 
-Usually, a neural network requires a large annotated dataset to reach good performance and generalized well.
-We exploit the MATLAB simulation framework previously released by our group~\cite{samacoits_computational_2018}.
-These simulations differ from \emph{simfish}, even if the original 318 cell templates from which we simulate are the same.
-In particular, localization patterns and rules to modulate pattern strength are different.
-They are greatly simplified in \emph{simfish}.
-We simulated 200,000 cells to train, validate and test our model (with a stratified split of 60\%, 20\% and 20\% respectively).
-We also use a real dataset with 10 different transcripts visualized across 2791 cells.
-Unlike the original paper, we only simulate 5 different patterns: polarization patterns and cell edge were removed because too rare in the real dataset.
-
-We use SqueezeNet~\cite{Iandola_2016} for the image classification task.
-This model integrates compression techniques to keep a reasonable accuracy, but drastically reduces the number of parameters to train.
-These techniques include squeeze operations to decrease the feature dimension of the layers or a more efficient mix of different convolution kernel sizes.
-
-\section{Results}
-\label{sec:results_cnn_features}
+These heat maps also confirm that different localization patterns can coexist for the same transcript but not necessarily within the same cells at the same time.
+For example with ASPM transcripts, cells are identified with a foci pattern, a nuclear edge pattern or both at the same time.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/appendix/tsne_cnn}
-    \caption[t-SNE projection of the learned features]{t-SNE projection of the learned features}
-    \label{fig:tsne_cnn}
+    \includegraphics[width=\textwidth]{figures/appendix/heatmap_cell_racha}
+    \caption[Heat maps with cell-wise classification results]{Three heat maps from~\cite{CHOUAIB_2020} with the probability of single cells to have each patterns.
+	Only cells where we visualized SPEN, MYH3 and ASPM transcripts are represented.
+	Each row corresponds to a cell and the color indicates the probabilities of the cell to be classified in the indicated localization pattern}
+    \label{fig:heatmap_racha_cells}
 \end{figure}
-
-We can evaluate the classification predictions for the simulated test dataset.
-We observe on the confusion matrix~\ref{fig:confusion_matrix_cnn} that the model performs well with the foci pattern, the protrusion pattern (\emph{cellext}) and the intranuclear pattern (\emph{inNUC}).
-On the opposite, we fail to predict nuclear edge pattern (\emph{nuc2D}) and random patterns are often confused with foci or intranuclear.
-Globally, results are not as good as expected and do not generalize to all the frequent localization patterns observed in the transcriptome.
-
-With the real dataset, we do not have annotations for each cell, but we can still observe more frequent patterns for some genes.
-Indeed, the 10 genes selected present a diversity of localization patterns.
-We collect the last network layer (before the classification head) and vizualize our cell population with a 2D t-SNE embedding~\cite{vandermaaten_2008,wattenberg2016}.
-A first striking observation in figure~\ref{fig:tsne_cnn} is the high level of heterogeneity among the cells (even among the ones labelled with the same \ac{FISH}).
-However, distinct clusters can be observed, relevant with the frequent pattern observed with the genes like the intranuclear pattern frequently observed with the CEP192, or the protrusion pattern frequent with KIF1C and RAB13.
-
-\begin{wrapfigure}{L}{0.40\textwidth}
-  \begin{center}
-    \includegraphics[width=0.33\textwidth]{figures/appendix/confusion_matrix_cnn}
-  \end{center}
-  \caption[Confusion matrix]{Confusion matrix}
-  \label{fig:confusion_matrix_cnn}
-\end{wrapfigure}
-
-This study reveals two potential difficulties when we train neural network to learn intermediate features, instead of designing manual ones.
-First, when the model makes a prediction, it is much more complicated to understand why it favours a pattern over another.
-The internal representation built by the network are not easily accessible or easy to interpret.
-There is no direct method to visualize these representations, to quantify the importance of a subregion from the input image in the prediction or to measure the confidence given to a prediction.
-However, this is an active field of research and papers~\cite{Yarin_2016,olah2017feature,olah2018the} are investigating it.
-Second, by exploiting images of coordinates, we lose a lot of information.
-We project a potential 3D \ac{RNA} point cloud in 2D, use an inefficient dense representation (an image) of a sparse input (the \ac{RNA} point cloud) and convolutions might not be the right choice to deals with coordinates inputs~\cite{Rosanne_2018}.
