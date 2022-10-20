@@ -74,10 +74,6 @@ Finally, cell and nucleus segmentation adds a great value to an analysis as it e
 It is the building stone of any single-cell analysis.
 Instance segmentation is a critical step to capture information at the cell level, especially when the biological mechanism studied exhibits a high intracellular heterogeneity.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Related work}
 \label{subsec:segmentation_related_work}
 
@@ -403,7 +399,7 @@ Interestingly, the addition of nucleus information in input slightly improves ce
 I have contributed to two projects with the aim to improve specific aspects of biomedical segmentation.
 The first one is a personal project and consists in developing a deep learning version of the active contour algorithm.
 However, this work is not finished and it yields incomplete results, so here I only present the main idea.
-The second project results in a publication~\cite{anonymous_Bonte_2022}.
+The second project results in a publication~\cite{Bonte_2022}.
 It leverages in-silico labelling protocol to pre-train segmentation models.
 
 \subsection{Snake-like model}
@@ -441,14 +437,14 @@ More complex experiments are possible.
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter3/insilico_prediction}
-    \caption[Example of in silico labeling]{Example of in silico labeling, from~\cite{anonymous_Bonte_2022}.
+    \caption[Example of in silico labeling]{Example of in silico labeling, from~\cite{Bonte_2022}.
 	(\textit{Left}) Bright-field input image.
 	(\textit{Center} Ground truth DAPI channel.)
 	(\textit{Right}) Predicted DAPI}
     \label{fig:example_insilico}
 \end{figure}
 
-In~\cite{anonymous_Bonte_2022}, we use the same model to perform \ac{ISL} and segmentation.
+In~\cite{Bonte_2022}, we use the same model to perform \ac{ISL} and segmentation.
 It is based on a U-Net architecture, with a DenseNet encoder branch~\cite{Huang_2017_CVPR}.
 The first training on \ac{ISL} makes the model learn intermediate visual representations of the cell.
 We speculate that these learned features are (partially) relevant for the segmentation task.
@@ -462,7 +458,7 @@ However, pre-training a segmentation model with \ac{ISL} clearly compensates a l
 \begin{figure}[]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter3/insilico_training_size}
-    \caption[Results of in silico pre-training]{Results of in silico pre-training for a nucleus segmentation task, from~\cite{anonymous_Bonte_2022}.
+    \caption[Results of in silico pre-training]{Results of in silico pre-training for a nucleus segmentation task, from~\cite{Bonte_2022}.
 	IoU score for different training set size (the higher the better).
 	Segmentation model with in silico pre-training (\textit{green}) is more efficient in low training dataset regime than model with ImageNet pre-training (\textit{red})}
     \label{fig:results_insilico}

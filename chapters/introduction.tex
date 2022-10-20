@@ -2,18 +2,18 @@
 
 \graphicspath{{./figures/introduction/}}
 
-\chapter{Image-based transcriptomics}
+\chapter{FISH-based transcriptomics}
 \label{ch:introduction}
 
 \minitoc
 \newpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Gene expression process}
 \label{sec:gene_expression}
-
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
 
 Cells are the basic unit of all living organisms.
 Yet, a diversity of cell-type exists, performing different actions.
@@ -21,50 +21,87 @@ Some of those are common among all cells (cell division for example), but others
 Most of the time, different cell-types perform diverse actions through a different set of functional molecules.
 In order to implement these different cellular processes and to fulfill the variety of diverse functions, a cell gets its instructions from the \ac{DNA}.
 The latter contains all the cell's genetic information and it is common for all cells of the same organism.
-A \ac{DNA} strand presents a succession of genes, defined as long sequences of nucleotides (organics molecules composed of a five-carbon sugar, a phosphate group and one of the four nucleobases - Adenine, Cytosine, Guanine and Thymine).
+A \ac{DNA} strand presents a succession of genes, defined as long sequences of nucleotides.
+They are organics molecules composed of a five-carbon sugar, a phosphate group and one of the four nucleobases: Adenine, Cytosine, Guanine and Thymine.
+Together, these nucleobases form a genetic alphabet of 4 letters (A, C, G and  T).
 Each gene encodes the blueprint of a functional molecule with a specific sequence of nucleobases.
 
-\textbf{Gene expression} is the process by which genetic information is transformed into functional products.
-RNA molecules are essential for this process; because they are either the functional gene products themselves or they serve as an intermediate molecule prior to the production of other functional products, i.e. proteins.
+Gene expression is the process by which genetic information is transformed into functional products.
+\ac{RNA} molecules, or transcripts, are essential for this process.
+They are either the functional gene products themselves or they serve as an intermediate molecule prior to the production of other functional products, namely the proteins.
 A change in gene expression gives cells enough flexibility to adapt and react to different external stimuli.
 It also drives cells differentiation, allows them to run their basic functions, modulate their activities and therefore appears to be one of the most fundamental processes of life.
 On the contrary, its deregulation can lead to various diseases.
 This explains the interest of the scientific community to study and decode gene expression processes.
 
-For an eukaryote cell, the expression of a gene includes two main steps: the \textbf{transcription of a \ac{DNA} sequence into a \ac{RNA}}(in the nucleus) and the \textbf{translation of a \ac{RNA} into a protein}.
-Between these two major steps, there is a \textbf{phase of \ac{RNA} maturation and transportation}.
-A cell can regulate either the transcription or the translation step to control the production of its functional molecules and thereby the biological process the proteins or \ac{RNA} are contributing to.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/introduction/cell_eukaryotic.jpg}
+    \caption[Eukariotic cell]{Illustration of an eukaryotic cell, from~\cite{parker2017microbiology}}
+    \label{fig:eukaryotic_cell}
+\end{figure}
+
+In the living world, cells can be divided in two categories: prokaryotic cells and eukaryotic cells.
+The prokaryotic cells, which do not have a nucleus and typically form a unicellular organism, and the eukaryotic cells, with a well-organized nucleus.
+An eukaryote (a living organism with eukaryotic cells) is usually composed of cells with a higher level of compartmentalization through membrane-bound organelles.
+The nucleus is obviously the most important of these organelles, with the \ac{DNA} inside.
+The rest of the organelles are located in the cytoplasm, such as the mitochondria, the lysosomes, or the Golgi apparatus (see Figure~\ref{fig:eukaryotic_cell}).
+
+For an eukaryote cell, the expression of a gene includes two main steps: the transcription of a \ac{DNA} sequence into a \ac{RNA} (in the nucleus) and the translation of a \ac{RNA} into a protein.
+Between these two major steps, there is a phase of maturation for the transcript, before a potential exports outside the nucleus and a transport somewhere in the cytoplasm.
+A cell can regulate either the transcription or the translation step to control the production of its functional molecules and thereby the biological process to which the proteins or \ac{RNA} contribute.
 
 \subsection{Transcription}
 \label{subsec:intro_transcription}
 
+\subsubsection{The primary transcripts}
+
 This step consists in copying a gene (a sequence of nucleotides along the \ac{DNA} strands) into another biomolecules composed of nucleotides: a \ac{RNA}.
-As the \ac{DNA} is stuck within the nucleus, the \ac{RNA} can convey the blueprint of the future protein outside.
+While the \ac{DNA} is stuck within the nucleus, the \ac{RNA} can convey the blueprint of the future protein outside.
 In many cases, \ac{RNA} can be non-coding (they do not lead to the synthesis of a protein) and fulfill a variety of functions itself, for instance the regulation of gene expression.
-If both \ac{DNA} and \ac{RNA} contain genetic information, \ac{RNA} is a shorter single-stranded molecule compared to the double-stranded \ac{DNA}, has only a single strand and is thus less stable.
-However, they both have two distinctive ends 5' and 3' (corresponding to the number of carbon atoms in their sugar backbone extremities).
+In a \ac{RNA}, the nucleotide Uracil (U) replaces the Thymine (T) and a ribose sugar serves as backbone instead of a desoxyribose sugar.
+If both \ac{DNA} and \ac{RNA} contain genetic information, \ac{RNA} is a shorter single-stranded molecule compared to the double-stranded \ac{DNA}.
+It has only a single strand and is therefore less stable.
+However, they both have two distinctive ends 5' and 3' (corresponding to the number of carbon atoms in their sugar backbone extremities).\\
 
 \noindent
 Transcription proceeds as follows:
-\begin{itemize}
-	\item Proteins (general transcription factors) bind to a specific sequence of \ac{DNA} (the promoter sequence) and recruit an enzyme (\ac{RNA} polymerase) to initiate the transcription.
-	\item \ac{RNA} polymerase breaks the hydrogen bounds between the two \ac{DNA} strands to separate them.
-	\item \ac{RNA} polymerase moves along one \ac{DNA} strand, from 3' to 5' extremity, synthesizing a complementary nucleotides sequence on the way.
-	\item \ac{RNA} polymerase disengages from the strand when it meets a specific sequence of \ac{DNA} (the terminator sequence) and the newly synthesized nucleotides sequence (the primary transcribed \ac{RNA}) is released.
-\end{itemize}
+\begin{enumerate}
+	\setlength\itemsep{0.1em}
+	\item Proteins that serve as transcription factors bind to a specific sequence of \ac{DNA} (the promoter sequence) and recruit an enzyme (the \ac{RNA} polymerase) to initiate the transcription.
+	\item The \ac{RNA} polymerase breaks the hydrogen bounds between the two \ac{DNA} strands to separate them.
+	\item The \ac{RNA} polymerase moves along one \ac{DNA} strand, from 3' to 5' extremity, synthesizing a complementary nucleotides sequence on the way.
+	\item The \ac{RNA} polymerase disengages from the strand when it meets a specific sequence of \ac{DNA} (the terminator sequence) and the newly synthesized nucleotides sequence (the primary transcribed \ac{RNA}) is released.
+\end{enumerate}
 
 \noindent
-At this point, different sorts of \ac{RNA} are transcribed, including:
+At this point, different sorts of \ac{RNA} are transcribed, depending of \ac{RNA} polymerase recruited:
 \begin{itemize}
-	\item \textbf{\ac{mRNA}}, composed of coding (exon) and non-coding (intron) nucleotides, which conveys the blueprint of a future protein.
-	\item \textbf{\ac{rRNA}} which, associated with ribosomal proteins, forms ribosomes, a macromolecular machine used by the cell to synthesize proteins.
-	\item \textbf{\ac{tRNA}}, the most abundant \ac{RNA} molecule, which carries amino acids to the ribosome.
+	\setlength\itemsep{0.1em}
+	\item \ac{mRNA}, composed of coding (exon) and non-coding (intron) nucleotides, which conveys the blueprint of a future protein.
+	\item \ac{rRNA} which, associated with ribosomal proteins, forms ribosomes, a macromolecular machine used by the cell to synthesize proteins.
+	\item \ac{tRNA}, the most abundant \ac{RNA} molecule, which carries amino acids to the ribosome.
 \end{itemize}
 
-\paragraph{Maturation and transportation}
+\subsubsection{RNA maturation}
 
-From now, we focus on \ac{mRNA}s. They do not fit translation requirements yet and need to undergo three processes before leaving the nucleus: the 5' end is transformed (\textbf{\ac{RNA} capping}), a poly(A) tail (repeated adenine-based molecules) is added at the 3' end (\textbf{polyadenylation}), then the non-coding parts of the \ac{RNA} sequence are removed (\textbf{splicing}).
+For the rest of the manuscript, I mainly focus on the \ac{mRNA}s.
+They do not fit translation requirements yet and need to undergo three processes before leaving the nucleus: the 5' end is transformed (\textbf{\ac{RNA} capping}), a poly(A) tail (repeated adenine-based molecules) is added at the 3' end (\textbf{polyadenylation}), then the non-coding parts of the \ac{RNA} sequence are removed (\textbf{splicing}).
 Those transformations allow to move the \ac{mRNA} out of the nucleus, regulate its degradation and promote the translation.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/introduction/gene_expression_process.jpg}
+    \caption[Gene expression process]{Overview of gene expression process, from~\cite{cell_essential_nature}}
+    \label{fig:gene_expression}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{RNA transport mechanisms}
+\label{subsec:intro_rna_transport}
 
 When an \ac{mRNA} is ready for export, it is moved out of the nucleus through the nuclear pore complex.
 This complex recognizes a mature \ac{mRNA} if a specific set of proteins is bounded to it (poly(a) binding proteins, cap binding proteins, and proteins related to the splicing step).
@@ -76,9 +113,6 @@ New evidence suggests on the contrary that \ac{mRNA} localization within the cel
 However, the involved mechanisms are not well understood yet and the extend of \ac{mRNA}s concerned by a specific localization pattern is still unknown.
 Beyond the number of \ac{mRNA} molecules within a cell (the expression level of a gene), researchers manifest now an increasing interest for \ac{mRNA} localization.
 
-\subsection{Transport mechanisms}
-\label{subsec:intro_transport}
-
 \noindent
 Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have already been identified:
 \begin{itemize}
@@ -86,6 +120,10 @@ Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have a
 	\item Prevention of \ac{mRNA} degradation at a precise location.
 	\item Local entrapment to anchor the \ac{mRNA}s.
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Translation}
 \label{subsec:intro_translation}
@@ -95,6 +133,10 @@ A ribosome is assembled around a \ac{mRNA} and moves along its nucleotides.
 At the same time, \ac{tRNA}s carry amino acids matching the \ac{mRNA} sequence.
 According to the genetic code, three successive nucleotides of the \ac{mRNA} (a codon) correspond to an amino acid.
 The ribosome sequentially chains the amino acids, which then fold into a protein with a specific 3-dimensional structure.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{mRNA localization}
 \label{subsec:intro_rna_loc}
@@ -463,8 +505,30 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Protein localization}
-\label{subsec:intro_protein_loc}
+% thesis adham
+
+%2. mRNA localization in cell lines: generalities
+%The two mRNA localization screens provided insights into general mRNA localization features in cell lines:
+
+%First, even in the case of mRNAs that produce a strong pattern (DYNC1H1 mRNAs localizing in foci for example), a non-negligible fraction of mRNA molecules always seems to have random distribution. This is not the case in other systems such as developing embryos or oocytes in which most molecules of a localized transcript actually display the pattern. The reasons behind this difference are unclear; but (i) they could be a general aspect of mRNA localization in cell lines, in which they are much less stereotyped than embryos, especially cancer ones like HeLa; (ii) they could arise due to the relatively smaller size of HeLa cells (although similar observations are made in neurons which argues against this); (iii) localizing only a fraction of mRNA molecules is sufficient to carry out the intended biological function (discussed in detail below), in which there is no need to localize all transcripts for the cell to function properly.
+
+%mRNA localization occurs in a wide range of subcellular locations in cell lines. These include cellular protrusions, the Golgi apparatus, endosomes, the nuclear envelope, cell edges, centrosomes, and even the cytosolic space itself (as in the case of mRNA foci and polarized distributions). This demonstrates the variety of mRNA trafficking and the diverse functions of mRNA localization.
+
+%Most localized mRNAs display ìsimpleî localization patterns in which they belong to one of the described localization classes (intranuclear, nuclear envelope, cell edge, cell extension, polarized, foci, centrosomes). However, some transcripts show ìcomplexî patterns in which they localize to multiple compartments either simultaneously or at different times. An example of this is HMMR mRNA that localizes to both centrosomes and P-bodies during interphase. This difference is probably related to the function of each transcript but it implies that mRNA localization can be complex and can involve multiple sub-cellular compartments at once (see ASPM below for a detailed example).
+
+%mRNA localization often exhibits cellular heterogeneity. Indeed, not all cells exhibit the pattern, and the strength of the pattern could vary between cells that display it. The is probably related to: (i) cells having different physiological states and thus different gene expression needs; (ii) cells being in different stages of the cell cycle; (iii) variations in mRNA
+%expression levels; (iv) variation in motors protein availability, RBP expression, cytoskeletal arrangements; or (v) a stochastic process yet unidentified.
+
+%3. A variety of local translation flavors
+%In many cases, mRNAs co-localized with the protein they encode suggesting local translation. This was observed in a variety of regions such as cell extensions, cell edges, centrosomes, endosomes, and the Golgi network. Local translation could function in:
+
+%Protein targeting: ASPM mRNA for instance was the first case of local translation at the nuclear pore during interphase and this could facilitate nucleoplasmic targeting of the mature ASPM protein.
+
+%Preventing aberrant dispersal of proteins that could have harmful effects. For example, NUMA1 mRNA and protein are only localized on centrosomes during mitosis. Targeting NUMA1 protein to centrosomes during interphase could have deleterious effects.
+
+%Enhancing translation efficiencies: this applies to mRNAs that are localized and translated in cytoplasmic foci referred to as translation factories. These structures could host an environment more suitable for translation (a more favorable concentration of translation factors for instance). In fact, DYNC1H1 mRNAs are translated as both single molecules and mRNA foci. However, mRNAs in the foci are more often found engaged in translation than ones that exist as single molecules. Here, it is tempting to speculate that translation factories harbor specialized ribosomes or components of the translation machinery that are dedicated for localized cases of protein synthesis.
+
+%Nascent peptide metabolism: synthesizing components of a protein complex locally can enhance the efficiency of complex assembly for example. Another possibility is co- translational assembly at certain organelles. For instance, translating mRNAs encoding centrosomal proteins such as PCNT, CEP350, NIN, and HMMR could help to incorporate the mature protein into centrosomes during the expansion of the pericentriolar material that occurs during the late G2 phase of the cell cycle. Finally, local translation could allow certain
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -489,17 +553,15 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 % against the GFP sequence is sufficient to detect all the studied mRNAs. Sec- ond, using mild hybridization conditions,
 % GFP fluorescence can be detected together with the smFISH signal (Fusco et al., 2003), and thus, both the mRNA and the encoded protein can be detected in the same cell.
 
-\subsection{Fluorescent stains and GFP}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Fluorescent proteins}
 \label{subsec:intro_fluorescence}
 
-\subsection{FISH}
+\subsection{A zoo of FISH}
 \label{subsec:intro_fish}
-
-\subsection{smiFISH}
-\label{subsec:intro_smifish}
-
-\subsection{SeqFISH and MERFISH}
-\label{subsec:intro_multiplexing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -511,9 +573,6 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
-
-\subsection{MATLAB, java and python: a zoo of solutions}
-\label{subsec:intro_tools}
 
 \subsection{Detect, segment and analyze}
 \label{subsec:intro_pipeline}
@@ -606,39 +665,133 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{StarFISH: a common \ac{FISH} platform}
-\label{subsec:intro_starfish}
+\begin{figure}[]
+	\centering
+	\minipage{0.2\textwidth}
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_image_foci}
+		\vfill
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_coord_foci}
+		\subcaption{Foci}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_image_intranuclear}
+		\vfill
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_coord_intranuclear}
+		\subcaption{Intranuclear}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_image_nuclear_edge}
+		\vfill
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_coord_nuclear_edge}
+		\subcaption{Nuclear edge}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_image_perinuclear}
+		\vfill
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_coord_perinuclear}
+		\subcaption{Perinuclear}
+	\endminipage\hfill
+	\minipage{0.2\textwidth}
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_image_protrusion}
+		\vfill
+		\includegraphics[width=0.95\linewidth]{figures/introduction/real_coord_protrusion}
+		\subcaption{Protrusion}
+	\endminipage
+	\caption[RNA localization patterns: from pixels to numbers]{RNA localization patterns from~\cite{pointfish_2022}.
+	(\textit{Top}) Typical smFISH images with different RNA localization patterns.
+	(\textit{Bottom}) Coordinate representations with RNA spots (red), cell membrane (black) and nuclear membrane (blue).
+	Detection and segmentation results are extracted and visualized with FISH-quant~\cite{Imbert_fq_2022}}
+	\label{fig:intro_localization_patterns}
+\end{figure}
 
-\subsection{FISH-Quant MATLAB}
-\label{subsec:intro_fq1}
+\subsection{Bioinformatics in a nutshell}
+\label{subsec:intro_non_ml_tools}
+
+\subsection{A machine learning boom}
+\label{subsec:intro_ml_tools}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Contributions}
+\section{Contributions and summary}
 \label{sec:contributions}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+\subsection{Contributions}
+\label{subsec:intro_contributions}
 
-\subsection{FISH-Quant v2}
-\label{subsec:intro_fq2}
+Beyond this own manuscript, my contributions are essentially summarized by lines of code.
+With a effort of transparency, reproducibility and documentation, I try to develop computational tools as useful as possible for any biologist interested in \ac{FISH} experiments.
+My PhD results in three major contributions.
 
-\subsection{Quantifications of localization patterns}
-\label{subsec:intro_applications}
+\begin{itemize}
+	\setlength\itemsep{0.1em}
+	\item My first and main contribution is FISH-quant V2.
+	This online framework gathers Python packages and \ac{GUI} to process \ac{FISH} images, build robust analysis pipelines and even perform simulations.
+	\item My second important contribution is an alternative method to compute relevant features in order to discriminate \ac{RNA} localization patterns.
+	This method implies the development of PointFISH, a dedicated deep learning model for point cloud.
+	\item My third contribution is my participation to biological studies with meaningful results.
+	These studies leveraged high content screening assays and \ac{smFISH} techniques to perform a systemic analysis of \ac{RNA} localization and investigate local translation phenomenons.
+\end{itemize}
 
-\subsection{Manuscript}
+\noindent
+Some other contributions are also mentioned throughout this manuscript.
+It includes a dataset I annotated for nucleus and cell segmentation with thousands of instances and my supervision of an intern.
+The work performed during this internship was the seed for the first publication of another PhD student in the team, about in silico labeling and segmentation.
+Lastly, a list of my publications are available at the very end of the manuscript.
+
+\subsection{Manuscript summary}
 \label{subsec:intro_manuscript}
+
+The manuscript is composed of two parts.
+The first four chapters are a presentation of the analysis pipeline with a focus on every critical stage.
+It includes systematic reviews of the existing methods and details about solutions I implemented.
+In addition, code snippets, ready to be imported and run, are interspersed with descriptions of the related algorithms.
+The second part details several applications of my tools, where quantification of \ac{RNA} localization patterns supports biological insights.
+
+In \textbf{Chapter~\ref{ch:chapter1}}, I present the general computational framework I developed and published: FISH-quant v2.
+It includes methods for every stages of a \ac{FISH}-based analysis, with an effort to make them scalable and modular.
+I also describe the improvements from the original FISH-quant version, and how it addresses the requirements of a modern software tool.
+
+In \textbf{Chapter~\ref{ch:chapter2}}, I focus on the \ac{RNA} detection stage.
+With \ac{smFISH} experiments, the \ac{RNA} molecules are spotted and reduced to discrete data points in space.
+I describe detection algorithms and their extensions available in FISH-quant.
+In the end, the set of all \ac{RNA} molecules is reduced to a point cloud with spatial coordinates.
+
+In \textbf{Chapter~\ref{ch:chapter3}}, I review and describe algorithms for nucleus and cell segmentation.
+Most of them are deep learning models, trained on vast datasets of annotated images.
+Beside my own implemented methods, I also present refinement techniques to improve and format segmentation masks.
+Two other projects for which I contributed (including one published) are also discussed at the end of the chapter.
+They aim at improving the efficiency and consistency of segmentation on specific aspects.
+
+In \textbf{Chapter~\ref{ch:chapter4}}, I compare two different approaches to quantify \ac{RNA} localization patterns.
+Once the \ac{RNA} molecules are detected and cell morphology is segmented, the pixel domain gives way to Euclidean space and cells can be represented with a coordinate representation.
+Then, spatial features are computed in order to discriminate relevant localization pattern.
+I present two different methods of feature engineering.
+The first method consists in manually designing features to characterize specific localization patterns.
+I then list and describe every hand-crafted feature implemented in FISH-quant.
+The second (published) method consists in learning features.
+They are extracted from a deep learning model fed with the \ac{RNA} point cloud as input and trained on a simulated pretext task.
+
+In \textbf{Chapter~\ref{ch:chapter5}}, I present several applications of my quantitative pipeline.
+These applications come from three publications where we study different \ac{RNA} localization patterns and cases of local translation.
+My analyses support and validates biological insights claimed in these studies about \ac{RNA} localization.
+I design a classification pipeline to recognize generic localization patterns.
+I evaluate the impact of translation inhibitor on \ac{RNA} localization and help identifying a singular translation-dependent pattern.
+I quantify a cell cycle dependent pattern, which is related to centrosomes.
+Finally, I also contribute to a a study focused on the protrusion pattern.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % plots
 
-% gene expression process
-% RNA maturation
+% (RNA maturation)
 % RNA transport mechanism
+
 % smFISH + microscope
 % multichannel images (dapi + smfish)
-% localization patterns
 % multiplexed FISH
+
 % (deep learning architecture)
