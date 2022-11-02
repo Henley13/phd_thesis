@@ -10,18 +10,17 @@
 \newpage
 
 
-In smFISH images, RNA molecules appear as diffraction limited spots, and for this reason, the detection of individual RNA molecules boils down to spot detection.
-%Here, we review different techniques for spot detection.
-The problem of spot detection has been largely addressed by different scientific communities; I will therefore start by reviewing different techniques aiming at detecting spots in images. 
+In smFISH images, RNA molecules appear as diffraction limited spots, and for this reason, the detection of individual RNA molecules boils down to spot detection, a problem that has been largely addressed by different scientific communities. 
 
-I will then point to the shortcomings of existing algorithms when applied to High Content Screening by \ac{FISH} 
-and describe the solution I have developed and implemented in \mbox{\emph{bigfish.detection}}.
+After a review of different techniques for spot detection, I will discuss shortcomings of existing methods when applied to High Content Screening by \ac{FISH} and describe the solution I have developed and implemented in \mbox{\emph{bigfish.detection}}.
 %We try to answer specific limitations of existing solutions, especially the possibility to scale the detection.
-As an example, I also add a code snippet at the end of each step.
+%As an example, I also add a code snippet at the end of each step.
 Finally I evaluate robustness and accuracy of this implementation by applying the algorithm on simulated data under different noise conditions.
 
 \section{Spot detection as a signal processing problem}
 \label{sec:detection_introduction}
+
+\tw{This section is not very well written. It lacks a convincing structure.}
 
 We first describe inputs and outputs we can expect when we perform spot detection.
 Then we review some solutions proposed in the literature, in bio-informatics, but more generally in computer vision.
