@@ -42,12 +42,13 @@ Aim of spot detection is to extract a array of spatial coordinates from an image
 This task is performed in two or three dimensions, depending of the input image.
 
 Detecting an object as small as a \ac{RNA} molecule implies some constraints.
-The optical system does not capture the original light signal emitted by the fluorescence probes, but its convolution with a \ac{PSF}.
-However, for the rest of the chapter, we simply assume the resulting spot signal can be approximate by a gaussian signal.
-Such simplification is reasonable for a detection with a pixel accuracy, with our noise level.
-In addition, as we can observe in Figure~\ref{fig:detection_results}, a \ac{smFISH} image often present a background fluorescence that doesn't identify with a \ac{RNA}.
-The noise can be highly heterogeneous and vary between images and even cells.\\
+The optical system does not capture the original light signal emitted by the fluorescence probes, but its convolution with a Point-Spread-Function (\ac{PSF}).
+In this thesis, I will assume that the \ac{PSF} can be approximately described by a Gaussian in 2 or 3 dimensions. 
+Such simplification is reasonable for a detection with pixel accuracy, given a good Signal-to-Noise-Ratio (\ac{SNR}).
 
+\tw{link the considerations on noise to the logical flow}
+In addition, as we can observe in Figure~\ref{fig:detection_results}, a \ac{smFISH} image often presents a background fluorescence that doesn't identify with a \ac{RNA}.
+The noise can be highly heterogeneous and vary between images and even cells.\\
 \noindent
 We can observe two types of noise:
 \begin{itemize}
@@ -56,6 +57,7 @@ We can observe two types of noise:
 	\item At the cellular level, the difference in the autofluorescence of the observed samples.
 \end{itemize}
 
+\tw{rewrite}
 In the context of a high content screening study, numerous images are acquired, with various biological samples or conditions.
 This leads to potentially heterogeneous pixel intensity and spot distribution across different images.
 Spot detection can be really challenging.
@@ -66,8 +68,8 @@ It thus requires a robust approach to tackle this problem and extract accurate c
 
 \subsubsection{Threshold based methods}
 
-Spot detection, especially with fluorescent images, has been addressed by the scientific community through different approaches.
-Yet, some similitudes can be observed and difficulties remained.
+\tw{bad place?}
+Spot detection, especially with fluorescent images, has been addressed by the scientific community through different approaches. \tw{unclear:} Yet, some similitudes can be observed and difficulties remained.
 
 \paragraph{Noise, signal and threshold}
 
@@ -100,6 +102,7 @@ They propose their own spot detection pipeline like Icy~\cite{de_chaumont_icy_20
 The recent Python library \emph{starfish}~\cite{perkel_starfish_2019} wraps existing \emph{scikit-image} functions and the first FISH-quant version~\cite{mueller_fish-quant_2013} includes a blob detection pipeline with a \ac{LoG} filter.
 This last pipeline is the one we implemented and improved for \emph{bigfish.detection}.
 
+\tw{There is a copy paste issue here.}
 More recently RS-FISH~\cite{bahry_rs-fish_2021} was released specifically for 3D spot detection with \ac{FISH} images.
 Developed in Java and exploiting radial symmetry, it presents a great subpixel accuracy, a fast runtime computation and robustness against anisotropic spot signal.
 After a \ac{DoG} filtering, we threshold the image to generate potential spot localizations.
