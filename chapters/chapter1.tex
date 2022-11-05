@@ -8,8 +8,10 @@
 \minitoc
 \newpage
 
-In this chapter I present FISH-quant v2.0, a computational framework dedicated to \ac{smFISH} analysis. FISH-quant v2.0 contains methods for every stage of a \ac{FISH}-based study.
-Based on a previous MATLAB package~\cite{mueller_fish-quant_2013}, I present here an improved and extended version, that is both scalable and modular and thus fulfills the requirement of a modern software tool. The chapter mainly describes the development presented in the paper~\cite{Imbert_fq_2022} for this second version of FISH-quant:
+In this chapter I present FISH-quant v2.0, a computational framework dedicated to \ac{smFISH} analysis.
+FISH-quant v2.0 contains methods for every stage of a \ac{FISH}-based study.
+Based on a previous MATLAB package~\cite{mueller_fish-quant_2013}, I present here an improved and extended version, that is both scalable and modular and thus fulfills the requirement of a modern software tool.
+The chapter mainly describes the development presented in the paper~\cite{Imbert_fq_2022} for this second version of FISH-quant:
 
 \begin{center}
 	\color{green}
@@ -26,7 +28,9 @@ In this section I present the functionalities expected from a modern and efficie
 \label{subsec:pipeline_stages}
 
 % FISH in screening mode 
-\ac{FISH} imaging techniques allow to visualize RNAs in cells and tissues and thus allow to explore the spatial distribution of RNA molecules inside cells and tissues. In particular, \ac{FISH} is a scalable technique and can therefore be applied in screening mode, where hundreds or thousands of experiments can be performed using a high degree of automation. The resulting datasets are extremely large and complex image datasets. 
+\ac{FISH} imaging techniques allow to visualize RNAs in cells and tissues and thus allow to explore the spatial distribution of RNA molecules inside cells and tissues.
+In particular, \ac{FISH} is a scalable technique and can therefore be applied in screening mode, where hundreds or thousands of experiments can be performed using a high degree of automation.
+The resulting datasets are extremely large and complex image datasets.
 
 While such large-scale imaging methods provide a systematic solution to understand \ac{RNA} localization at a systems level, they come at a price: the need for fully automated, robust image analysis and user-friendly software tools to analyze such data sets and to fully exploit their potential.
 Several specifications can be defined a priori for such an analysis tool.
@@ -35,8 +39,15 @@ Yet, it should be flexible enough to address different experimental designs and 
 With the same modules, users should be able to both perform a high content screening analysis on a remote cluster, and a local analysis of a single image.
 Finally, the software should integrate the latest generation of computer vision algorithms, in particular deep-learning-based methods for image segmentation.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter1/schema_pipeline}
+    \caption{Computational pipeline I use as reference for a smFISH study}
+    \label{fig:pipeline}
+\end{figure}
+
 % concrete tasks
-The analysis of \ac{smFISH} images aims at localizing and counting individual \ac{RNA}s in single cells and analyze their spatial configuration with respect to subcellular landmarks (e.g. nuclear and cytoplasmic membranes). 
+The analysis of \ac{smFISH} images aims at localizing and counting individual \ac{RNA}s in single cells and analyze their spatial configuration with respect to subcellular landmarks (e.g.~nuclear and cytoplasmic membranes).
 It typically encompasses a sequence of interconnected steps, as illustrated in Figure~\ref{fig:pipeline}:
 \begin{itemize}
 	\setlength\itemsep{0.1em}
@@ -47,293 +58,51 @@ It typically encompasses a sequence of interconnected steps, as illustrated in F
 
 %In multiplex smFISH studies, which are not subject of this PhD thesis, these steps are usually complemented by jointly analyzing different smFISH signals, i.e. point clouds of different types. 
 
-\noindent
-\tw{Not sure what you want do say here.}
-\tw{TODO : revise this paragraph}
-These stages are often observed in studies with a quantitative approach.
-After designing spot features to capture spatial properties of transcripts~\cite{battich_image-based_2013}, researchers propose to complete their analysis pipeline with computer vision algorithms~\cite{stoeger_computer_2015}.
-Indeed, to efficiently quantify a high-dimensional feature space for each transcript, we need to combine an accurate \ac{RNA} detection method with the segmentation of relevant subcellular regions, and potentially preprocessing techniques to prepare the bioimages (such that filtering, denoising or projection algorithms).
-In~\cite{stoeger_computer_2015}, researchers release techniques to detect and segment, in addition to the set of spot features they previously developed.
-They also support that such a pipeline could be use independently of their \ac{RNA}-focused task, for any similar study that imply to quantify phenotypes in fluorescent microscopic images.
-As an example, they reused part of their pipeline and features in a study~\cite{battich_control_2015} where they model the heterogeneity of transcript abundance in mammalian cells.
-Their previous analysis pipeline allow them to perform a single-cell analysis on a large-scale experimental dataset to validate their biological insights.
-From this example we can develop some principles that should guide the development of our tools.
-
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter1/schema_pipeline}
-    \caption{Computational pipeline we use as reference for a smFISH study}
-    \label{fig:pipeline}
-\end{figure}
-
 \subsection{Related work}
 \label{subsec:related_work_fishquant}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+Processing a large-scale \ac{smFISH} study requires both specific methods to analyze \ac{RNA} distribution and more general techniques to read and manipulate bioimages.
+Indeed, if we develop localization features or compute gene expression level by counting \ac{RNA} molecules, we would still need robust computer vision algorithms.
+The \ac{FISH} analysis pipeline should also include an accurate \ac{RNA} detection method, the segmentation of relevant subcellular regions, and potentially preprocessing techniques to prepare the bioimages (such that filtering, denoising or projection algorithms).
+Such approach can be illustrated with the publications from the Pelkmans Lab.
+After designing spot features to capture spatial properties of transcripts~\cite{battich_image-based_2013}, researchers propose to complete their analysis pipeline with computer vision algorithms~\cite{stoeger_computer_2015}.
+To efficiently quantify a high-dimensional feature space for each transcript, we need a complete and robust pipeline.
+In~\cite{stoeger_computer_2015}, researchers describe techniques to detect and segment, in addition to the set of spot features they previously developed.
+They also support that such a pipeline could be use independently of their \ac{RNA}-focused task, for any similar study that imply to quantify phenotypes in fluorescent microscopic images.
+As an example, they reused part of their pipeline and features in a study~\cite{battich_control_2015} where they model the heterogeneity of transcript abundance in mammalian cells.
+Their previous analysis pipeline allow them to perform a single-cell analysis on a large-scale experimental dataset to validate their biological insights.
+Another approach can be observed with BlobFinder~\cite{ALLALOU200958}, which can be see as a niche software.
+Researchers intentionally narrowed the scope of the project such that ''an analysis can be performed using less parameters and less user input''.
+Indeed, BlobFinder allows to quantify and localize cells and spots (''point like source signals'') in fluorescence microscopy images, then export a result file.
+From these examples we can draw two conclusions that should guide the development of our tools.
+First, we need a framework that deals with every part of a \ac{smFISH} analysis pipeline, otherwise the pipeline would have a bottleneck at some point, that should be solved manually or by using an external framework.
+Second, there is a balance to find between the scope of a framework, its flexibility, its scalability and the amount of user input required.
+A more general or flexible framework should not drown a user under a complex and vast documentation and keep its process simple, robust and modular.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+While several tools exist for each stage illustrated in Figure~\ref{fig:pipeline}, there was - to our knowledge - no tool available that permits performing the entire analysis in one framework.
+A complete analysis pipeline has then to be built by mixing these tools and requires some in-house developments, which can be daunting for non-specialists and may provide solutions that are unstable and difficult to scale.
+For the segmentation, deep learning has become the method of choice with dramatic improvements in segmentation accuracy as compared to traditional methods.
+Spot detection can be performed with different Python or Matlab packages.
+However, assigning spot counts to segmentation results and the subsequent analysis of \ac{RNA} levels and RNA localization require custom-written code~\cite{stoeger_computer_2015, samacoits_computational_2018}.
+General image analysis tools, such as CellProfiler~\cite{mcquin_cellprofiler_2018}, CellCognition~\cite{held_cellcognition_2010} or Trackmate~\cite{ershov_bringing_2021}, permit us to establish an analysis framework daisy-chaining some of these analysis steps, but do not permit us to perform the entire analysis.
+Steps are missing, usually the ones focused on the \ac{RNA} distribution and localization features computation.
 
-% References to mention here:
+A first attempt to build a software self-sufficient for an \ac{smFISH} analysis is the Matlab version of FISH-quant~\cite{mueller_fish-quant_2013}.
+Coupled with the flexible \ac{smiFISH} probes~\cite{tsanov_smifish_2016}, FISH-quant progressively integrated detection and segmentation solutions, in addition to dedicated localization features~\cite{samacoits_computational_2018}.
+This chapter introduces the Python-based version of FISH-quant~\cite{Imbert_fq_2022}.
+Contrary to the first version of FISH-quant in Matlab, I address and improve on each of the specifications mentioned in section~\ref{subsec:pipeline_stages}.
+The switch to Python allows me to develop a flexible, free and fully open-source software.
+FISH-quant v2 enjoys a better integration to other open source tools and frameworks, from data analysis to web-based user interaction.
+Importantly, FISH-quant v2 facilitates the use of machine learning or deep learning algorithms with the import of dedicated packages, such as scikit-learn~\cite{pedregosa11a_scikitlearn} or TensorFlow~\cite{tensorflow_2015}.
+I also improve the scalability and the modularity of the package: the software has now been applied to several High Content Screening projects~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}.
+Lastly, by using ImJoy~\cite{ouyang_imjoy_2019}, a recently developed data analysis framework, we provide web-based \ac{GUI} for both launching image analysis and downstream analysis of the results, and the computation can be performed locally or seamlessly scale to powerful remote computing servers.
 
-% FQ1
-% pyHIM
-% Bento
-% DypFISH
-% general tools (TrackMate, CellProfiler, CellCognition, ICY)
-
-% references in bib file
-%~\cite{mcquin_cellprofiler_2018} % cellprofiler
-%~\cite{mueller_fish-quant_2013} % fq1
-%~\cite{de_chaumont_icy_2012} % icy
-%~\cite{ershov_bringing_2021} % trackmate
-%~\cite{perkel_starfish_2019} % starfish
-
-%~\cite{tsanov_smifish_2016}
-%~\cite{samacoits_computational_2018}
-%~\cite{battich_image-based_2013}
-%~\cite{stoeger_computer_2015}
-
-% %%%%% extracts from paper fqV2
-
-\tw{This is currently a copy paste from the article. We do not need a complete reformulation, but I guess a bit is needed.}
-\tw{Insert the citations!}
-
-% fq1 vs fq2
-Here, we introduce a Python-based version of our widely adopted software package
-FISH-quant (Mueller et al. 2013) for the analysis of smFISH images.
-
-Contrary to the first version of FISH-quant in Matlab, we address and improve on each of
-the specifications mentioned above.
-
-The switch to Python allows us to develop a flexible, free and fully open-source software.
-
-FISH-quant v2 enjoys a better integration to other open source tools and frame- works, from data analysis to web-based user interaction.
-
-Importantly, FISH-quant v2 facilitates the use of machine learning or deep learning algorithms with the import of dedicated packages, such as scikit-learn (Pedregosa et al. 2011) or TensorFlow (Abadi et al. 2016).
-
-We also im- prove the scalability and the modularity of the package: the software has now been applied to several High Content Screening projects (Chouaib et al. 2020; Pichon et al. 2021; Safieddine et al. 2021). Lastly, by using ImJoy (Ouyang et al. 2019), a recently developed data analysis framework, we provide web-based graphical user
-interfaces (GUI) for both launching image analysis and downstream analysis of the
-results, and the computation can be performed locally or seamlessly scale to pow- erful remote computing servers.
-
-% related work
-
-Overview of existing analysis solutions
-While several tools exist for each of these steps, there is currently—to our
-knowledge—no tool available that per- mits performing the entire analysis in one
-framework (see Supplemental Note 4).
-
-A complete analysis pipeline has then to
-be built by mixing these tools and requires some in-house developments, which
-can be daunting for non- specialists and may provide solutions that are unstable
-and difficult to scale.
-
-For the first step of object segmentation, deep-learning has become the method of
-choice with dramatic improve- ments in segmentation accuracy as compared to tradi- tional methods.
-
-Lastly, assigning spot counts to segmentation results and the subsequent analysis of
-RNA levels and/or RNA locali- zation requires custom-written code (Stoeger et al. 2015; Samacoits et al. 2018).
-
-General image analysis tools such as CellProfiler (McQuin et al. 2018) permit us
-to establish an analysis framework daisy-chaining some of these analysis steps,
-but do not permit us to perform the entire analysis.
-
-A num- ber of approaches,
-specifically dedicated to the analysis of smFISH are available.
-
-In our own software
-FISH-quant v1 (Mueller et al. 2013) and also (Stoeger et al. 2015), the core of
-the analysis was performed in Matlab while cell seg- mentation was performed with
-the Python-based CellProfiler.
-
-DypFISH (Savulescu et al. 2021) permits the study
-of the spatial distribution of mRNAs and proteins of micropatterned cells, mixing
-tools implemented in Python and Icy (de Chaumont et al. 2012). Lastly, StarFISH
-(Perkel 2019) is an ongoing software
-development mainly aiming at solving problems related to multiplex smFISH data
-for application in spatial transcriptomics.
-
-% %%%%% extracts from smiFISH
-
-~\cite{mueller_fish-quant_2013} % FQ1
-~\cite{tsanov_smifish_2016}
-
-smiFISH is also flexible since differently labelled secondary detector probes
-can be used with the same primary probes. We demonstrate that this flexibility
-allows multicolor labelling without the need to synthesize new probe sets. We
-further demonstrate that the use of a specific acrydite detector oligonucleotide
-allows smiFISH to be combined with expansion microscopy, enabling the resolution
-of transcripts in 3D below the diffraction limit on a standard microscope.
-Lastly, we provide improved, fully automated software tools from probe-design
-to quantitative analysis of smFISH images. In short, we provide a complete
-workflow to obtain automatically counts of individual RNA molecules in single cells.
-
-Nuclear area was measured in 2D maximum intensity projections of DAPI images
-with CellProfiler (11)afterautomated segmentation. mRNA detection was performed
-with FISH-quant (5) with local-maximum detection after Laplacian of Gaussian
-filtering. Signal-to-noise ratio (SNR) was calculated for individual cells as
-the ratio of the mean amplitude of the fitted 3D Gaussian to the standard
-deviation of the background in a region without cells.
-
-In order to test if our projection approach improves cell segmentation,
-we used a fairly traditional workflow for cell segmentation based on prefiltering,
-global thresholding and watershed transformation, and we integrated it to the
-open-source software CellCognition (10).
-
-~\cite{samacoits_computational_2018}
-
-% %%%%% extracts from dypfish
-
-~\cite{savulescu_dypfish_2019}
-We introduce a range of analytical techniques for quantitatively interrogating
-single molecule RNA FISH data in combination with protein immunolabeling over time.
-Strikingly, our results show that constraining cellular architecture reduces
-variation in subcellular mRNA and protein distributions, allowing the
-characterization of their localization and dynamics with high reproducibility
-
-~\cite{savulescu_interrogating_2021}
-Here, we present DypFISH, an approach to quantitatively investigate the
-subcellular localization of RNA and protein. We introduce a range of analytical
-techniques to interrogate single-molecule RNA fluorescence in situ hybridization
-(smFISH) data in combination with protein immunolabeling. DypFISH is suited to
-study patterns of clustering of molecules, the association of mRNA-protein
-subcellular localization with microtubule organizing center orientation, and
-interdependence of mRNA-protein spatial distributions
-
-% %%%%% extracts from bento
-
-~\cite{mah_bento_2022}
-Bento’s utility, we applied it to analyze spatial transcriptomics datasets generated by seqFISH+ (10k genes in ~200 fibroblast cells) and MERFISH
-Bento ingests single-molecule resolution data from highly multiplexed
-spatial transcriptomics imaging experiments, enabling visualization, exploration and analysis of subcellular
-biology.
-
-% %%%%% extracts from battich, stoeger, etc...
-
-~\cite{battich_image-based_2013}
-We obtained 18 primary spot features that reflect the
-relative localization of each spot in a single cell, with respect to both the cell and other spots
-
-~\cite{stoeger_computer_2015}
-(talking about ~\cite{battich_image-based_2013})
-Therefore, we have previously developed and documented [4] an unsupervised
-clustering scheme that uses selected cellular statistics to identify a small
-number of main patterns in single cell subcellular transcript localization.
-Briefly, this package uses the per-cell mean and standard deviation of the
-single-transcript localization features to first identify a number of
-different patterns, by clustering random subsets of cells, such that
-the clusters are most reproducible. In a second step, it determines the
-similarity of each single cell to each of the identified patterns.
-
-To enable imagebased transcriptomics to reach its full potential, we developed
-computer vision algorithms that build on and improve those currently used to
-detect objects in confocal images. By using iterative watershedding we have
-improved the segmentations of nuclei and cells. In addition, we describe how
-to perform spot detection for transcript identification in an automated way for
-thousands of images. Accurate detection of nuclear outlines, cell outlines, and
-transcript molecules are essential for the correct quantification of a
-high-dimensional multivariate feature space of each transcript and to reveal
-bona fide novel properties of the spatial organization of the transcriptome [4].
-The computer vision pipeline presented here complements our earlier work [4],
-and can be used independently of transcripts in other image-based approaches.
-
-~\cite{battich_image-based_2013}
-We obtained 18 primary spot features that reflect the
-relative localization of each spot in a single cell, with respect to both the cell and other spots
-here we show that branched dnA technology combined with automated liquid handling, high-content imaging and quantitative image analysis allows highly reproducible quantification of transcript abundance in thousands of single cells at single-molecule resolution.
-in addition, it allows extraction of a multivariate feature set quantifying subcellular patterning and spatial properties of transcripts and their cell-to-cell variability. this has multiple implications for the functional interpretation of cell-to-
-cell variability in gene expression and enables the unbiased identification of functionally relevant in situ signatures
-of the transcriptome without the need for perturbations. Because this method can be incorporated in a wide variety of high-throughput image-based approaches, we expect it to be broadly applicable.
-
-~\cite{stoeger_computer_2015}
-(talking about ~\cite{battich_image-based_2013})
-Therefore, we have previously developed and documented [4] an unsupervised
-clustering scheme that uses selected cellular statistics to identify a small
-number of main patterns in single cell subcellular transcript localization.
-Briefly, this package uses the per-cell mean and standard deviation of the
-single-transcript localization features to first identify a number of
-different patterns, by clustering random subsets of cells, such that
-the clusters are most reproducible. In a second step, it determines the
-similarity of each single cell to each of the identified patterns.
-
-To enable imagebased transcriptomics to reach its full potential, we developed
-computer vision algorithms that build on and improve those currently used to
-detect objects in confocal images. By using iterative watershedding we have
-improved the segmentations of nuclei and cells. In addition, we describe how
-to perform spot detection for transcript identification in an automated way for
-thousands of images. Accurate detection of nuclear outlines, cell outlines, and
-transcript molecules are essential for the correct quantification of a
-high-dimensional multivariate feature space of each transcript and to reveal
-bona fide novel properties of the spatial organization of the transcriptome [4].
-The computer vision pipeline presented here complements our earlier work [4],
-and can be used independently of transcripts in other image-based approaches.
-
-~\cite{battich_control_2015}
-Here, we applied image-based transcriptomics, a highthroughput automated
-single-molecule fluorescence in situ hybridization (sm-FISH) method that we
-recently developed (Battich et al., 2013), which meets these requirements.
-Using large-scale single-cell datasets acquired with this approach, we show
-that cell-to-cell variability in cytoplasmic transcript abundance in human
-adherent cells can be accurately predicted at the single-cell level with a
-multivariate set of features that quantify properties of the cellular state
-and microenvironment, and we experimentally verify some of the underlying
-causality. We find that for most genes, the unexplained variability in cytoplasmic
-transcript abundance approaches a limit of minimal stochasticity imposed by a
-Poisson process. The few genes that deviate from this limit also show a high
-amount of explained variability, suggesting high-level regulation rather than
-high stochasticity. Through computational multiplexing, we uncover the existence
-of multilevel transcript homeostasis in single cells to achieve specific
-adaptation of transcript abundance to the cellular state and microenvironment,
-according to function of the proteins they encode. Finally, we show that the
-mammalian nucleus acts as a potent and global buffer to stochastic fluctuations
-arising from bursts in gene transcription by temporally retaining transcripts
-in the nucleus. This explains how cytoplasmic transcript abundance in mammalian
-cells can be minimally stochastic, while deterministic variation is maintained.
-
-% %%%%% extracts from BlobFinder
-
-%~\cite{ALLALOU200958}
-% simple pipeline (segment with h-maxima, detect spots with filter/threshold, assign spots to cell/nucleus, count)
-
-We provide a free software called BlobFinder that is intended for a limited
-type of application, making it easy to use, easy to learn and optimized for its
-particular task. BlobFinder can perform batch processing of image data and
-quantify as well as localize cells and point like source signals in fluorescence
-microscopy images, e.g., from FISH, in situ PLA and padlock probing, in a fast and easy way.
-
-BlobFinder is developed for one type of application so that an analysis can be performed using less parameters and less user input.
-
-Furthermore, to minimize the number of input parameters in the software, all
-the parameters were discussed together with the end-users before the start of the project.
-The BlobFinder GUI (Fig. 2) consists mainly of three parts; the image import,
-the configuration and the analysis. The aim of the configuration part is for
-the user to easily tune the parameters on one or several test images before running an analysis.
-
-The main objective of BlobFinder is to detect and count all cells and signals in an image and export a data file containing these quantified results
-
-The first step in the analysis is to segment all cell nuclei in the image.
-To separate cell nuclei from image background Otsu’s method of thresholding,
-
-A distance transform is applied to the binary image obtained from the previous step [13].
-This will create a landscape like image where the intensity represents the height in the landscape. The watershed transform together
-with a h-extended maxima algorithm makes use of the land- scape like image to separate clustered nuclei [14,15].
-cytoplasm delineation is purely based on the distance from the nuclei.
-A user-defined threshold, representing the maximum distance from cell nucleus to cell border,
-A watershed algorithm is then used to label and separate touch- ing cytoplasms.
-
-The pre-processing step consists of a filtration with a variable sized kernel,
-defined by the user, enhancing local maxima in the image; this is also done in
-the case when no z-stacks are present. Subse- quently, all local maxima in the
-image are identified and a user defined threshold decides which of the local maxima should be regarded as detected signals.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A number of approaches specifically dedicated to the analysis of \ac{smFISH} are currently available or in development.
+DypFISH~\cite{savulescu_dypfish_2019,savulescu_interrogating_2021} permits the study of the spatial distribution of \ac{mRNA}s and proteins of micropatterned cells.
+They mix tools implemented in Python and Icy~\cite{de_chaumont_icy_2012}.
+Recently, Bento~\cite{mah_bento_2022} was released to process \ac{SeqFISH}+ and \ac{MERFISH} images, explore and compute spatial features like FISH-quant, with a single-molecule accuracy.
+Lastly, StarFISH~\cite{perkel_starfish_2019} is an ongoing software development mainly aiming at solving problems related to multiplex \ac{smFISH} data for application in spatial transcriptomics.
+They made a significant effort to be able to read and process images generated by any \ac{FISH} method.
 
 \section{A new framework}
 \label{sec:fqv2}
@@ -354,7 +123,7 @@ In this section, I will describe the overall organisation of FISH-quant v2 and t
 
 While an impressive range of computational methods already exists, a unified framework dedicated to \ac{smFISH} experiments was lacking.
 This prevents users, especially non-specialist, from performing an accurate and large-scale analysis.
-To address this, we designed a new version of FISH-quant to fulfill the above-described requirements in a flexible and efficient way.
+To address this, I designed a new version of FISH-quant to fulfill the above-described requirements in a flexible and efficient way.
 
 This version is entirely open-source and hosted on GitHub under the FISH-quant organization\footnote{\url{https://github.com/fish-quant}}.
 Using a GitHub organization allowed us to provide dedicated repositories with well defined and dedicated scope (see Figure~\ref{fig:fishquant}).
@@ -363,13 +132,13 @@ The user can choose the adequate code for the analysis needs, without the overhe
 This GitHub organization is organized in several resources with dedicated repositories and documentation.
 
 First, I implemented a Python package (\emph{bigfish}) providing the core code for performing scalable computation and analysis.
-Second, I provide detailed interactive examples with test data for each analysis step are available in Jupyter notebooks. These examples can be run directly on Binder~\cite{Jupyter2018Binder2}, a free and reproducible Jupyter notebook service, without local installation.
+Second, I provide detailed interactive examples with test data for each analysis step that are available in Jupyter notebooks.
+These examples can also be run directly on Binder~\cite{Jupyter2018Binder2}, a free and reproducible Jupyter notebook service, without local installation.
 Third, a Python package (\emph{simfish}) allows the simulation of different subcellular \ac{RNA} localization patterns.
 Fourth, ImJoy plugins~\cite{ouyang_imjoy_2019} provide a \ac{GUI} for the most commonly used workflows, and an interactive tutorial that can also run directly without local installation.
 Lastly, a landing page\footnote{\url{https://fish-quant.github.io/}} centralizes implemented tools and directs new users to the most relevant resource for their analysis needs.
 
 Dependencies for the Python packages are limited to standard Python scientific libraries: scientific computing (numpy~\cite{2020NumPy}, SciPy~\cite{2020SciPy}), data wrangling (pandas~\cite{mckinney_pandas_2010}), image analysis (scikit-image~\cite{walt_scikit-image_2014}), visualization (matplotlib~\cite{hunter_matplotlib_2007}), parallel computing (joblib\footnote{\url{https://github.com/joblib/joblib}})and machine learning (scikit-learn~\cite{pedregosa11a_scikitlearn}, TensorFlow~\cite{tensorflow_2015}).
-%We also try to adopt best practices in software development.
 The GitHub repositories are using continuous integration providing increased robustness of the released code, through unitary testing, version control and automatically generated up-to-date documentation.
 Finally, packages are hosted under a BSD 3-Clause License.
 
@@ -378,7 +147,7 @@ Finally, packages are hosted under a BSD 3-Clause License.
 
 \subsubsection{\emph{pip install big-fish}}
 
-The core analysis package we chose to implement in Python is \emph{bigfish}.
+The core analysis package I chose to implement in Python is \emph{bigfish}.
 Compared to MATLAB, this programming language allows the development of a free and fully open-source software.
 It also provides access to established libraries for data and image analysis, in addition to the most popular deep learning frameworks.
 Lastly, Python packages can be interfaced with other tools and frameworks, from data analysis to web design, to provide interactive tools for user interaction and data inspection.
@@ -388,7 +157,7 @@ I designed each subpackage with clearly defined input and output data formats, w
 Each of these packages can be used independently in a modular fashion.
 Users can thus create a customized analysis workflow, starting from preprocessing of images to statistical interpretation of results.
 These workflows can be implemented in Python and Bash scripts and run both on local and remote computational resources.
-The modular design also permits the easy integration of external methods, for instance, a new segmentation method can be combined with our spot detection algorithm.
+The modular design also permits the easy integration of external methods, for instance, a new segmentation method can be combined with this spot detection algorithm.
 
 More specifically, the Python code used in \emph{bigfish} package is organized in 7 subpackages performing dedicated steps:
 \begin{itemize}
@@ -402,8 +171,8 @@ More specifically, the Python code used in \emph{bigfish} package is organized i
 	\item \emph{bigfish.deep\_learning} - deep learning algorithms and pretrained models for segmentation or point cloud analysis
 \end{itemize}
 
-In this chapter, I provide an overview of these subpackages. More details can be found in subsequent chapters where I discuss particular algorithms that I have designed and/or implemented.
-%In the subsequent chapters a more detailed description of algorithms implemented is given, especially when we reuse or improve proven methods from the literature.
+In this chapter, I provide an overview of these subpackages.
+More details can be found in subsequent chapters where I discuss particular algorithms that I have designed and/or implemented.
 I would also like to refer interested readers to the package documentation\footnote{\url{https://big-fish.readthedocs.io/en/stable/}} or the GitHub repository\footnote{\url{https://github.com/fish-quant/big-fish}}.
 Dedicated notebook tutorials are also available\footnote{\url{https://github.com/fish-quant/big-fish-examples}}.
 They can be run directly in the browser with Binder~\cite{Jupyter2018Binder2} and provided sample data, and thus allows new users to immediately test the package.
@@ -437,7 +206,7 @@ Second, the detection subpackage (\emph{bigfish.detection}) provides methods req
 An important aspect of my implementation is its ability to detect spots without setting any pixel intensity threshold.
 I propose a method to automatically infer this threshold from the image.
 Such automatization overcomes human intervention and allows scaling to large data sets, such that the subpackage can process thousands of images.
-While initially designed to detect individual \ac{mRNA}s, this subpackage permits the detection of larger spot-like structures like P-bodies or centrosomes \tw{refer to the chapter}.
+While initially designed to detect individual \ac{mRNA}s, this subpackage permits the detection of larger spot-like structures like P-bodies or centrosomes (see applications in chapter~\ref{ch:chapter5} for more details).
 Furthermore, I provide a fitting method to localize spots with a subpixel accuracy, a colocalization algorithm and cluster detection.
 Strong local accumulation of \ac{RNA}s can lead to an underdetection since such accumulations are counted as single \ac{RNA}s.
 For such cases, I also provide tools to decompose these dense regions and estimate the right number of spots.
@@ -449,43 +218,41 @@ Furthermore, different post-processing tools are available to refine and clean t
 These algorithms are presented with more details in the chapter~\ref{ch:chapter3}.
 
 Finally, there are 2 subpackages dedicated to the analysis of \ac{RNA} distribution.
-First, detected point clouds need to be matched to their cellular or subcellular environment. For this, the subpackage (\emph{bigfish.multistack}) allows to combine detection and segmentation results, obtained from different input channels.
+First, detected point clouds need to be matched to their cellular or subcellular environment.
+For this, the subpackage (\emph{bigfish.multistack}) allows to combine detection and segmentation results, obtained from different input channels.
 It permits the analysis of \ac{RNA} abundance and distribution at the single-cell level.
 Detected spots can be assigned to a specific region of interest, for instance, a cell or a nucleus.
 Using the same method, \ac{RNA} clusters can be assigned to a nucleus and thus be considered as transcription sites.
 \ac{RNA} expression levels are computed within this subpackage, as this is usually the minimum information that is extracted from a spatial transcriptomics study.
-Finally, the subpackage \emph{bigfish.classification} computes features at the single cell level from the spot positions and the coordinates of cellular landmarks. 
+Finally, the subpackage \emph{bigfish.classification} computes features at the single cell level from the spot positions and the coordinates of cellular landmarks.
 These features allow a statistical description of the cell population or can feed a classification model allowing for the discrimination of individual cells according to their RNA localization patterns.
 More information about the cell matching step and the feature engineering are presented in chapter~\ref{ch:chapter4}.
 
-% HEre I AM
 In \emph{bigfish}, I also provide a subpackage (\emph{bigfish.plot}) to visualize the results of each intermediate step in the analysis workflow and thus provide valuable visual quality control.
-A last subpackage (\emph{bigfish.deep\_learning}) 
-%is not intended to be directly used by an user. It
-gathers the utility functions and model architectures to run deep learning solutions. 
-% elsewhere in the package.
+A last subpackage (\emph{bigfish.deep\_learning}) gathers the utility functions and model architectures to run deep learning solutions.
 The use of such techniques implies heavy frameworks in the back-end like TensorFlow~\cite{tensorflow_2015}.
-By isolating our pieces of code related to deep learning, we make the import of these frameworks optional for the user.
+By isolating pieces of code related to deep learning, I make the import of these frameworks optional for the user.
 Indeed, the majority of the methods provided by \emph{bigfish} does not require artificial neural networks.
 
 \subsection{Sim-FISH}
 \label{subsec:simfish}
 
-The Python package \emph{simfish} is dedicated to the simulation of FISH data. These simulations come in two flavors: FISH image simulation and simulation of point cloud coordinates with a localization pattern
-
-%Two kind of simulations are available: image of spots and point cloud coordinates with a localization pattern.
+The Python package \emph{simfish} is dedicated to the simulation of FISH data.
+These simulations come in two flavors: FISH image simulation and simulation of point cloud coordinates with a localization pattern.
 
 Simulated images can be used to validate the spot detection methods under different noise conditions.
 Spots or clusters of spots with various intensities and shapes can be simulated, in 2D or 3D, optionally with subpixel accuracy.
 Different parameters, such as the number of spots, the size of the clusters and even the background noise level or randomness in the image can be controlled by the user.
 I refer to the chapter~\ref{ch:chapter2} for the details about the generation of these images.
 
-The point clouds are used to build a large dataset with different localization patterns. They can be used for benchmarking and ultimately for the training of neural networks for classification of localization patterns. 
-The output of the simulation is not an image, but rather a list of 3D \ac{RNA} coordinates as well as the 2D cell and nuclear boundaries. 
-The localization pattern can be chosen among 9 predefined patterns, and the strength of the pattern (and thus the difficulty of recognizing the pattern) can be controlled by a parameter. 
+The point clouds are used to build a large dataset with different localization patterns.
+They can be used for benchmarking and ultimately for the training of neural networks for classification of localization patterns.
+The output of the simulation is not an image, but rather a list of 3D \ac{RNA} coordinates as well as the 2D cell and nuclear boundaries.
+The localization pattern can be chosen among 9 predefined patterns, and the strength of the pattern (and thus the difficulty of recognizing the pattern) can be controlled by a parameter.
 Chapter~\ref{ch:chapter4} provides a thorough description of the simulations.
 
-More generally, simulations can be helpful to validate, calibrate or pre-train algorithms. This is particularly true when we deal with experimental data difficult to generate or annotate. 
+More generally, simulations can be helpful to validate, calibrate or pre-train algorithms.
+This is particularly true when we deal with experimental data difficult to generate or annotate.
 Lastly, online information about the simulation package are available in the documentation\footnote{\url{https://sim-fish.readthedocs.io/en/stable/}} or in the GitHub repository\footnote{\url{https://github.com/fish-quant/sim-fish}}.
 
 \subsection{ImJoy}
@@ -509,9 +276,9 @@ We thus implemented several plugins with a \ac{GUI} based on ImJoy platform~\cit
 A general organization of ImJoy is illustrated in Figure~\ref{fig:imjoy}.
 It provides simpler access for users with no computational background and no programming skills.
 These plugins provide the most commonly used analysis workflow, as determined from the usage of the Matlab version of FISH-quant~\cite{mueller_fish-quant_2013}, and will thus be suited for a large number of use cases.
-% HERE I AM
-\tw{Unclear: segmentation vs. workflow.}
-I implemented a plugin to perform segmentation, on top of CellPose model~\cite{stringer_cellpose_2021}.
+It mostly includes segmentation and detection tools.
+
+First, we implemented a plugin to perform segmentation on top of CellPose model~\cite{stringer_cellpose_2021}.
 Thanks to the modular design, this model can be easily exchanged if more performant methods are available in the future.
 A documentation is available online to launch and run the plugin\footnote{\url{https://fq-segmentation.readthedocs.io/en/latest/}}.
 
@@ -519,7 +286,7 @@ We also implemented a detection plugin based on \emph{bigfish} modules.
 Both isolated and clustered \ac{RNA} can be detected and detection results can be inspected with the Kaibu image viewer plugin in ImJoy.
 While \emph{bigfish} is developed to be scalable without the need to fine tune parameters, different detection settings can be interactively investigated through the \ac{GUI}.
 Batch processing of entire folders is also possible.
-Lastly, detection results can be assigned to segmented cells and nuclei is segmentation masks are available.
+Lastly, detection results can be assigned to segmented cells and nuclei if segmentation masks are available.
 An online documentation is available for this plugin\footnote{\url{https://fq-imjoy.readthedocs.io/en/latest/}}, and also an interactive demo\footnote{\url{https://fish-quant.github.io/fq-interactive-docs/\#/fq-imjoy}}.
 This demo can be run directly in the browser without any local installation.
 
@@ -539,15 +306,15 @@ This plugin can be run without local installation and enables the user to explor
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this chapter we present the second version of FISH-quant, a user-friendly Python based framework for the complete analysis of \ac{smFISH} images.
+In this chapter I present the second version of FISH-quant, a user-friendly Python based framework for the complete analysis of \ac{smFISH} images.
 It is built around \emph{bigfish}, a core-analysis package, implemented following rigorous software development guidelines, with detailed interactive documentation and tutorials.
 This package consists of several interchangeable modules whose organization matches key steps in \ac{smFISH} image analysis: preprocessing, \ac{RNA} detection, cell segmentation and analysis.
 Its modularity permits the creation of flexible workflows ranging from the analysis of small data sets with the help of a \ac{GUI} to custom-tailored investigation of large-scale screens requiring computational clusters.
-Indeed, we also provide user interfaces in ImJoy accessible to biologists without programming skills, which can be used locally or scaled to larger remote computational resources, and displayed in the browser.
+Indeed, I also provide user interfaces in ImJoy accessible to biologists without programming skills, which can be used locally or scaled to larger remote computational resources, and displayed in the browser.
 A last package, \emph{simfish}, allows the simulation of \ac{smFISH} images with non random \ac{RNA} localization patterns.
 These simulations can be used to develop and evaluate analysis pipelines.
 Lastly, the use of Python scientific ecosystem, as well as strict version control and minimal dependencies, facilitate installation, maintenance and integration with other analysis or visualization frameworks.
 All dependencies, as well as FISH-quant v2, are open-source, thus can be used free of charge.
 
-In the chapters~\ref{ch:chapter2},~\ref{ch:chapter3} and~\ref{ch:chapter4}, we detail the different functions available in FISH-quant.
-Throughout the manuscripts, we thus include several snippets with the few lines of code related to the described methods.
+In the chapters~\ref{ch:chapter2},~\ref{ch:chapter3} and~\ref{ch:chapter4}, I detail the different functions available in FISH-quant.
+Throughout the manuscripts, I thus include several snippets with the few lines of code related to the described methods.
