@@ -42,7 +42,7 @@ This last section mainly describes results presented in:
 \label{sec:general_pattern_recognition}
 
 In~\cite{CHOUAIB_2020}, I have implemented a quantitative pipeline to analyze the localizations of \ac{mRNA} molecules.
-This work lays the foundation of the future Python packages developed in FISH-quant V2~\cite{Imbert_fq_2022}.
+This work lays the foundation of the Python packages developed in FISH-quant v2~\cite{Imbert_fq_2022}.
 My contribution consists in classifying individual cells with one or several \ac{RNA} localization patterns.
 
 \subsection{Introduction}
@@ -55,17 +55,18 @@ Such localization can be related to either the \ac{RNA} metabolism, for example 
 This local synthesis concerns both mature proteins and nascent peptides.
 Different cellular processes imply the delivery of mature proteins in specific subcellular regions and a local regulation of the proteome.
 Local translation can contributes to cell fate determination during metazoan development, as observed in~\cite{melton_translocation_1987} with a clear modification of the Vg1 \ac{RNA} spatial distribution between mature and immature Xenopus oocytes.
-In these same Xenopus embryos, cyclin B1 \ac{mRNA}s localized at the mitotic apparatus could also play an important role in the rapid cell division cycles observed during early embryogenesis~\cite{Groisman_2000}.
+%In these same Xenopus embryos, cyclin B1 \ac{mRNA}s localized at the mitotic apparatus could also play an important role in the rapid cell division cycles observed during early embryogenesis~\cite{Groisman_2000}.
 In mammal cells, \ac{RNA} localization influences cell polarization and motility, usually through actin localization at the cell edge~\cite{Lawrence_1986}.
 Locally translated proteins are also known to be involved in axonal growth and so neural plasticity~\cite{VanDriesche_2018}.
 Finally, by precisely controlling the \ac{mRNA} localization and the subsequent translation process, cells can avoid to release proteins at inappropriate places~\cite{Muller_myelin_2013} and help the synthesis of protein complexes~\cite{pichon_visualization_2016}.
 
 Several mechanisms will drive the localization of \ac{mRNA}s.
 Sometimes the nascent peptide can serve as a targeting signal, but most of the time the \ac{RNA} molecule itself will initiate its localization.
-\ac{RNA} can also be trapped in specific subcellular compartments.
 The molecule often include a zip-code sequence that is read by a \ac{RBP} and starts the assembly of a transport complex comprising different organelles or motor proteins.
 Such complex can then directly convey the \ac{RNA} along the cytoskeleton~\cite{Blower_2013}.
 Coupled with an anchoring mechanism at the targeted destination, it provides a better stability of the \ac{RNA} localization.
+Following a random diffusion across the cell, a transcript can also be trapped in specific subcellular compartments.
+Likewise, a local protection from degradation will bias the \ac{RNA} spatial distribution.
 
 In~\cite{CHOUAIB_2020}, we claim that a global view of local translation in the whole cell and at the genomic level is still to come, despite recent progress.
 In a pioneering work on Drosophila embryogenesis~\cite{lecuyer_global_2007}, authors analyze 3,370 genes and find that 71\% of them encode a transcript with a non-uniform localization pattern.
@@ -77,14 +78,14 @@ The current section emphasizes this quantitative pipeline that contributes to ma
 \subsection{Materials and methods}
 \label{subsec:materials_general_pattern}
 
-The quantitative pipeline used in this study and the existing work in FISH-quant V1 are the building blocks of FISH-quant V2.
+The quantitative pipeline used in this study and the existing work in FISH-quant v1 are the building blocks of FISH-quant v2.
 Therefore, the various methods presented here were not yet packaged in \emph{bigfish}, but Python libraries that formed its foundation were already in used.
 This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_translation_factories_2020}}.
 
 \subsubsection{Experimental data}
 
 At first more than 500 genes have been manually analyzed to identify potential transcripts with non random localization patterns within the cell.
-In addition to different qualitative and manual observations performed over this dual \ac{RNA}-protein localization screen, we also develop a quantitative pipeline to systematically classify transcripts' localization patterns.
+In addition to different qualitative and manual observations performed over this dual \ac{RNA}-protein localization screen, we also develop a quantitative pipeline to systematically classify \ac{RNA} localization patterns.
 To this end, I exploit a dataset of 526 \ac{FoV}s, combining DAPI and \ac{smFISH} channels as illustrated in Figure~\ref{fig:fov_racha}.
 The raw images stacks several 2D acquisitions to gather a 3D information of the \ac{FoV} with a z-spacing of 0.3μm.
 Acquisitions are performed with a Zeiss Axioimager Z1 widefield microscope or a Nikon Ti fluorescence microscope, on human cell lines HeLa.
@@ -109,7 +110,7 @@ Large agglomeration of spots are decomposed with a gaussian mixture model, follo
 Ultimately, \ac{RNA} clusters - namely foci - are detected with a DBSCAN algorithm~\cite{ester_density-based_1996} applied on the detected spots.
 According to the way a DBSCAN cluster samples, a foci is then defined as a set of at least 5 points where for each point there is at least one other point from the foci within a 350 nanometers distance.
 All foci overlapping the nuclear area in the projected 2D images are considered as a transcription site and removed from the analysis.
-Percentages of \ac{RNA} in foci are then calculated as number of \ac{RNA} inside the cytoplasmic foci divided by the number of cytoplasmic \ac{RNA}s.
+Percentages of \ac{RNA} in foci are then calculated as number of \ac{RNA} inside the foci divided by the number of cytoplasmic \ac{RNA}s.
 
 There are two main differences compared to the current detection methods implemented in FISH-quant and presented in Chapter~\ref{ch:chapter2}: a detection threshold has to be set manually and the decomposition of agglomerated spots has since been simplified.
 
@@ -127,7 +128,7 @@ This technique is now implemented in FISH-quant.
 Cells are segmented with a watershed algorithm using nucleus masks as seeds.
 A threshold value is set manually for every experiment to discriminate the cell surface from the background.
 In case of poor results, some segmentation masks are corrected manually.
-This is especially the case for transcript that tend to localize in cell protrusion.
+This is especially the case for transcripts that tend to localize in cell protrusion.
 Indeed, such localization pattern is highly sensitive to the segmentation accuracy.
 
 \subsubsection{Localization feature engineering}
@@ -276,7 +277,7 @@ Indeed, a foci can be localized in a relevant subcellular compartment.
 Not surprisingly, a feature space that discriminates well between classes also performs well when fed into a robust random forest classifier.
 The \ac{OOB} accuracy score obtained for the different patterns is between 0.93 and 0.99, while a dummy classifier would return a 0.8 accuracy score (the dataset is built with 20\% positive samples).
 The intranuclear pattern is the easiest to recognize.
-In fact, it could be predicted by just thresholding the proportion of \ac{RNA} inside nucleus (almost all intranuclear cells have more than 80\% of their\ac{RNA}s that localize inside the nucleus).
+In fact, it could be predicted by just thresholding the proportion of \ac{RNA} inside nucleus (almost all intranuclear cells have more than 80\% of their \ac{RNA}s that localize inside the nucleus).
 On the opposite, the nuclear edge and perinuclear patterns are the most difficult to classify due to possible confusion with a random pattern or the lack of annotated cells.
 
 \begin{wraptable}{R}{0.50\textwidth}
@@ -367,7 +368,7 @@ Cells of specific genes are plotted on \ac{t-SNE}~\ref{fig:tsne_proba_gene} and 
 Pattern probabilities returned by classification models vary from cell to cell.
 For a given gene, cells are dispersed on the \ac{t-SNE} plot, although a majority of them still accumulate in the expected area.
 Finally, some cells have several localization patterns simultaneously.
-As listed before, it the case for the cells with localized \ac{RNA} clusters, combining a foci pattern with a protrusion or a nucleus-related pattern.
+As listed before, it is the case for cells with localized \ac{RNA} clusters, combining a foci pattern with a protrusion or a nucleus-related pattern.
 Likewise, MYH3 cells frequently show an intranuclear and protrusion pattern.
 
 In conclusion, my quantitative pipeline corroborates the manual observations and measures a high degree of heterogeneity of \ac{RNA} localization across different cells.
@@ -401,7 +402,7 @@ The rest of this section goes a bit further by focusing on a translation-depende
 We find four transcripts that accumulate in clusters, but do not colocalized with \ac{P-bodies} markers: BUB1, DYNC1H1, CTNNB1 and ASPM.
 We name such complex \emph{translation factory}, where specific \ac{mRNA}s accumulate to be translated, and not repressed.
 Indeed, we observe in these clusters a co-concentration of \ac{RNA} with nascent proteins, like in Figure~\ref{fig:translation_factory}.
-Finally, my second contribution to~\cite{CHOUAIB_2020} consists in quantify this unexpected phenomenon, exploiting my cluster detections methods and experiments with a translation inhibition protocol.
+Finally, my second contribution to~\cite{CHOUAIB_2020} is to quantify this unexpected phenomenon, exploiting my cluster detection methods and experiments with a translation inhibition protocol.
 
 \begin{figure}[]
     \centering
@@ -487,8 +488,8 @@ As~\cite{Chin_2020} summarizes it, these factories are ''sites of co-translation
 \label{sec:centrosomal}
 
 In~\cite{safieddine_choreography_2021} the analysis pipeline is far more mature.
-It benefits from the development of FISH-quant V2 and the improvements published in the literature about cell segmentation.
-My contribution consists in quantifying the centrosomal localization pattern observed for some \ac{mRNA}s.
+It benefits from the development of FISH-quant v2 and the improvements published in the literature about cell segmentation.
+My contribution is to quantify the centrosomal localization pattern observed for some \ac{mRNA}s.
 
 \subsection{Introduction}
 \label{subsec:introduction_centrosomal}
@@ -519,7 +520,7 @@ Moreover, these \ac{mRNA}s conserved their properties in both human and drosophi
 \label{subsec:materials_centrosomal}
 
 The quantitative analysis presented here exploits an improved version of \emph{bigfish}, especially for the spot detection.
-The main blocks that will be published in FISH-quant V2 are already present.
+The main blocks that will be published in FISH-quant v2 are already present.
 This work is developed in Python and the code repository is public\footnote{\url{https://github.com/Henley13/paper_centrosome_2020}}.
 
 \subsubsection{Experimental data}
@@ -635,7 +636,7 @@ All in all, these results reveal an elegant \emph{choreography} of \ac{mRNA} loc
 \label{sec:protrusion}
 
 In~\cite{pichon_kinesin_2021} I benefit from a proven and mature pipeline to extract quantitative results from a \ac{smFISH} high content screening study.
-My contribution consists in quantifying a protrusion pattern manifested by the accumulation of \ac{mRNA}s in cell extensions.
+My contribution is to quantify a protrusion pattern manifested by the accumulation of \ac{mRNA}s in cell extensions.
 
 \subsection{KIF1C and protrusion mRNAs}
 \label{subsec:introduction_protrusion}
@@ -656,7 +657,7 @@ KIF1C seems to have a dual function as microtubule motor and ''\ac{mRNA} anchori
 \subsection{Quantification of peripheral mRNAs}
 \label{subsec:materials_results_protrusion}
 
-This study is an opportunity to exploit a proven FISH-quant V2 and to scale a quantitative analysis that characterizes protrusion \ac{RNA}s from HeLa cells.
+This study is an opportunity to exploit a proven FISH-quant v2 and to scale a quantitative analysis that characterizes protrusion \ac{RNA}s from HeLa cells.
 I identify 27,644 individual cells, spotting \ac{mRNA}s from 40 different genes, including KIF1C, APC-dependent \ac{mRNA}s and control transcripts.
 For every cell, I perform an automated spot detection, nucleus and cell segmentation, from 2D projected images.
 I compute RDI Calculator features from~\cite{stueland_rdi_2019}, especially the peripheral distribution index that measures how close the \ac{RNA}s localize to the cell periphery (see Section~\ref{subsec:expert_features}).
@@ -679,7 +680,7 @@ Finally, RAB13 (that is not included in this analysis), KIF1C, TRAK2 and NET1 ar
 \section{Conclusion}
 \label{sec:conclusion_chapter5}
 
-In this chapter, I present several applications of FISH-quant V2.
+In this chapter, I present several applications of FISH-quant v2.
 Based on high content screening, from HeLa cell lines, I perform large scale quantitative analyses to support different biological insights.
 In total, several dozens of transcripts have been analyzed across 100,000 individual cells and hundreds of fluorescent bioimages.
 
@@ -702,4 +703,4 @@ Surprisingly, this proteins also bind its own \ac{mRNA}s along microtubules whic
 
 Finally, translation might be compartmentalized to a much higher degree and with a finer granularity than anticipated.
 It progressively reveals spatial and temporal dynamics as well as complex mechanisms to regulate the metabolism of nascent proteins.
-Robust quantitative and numerical methods are needed more than ever to address this complexity and volume of interactions.
+Robust quantitative and numerical methods are needed more than ever to address these complexity and volume of interactions.
