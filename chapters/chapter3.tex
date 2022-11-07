@@ -87,29 +87,32 @@ Instance segmentation is a critical step to capture information at the cell leve
 
 \subsubsection{From mathematical morphology\dots}
 
-Fluorescence Microscopy has been specifically designed to provide images, where structures of interest appear with high contrast, and irrelevant structures are invisible. This can greatly simplify the segmentation task, in particular when objects are isolated and can be easily discriminated from the background.
-This is often the case for nuclei, with DAPI channel.
-Therefore, a first approach, simple but often successful, is to threshold the image to discriminate instances from background, then identify each disconnected mask with a unique identifier to label the objects.
+Fluorescence Microscopy has been specifically designed to provide images, where structures of interest appear with high contrast, while irrelevant structures are invisible. This can greatly simplify the segmentation task, in particular when objects are isolated and can be easily discriminated from the background, for instance DAPI stained nuclei.
+Therefore, a first approach, simple but often successful, is to threshold the image to discriminate foreground from background, and then identify each disconnected mask with a unique identifier to label the objects.
 To avoid manual setting of the threshold for each image, automatic methods based on histogram intensity analysis can be exploited, such as Otsu thresholding~\cite{Otsu_1979}.
 For clustered nuclei or images with crowded cells, this method does not work and more complex algorithms are needed.
 
-A popular segmentation method for segmentation of nuclei and cells is the watershed algorithm~\cite{Beucher1979,Serra1983,Vincent_1991}.
+A popular method for segmentation of nuclei and cells is the watershed algorithm~\cite{Beucher1979,Serra1983,Vincent_1991}.
 An image is interpreted as a local topography (higher values are peaks and crests, lower values valleys and basins).
-There are several variants of this method, but basically the algorithm requires three elements: the starting points from which we flood the image (the markers or seeds; the local minima as default), a relevant topographic representation of our image where the boundaries of the object have higher pixel values, and optionally a binary mask limiting the flooding area (the mask). The Watershed algorithm simulates a flooding where pixels are subsequently added to the extending seed regions in such a way that pixels with lower value are always processed first. Object boundaries are found where the extending seed regions meet. 
+There are several variants of this method, but basically the algorithm requires three elements: the starting points from which we flood the image (the markers or seeds; the local minima as default), a relevant topographic representation of our image where the boundaries of the object have higher pixel values, and optionally a binary mask limiting the flooding area (the mask). The Watershed algorithm simulates a flooding of the surface where pixels are subsequently added to the extending seed regions in such a way that pixels with lower value are always processed first. Object boundaries are found where the extending seed regions meet. 
 
-This is an attractive strategy for cell segmentation: we can use a previous result of nucleus segmentation as markers and the cell image with any fluorescent label to which we apply the watershed algorithm (possibly with its intensity values inverted such that background pixels get higher values).
-Unfortunately, if we miss some nuclei at the beginning, the error impacts the rest of the computational pipeline: not only we miss potentially interesting cells, but we also wrongly assign cytoplasmic regions to cells where they do not belong.
+This is an attractive strategy for cell segmentation~\cite{Wahlby2002}: we can use the previously detected nuclei as seeds, which guarantees that all detected cells will have one nucleus, which is inside the cellular region, by design of the algorithm. Furthermore, there are numerous possibilities to construct an image to be flooded, depending on the employed marker: either the image itself (e.g. in case of a membrane marker) is used, or a gradient image (e.g. in case of a cytoplasmic marker with different expression levels), or the distance map of a binary image (which was the original idea). 
+%a previous result of nucleus segmentation as markers and the cell image with any fluorescent label to which we apply the watershed algorithm (possibly with its intensity values inverted such that background pixels get higher values).
+Unfortunately, if we miss some nuclei at the beginning, the error impacts the rest of the computational pipeline: not only do we miss potentially interesting cells, but we also wrongly assign cytoplasmic regions to cells where they do not belong.
 For this reason, it is important that the nuclei detection returns accurate results.
 
 Many other segmentation methods have been proposed in the computer vision literature.
-Superpixels approaches, for instance, partition the image into multiple homogeneous regions with enforced compactness~\cite{Ren_2003}.
+Superpixel approaches, for instance, partition the image into multiple homogeneous regions with enforced compactness~\cite{Ren_2003}.
 Low-level segmentation algorithms such as watershed itself can help form these regions by clustering pixels together~\cite{Machairas_2014}.
+These superpixel can then be merged by heuristics or graph-based approaches. 
 The segmentation task can also be addressed from the boundaries point of view.
-Active contour models (or snake) rely on energy minimization techniques to deform a spline curve until it delineate the object outline~\cite{kass_snakes_1988}.
+Active contour models (or snakes) rely on energy minimization techniques to deform a spline curve until it delineates the object outline~\cite{kass_snakes_1988}. The advantage of this method is that a priori knowledge on the cell or nuclear geometry can be incorporated into the segmentation algorithm~\cite{Dufour2005}. 
+
 
 For most segmentation benchmarks, these methods have been outdated in recent years, with the emergence of deep learning models trained on large and diverse datasets.
-However, mathematical morphology methods remains relevant for some use cases, especially to address unusual image modality or specific shape to segment.
-Most importantly, these methods do not require manual annotation, which is often a bottleneck for medical or biological image segmentation.
+However, mathematical morphology methods remain relevant for some use cases.
+%, especially to address unusual image modality or specific shape to segment.
+Most importantly, these traditional methods do not require manual annotation, which is often a bottleneck for medical or biological image segmentation.
 Eventually, such algorithms can also inspire new learning-based models, like Deep watershed model that predicts a watershed energy map before extracting object instances from it~\cite{Bai_2017_CVPR}.
 
 \subsubsection{\dots to deep learning models}
@@ -117,7 +120,7 @@ Eventually, such algorithms can also inspire new learning-based models, like Dee
 % recent successes
 Deep learning literature for image segmentation has provided several powerful and consistent models.
 Mostly based on \ac{CNN}, they have dramatically boosted computer vision applications.
-This trend keeps influencing bioinformatics as well.
+This trend keeps influencing bioimage informatics as well.
 
 % U-Net
 One of the seminal neural networks proposed for biomedical segmentation is U-Net~\cite{Ronneberger_unet}.
@@ -127,9 +130,8 @@ The latter includes upsampling layers to return an output segmentation map that 
 This architecture is now a classic and it is vastly reused by more recent work like StarDist~\cite{schmidt2018}, which is trained to predict star-convex polygons for each nucleus or cell instance.
 
 % importance of dataset
-One the main limitations of deep learning methods is the need for a large amount of annotated images to train the models.
-Some of the first successful applications of \ac{CNN} involved large annotated dataset of natural images like ImageNet~\cite{Deng_2009} or COCO dataset~\cite{Lin_2014}.
-Recent publications in biomedical segmentation include sometimes both a trained model and a release of an important dataset with segmented nuclei or cells.
+One the main limitations of deep learning methods in general is the need for a large amount of annotated images to train the models. For image classification, this problem was addressed by the publication of large annotated dataset of natural images like ImageNet~\cite{Deng_2009} or COCO dataset~\cite{Lin_2014}.
+Following this example, recent publications in biomedical segmentation include sometimes both a trained model and a release of an important dataset with segmented nuclei or cells.
 For example, the research community benefits from an online challenge organized in 2018 about nucleus segmentation: the 2018 Data Science Bowl\footnote{\url{https://www.kaggle.com/c/data-science-bowl-2018}}.
 This competition includes a large collection of images with different modalities (histopathology, fluorescence microscopy).
 
@@ -144,21 +146,20 @@ The network is trained to predict horizontal and vertical gradients of the topol
 These gradients form a vector field where each pixel ''belonging to a given cell can be routed to its center''.
 By grouping pixels converging to the same regions, individual instances can be identified.
 Most importantly, authors have collected and manually annotated 608 cell images with various modalities.
-Currently, this solution appears to be one of the most efficient.
+Currently, this solution appears to be one of the most efficient, even though it remains unclear whether this is attributed to the dataset, the architecture or the formulation of the prediction task. 
 The authors have extended their method by training it with several specialized datasets like TissueNet~\cite{Greenwald_2022} or bacteria images~\cite{cutler_omnipose_2022}.
 
 % adaptated from natural image model
 Another important factor for progress in segmentation is the state of the literature on natural image segmentation.
 Indeed, several methods published for biomedical segmentations are inspired from a previous model trained on natural images.
-For example, NucleAIzer reuses Mask R-CNN.
-It is a \ac{CNN} which efficiently suggests regions of interest, detects object instances within these regions and performs instance segmentation with a fully convolutional branch.
+For example, NucleAIzer reuses Mask R-CNN, a \ac{CNN} that combines ideas from object detection and image segmentation. Mask R-CNN suggests regions of interest, detects object instances within these regions and performs instance segmentation with a fully convolutional branch.
 When released in 2017, the model was state-of-the-art on the COCO dataset.
 This relationship can also be observed with EmbedSeg~\cite{Lalit_2021} directly inspired by~\cite{Neven_2019_CVPR}.
 
-\section{Nucleus and cell segmentation}
+\section{Segmentation models}
 \label{sec:segmentation_nuc_cell}
 
-In this section, I first describe a dataset I have annotated in order to train a deep learning segmentation model.
+In this section, I first describe a dataset I have annotated in order to train deep learning segmentation models.
 Then, I detail the solutions implemented in \emph{bigfish.segmentation} to segment both nuclei and cells.
 In addition, several postprocessing functions are presented to refine any segmentation results.
 
@@ -187,29 +188,37 @@ In addition, several postprocessing functions are presented to refine any segmen
 	\label{fig:annotated_dataset_segmentation}
 \end{figure}
 
-I reuse the 4-channel images from~\cite{safieddine_choreography_2021} to build an annotated dataset for the segmentation task.
+I use the 4-channel images from one of our applications presented in chapter \ref{ch:chapter5} 
+~\cite{safieddine_choreography_2021} to build an annotated dataset for the segmentation task.
 I randomly sample 180 \ac{FoV}s.
 Each image includes one channel adapted for nucleus segmentation (DAPI) and three channels adapted for cell segmentation (\ac{smFISH}, CellMask\textsuperscript{\texttrademark} and a \ac{GFP} marker for the centrosome).
 An example of these images is illustrated in Figure~\ref{fig:annotated_dataset_segmentation}.
 The ground truth annotation is obtained in two steps: I pre-segment nuclei and cell with a Cellpose model~\cite{stringer_cellpose_2021}, then I manually correct these predictions.
 In total, 4,026 cell instances are segmented, with their relative nucleus.
 
-The initial goal for this dataset is to train segmentation models or compute some experiments to evaluate their consistency.
-In particular, two kinds of evaluations can be tested.
-The first one is about the consistency between nucleus and cell segmentation, two tasks often performed independently.
+The initial goal for this dataset is to train segmentation models and perform some experiments to evaluate their consistency.
+In particular, we are interested in:
+\begin{enumerate}
+\item Consistency between nucleus and cell segmentation, two tasks often performed independently.
 The dataset is annotated such that each instance has a nucleus and a cell mask, matching together.
 This also enables a potential joint training of nucleus and cell segmentation.
-The second possible evaluation is about the input heterogeneity.
-Here, the cell related channels come from three different modalities of acquisition.
+\item Input heterogeneity. Here, the the cell related channels come from three different modalities of acquisition.
 A priori, a model trained on CellMask\textsuperscript{\texttrademark} should be more efficient, but because this label is not always available in an experimental setup, it is interesting to train models robust enough to identify cells from different channels.
+\end{enumerate}
+% The first one is about the consistency between nucleus and cell segmentation, two tasks often performed independently.
+% The dataset is annotated such that each instance has a nucleus and a cell mask, matching together.
+% This also enables a potential joint training of nucleus and cell segmentation.
+%The second possible evaluation is about the input heterogeneity.
+%Here, the cell related channels come from three different modalities of acquisition.
+%A priori, a model trained on CellMask\textsuperscript{\texttrademark} should be more efficient, but because this label is not always available in an experimental setup, it is interesting to train models robust enough to identify cells from different channels.
 
 \subsection{Nucleus segmentation}
 \label{subsec:segmentation_nuc}
 
 Nucleus segmentation is usually the first task in cellular image analysis, applied on a DAPI channel for example.
 An error during this step can propagate to the rest of the analysis, if the cell segmentation and identification is based on an initial nucleus segmentation.
-In particular, missed nuclei or split nuclei are the kind of errors I want to prevent.
-Even if thresholding technique is implemented in \emph{bigfish}, a simple deep learning model is also available for nucleus segmentation.
+In particular, it is important to avoid missed nuclei and nuclei that are split in several parts.
+In \emph{bigfish}, I have implemented simple thresholding techniques, and a simple deep learning model for nucleus segmentation.
 
 \subsubsection{A 3-class deep learning model}
 
@@ -241,30 +250,35 @@ nuc_label = segmentation.apply_unet_3_classes(
 \end{minipage}
 
 \subsubsection{Multiple rounds of segmentation}
+\tw{You need to describe the problem first ... something like: Despite overall good results, I noted that some dim (?) nuclei are missed altogether by the algorithm. }
 
 In \emph{bigfish.segmentation}, I implement a method to remove segmented nuclei from a DAPI channel, in order to perform a second round of segmentation.
-This technique based on morphological reconstruction is useful if the employed segmentation method misses too many nuclei at first try.
-These failures can be due to a heterogeneous DAPI signal between cells, to the presence of adjacent nuclei or instances with unusual shape.
-I proceed with the following steps for the removal:
+This strategy is useful if the employed segmentation method misses too many nuclei at first try. 
+%Removal of segmented nuclei is based on morphological reconstruction. 
+Such failures can be due to a heterogeneous DAPI signal between cells, to the presence of adjacent nuclei or instances with unusual shape. 
+%It is not entirely clear, why iterative application of a NN provides better results, except for the case of touching nuclei, where the learned shapes are better visible once neighboring nuclei are removed. 
 
+Removal of segmented nuclei is based on morphological reconstruction and based on the following steps:
+%I proceed with the following steps for the removal:
 \begin{enumerate}
 	\setlength\itemsep{0.1em}
-	\item I dilate the binary mask of the segmented nuclei.
-	\item In the original DAPI image, every pixels outside of the dilated mask are set to zero.
-	This includes the background and the potentially missed nuclei.
-	\item I perform a morphological reconstruction~\cite{Robinson_2004} of the missing nuclei by small dilation.
-	This dilation is constrained by the original DAPI image.
-	A pixel cannot have a dilated value greater than its original intensity.
-	This way, the background pixels keep a low intensity and the missed nuclei (brighter in the original image) are partially reconstructed by the dilation.
-	The reconstructed image only differs from the original one where the nuclei have been missed.
-	\item I subtract the reconstructed image from the original one to get an approximate image of the missing nuclei.
-	The latter is used to threshold a binary mask of the missing nuclei and ultimately extract their original pixel intensity from the original image.
+	\item The binary mask of the segmented nuclei is dilated.
+	\item From the original DAPI image $f$, an image $g$ is generated where all pixels outside of the dilated mask are set to zero. This includes the background and the potentially missed nuclei. 
+	\item A morphological reconstruction $R^{\delta}_f(g)$ by dilation~\cite{Serra1983, Soille2003, Robinson_2004} of $g$ under $f$ allows to reconstruct the background signal, but not the missed nuclei. As a consequence
+	% of the missing nuclei by small dilation.
+	% This dilation is constrained by the original DAPI image.
+	% A pixel cannot have a dilated value greater than its original intensity.
+	% This way, the background pixels keep a low intensity and the missed nuclei (brighter in the original image) are partially reconstructed by the dilation.
+	the reconstructed image only differs from the original one where the nuclei have been missed in the first place.
+	\item The residue image $\Delta = f - R^{\delta}_f(g)$ thus contains the missed nuclei and can then be thresholded to complete the detected nuclei. 
+	% I subtract the reconstructed image from the original one to get an approximate image of the missing nuclei.
+	% The latter is used to threshold a binary mask of the missing nuclei and ultimately extract their original pixel intensity from the original image.
 \end{enumerate}
 
 \noindent
 Finally, after a second round of segmentation, the two obtained nucleus segmentation masks can be merged together.
 Surprisingly, repetitive application of the same segmentation model seems to help improving the final segmentation.
-In particular, this technique is applied in~\cite{CHOUAIB_2020}.\\
+In particular, I appliwed this technique in~\cite{CHOUAIB_2020}.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -291,28 +305,31 @@ nuc_label = segmentation.merge_labels(nuc_label_1, nuc_label_2)
 
 Cell segmentation is often more difficult.
 It can involve images with cluttered cells, fluorescent labels with different quality or labels not initially designed to visualize the cytoplasm (for example, the \ac{smFISH} channel).
-In addition, cells can exhibit even more diversity in their morphological shapes than nuclei, and a successful method with HeLa cells could fail with bacteria images.
+In addition, cells can exhibit more diversity in their morphological shapes than nuclei, and a successful method with HeLa cells could fail in other cell lines or bacteria images.
 
-A watershed algorithm is available in \emph{bigfish.segmentation} to discriminate adjacent cells.
-A previous nucleus segmentation mask is used as marker.
-Instead of the color pixel, the grayscale level of fluorescence intensity is used as input image (potentially regularized with the distance map from nuclei).
+A watershed algorithm is available in \emph{bigfish.segmentation} to discriminate adjacent cells, where 
+a previous nucleus segmentation mask is used as marker. The Watershed transform is applied to the input channel, potentially regularized with the geodesic distance map from nuclei (an image where each pixel takes the distance to the nucleus). 
+
+%Instead of the color pixel, the grayscale level of fluorescence intensity is used as input image (potentially regularized with the distance map from nuclei).
 
 \subsubsection{A revisited deep watershed model}
 
 I also implement a deep learning solution for cell segmentation, inpired by Deep Watershed~\cite{Bai_2017_CVPR} and the use of distance maps for nucleus segmentation~\cite{Naylor_2019}.
 Two models are tested, with the same backbone architecture previously presented for nucleus segmentation: an encoder-decoder convolutional neural network with residual blocks.
 
-First model uses only one input image with cell information (in my case, CellMask\textsuperscript{\texttrademark}, \ac{smFISH} or \ac{GFP}).
-This model predicts two outputs: a binary mask of cell surface (like in semantic segmentation tasks) and a distance map to cell edges.
-I reuse these outcomes in a watershed algorithm and segmented nuclei as seeds in order to return a segmentation mask for every cell instance.
-Model is trained with a combined loss averaging a binary cross-entropy loss for the surface prediction and a mean absolute loss for the distance map.
+A first model uses only one input image with cell information (in my case, CellMask\textsuperscript{\texttrademark}, \ac{smFISH} or \ac{GFP}).
+This model predicts two outputs: a binary mask of cell surface (like in semantic segmentation tasks) and a distance map to cell edges. 
+The idea is that forcing the network to predict a distance map will ultimately push it to learn the specific local patterns indicating the position of the plasma membrane, a pre-requirement for instance segmentation. 
+These outcomes are then used in a watershed algorithm with the segmented nuclei as seeds in order to return a segmentation mask for every cell instance.
+The model is trained with a combined loss averaging a binary cross-entropy loss for the surface prediction and a mean absolute loss for the distance map.
 
-Second model uses two input images, one for the nuclei and one for the cells.
+A second model uses two channels as input images, one for the nuclei and one for the cells.
 In addition to the two previous output images, it predicts a third output: a distance map to nucleus edges.
-Cell instances are obtained with the same strategy as above, namely by application of a watershed algorithm.
-The idea is to add an input information about the nuclei and to force the model to take it into account by returning a nucleus related prediction.
-I speculate this would make cell segmentation more accurate.
-Finally, in \emph{bigfish.segmentation} the second model is implemented, with a double input strategy.\\
+Cell instances are obtained with the same strategy as above, namely by application of a watershed algorithm  applied on the predicted distance map with the segmented nuclei as seeds.
+The idea is to add input information about the nuclei and to force the model to take it into account by returning a nucleus related prediction.
+I hypothesized that this would make cell segmentation more accurate, as more local cell and nuclei features are predicted.
+
+In \emph{bigfish.segmentation} the second model is implemented, with a double input strategy.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -336,9 +353,16 @@ cell_label = segmentation.apply_unet_distance_double(
 
 Regardless of the segmentation method applied, \emph{bigfish.segmentation} includes different methods to clean and refine the segmentation masks.
 The most simple operations consist in smoothing the mask boundaries with a median filter, removing the small disjoint masks or filling holes within the segmented areas.
-By subtracting an eroded segmentation mask to a dilated one, I can also prevent boundaries contact and delimitate segmented instances.
+
+\tw{check whether this is correct: }
+It can also be useful to separate the labeled instances. For this, we can simply calculate the morphological gradient $\rho = \delta(y) - \vareps(y)$ and then separate the instance by setting $y(x) = 0 \forall x: \rho(x) > 0$. 
+%By subtracting an eroded segmentation mask to a dilated one, I can also prevent boundaries contact and delimitate segmented instances.
 An example of such refined results is illustrated in Figure~\ref{fig:instance_segmentation_example}.
-Lastly, after two independent nucleus and cell segmentations, a method matches every identified cell with the right nucleus.\\
+
+\tw{check whether this is correct: }
+Lastly, if nucleus and cell segmentation maps have been generated by independent algorithms, they need to be matched. For this, I also propose a small helper function in \emph{bigfish.segmentation}. 
+
+%Lastly, we check after two independent nucleus and cell segmentations, a method matches every identified cell with the right nucleus.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -366,9 +390,8 @@ The main advantages of the available deep learning models in \emph{bigfish.segme
 It is fast to apply and can be a relevant first solution to try.
 However, for more challenging segmentation problems, FISH-quant v2 still enables the use of external resources like Cellpose or StarDist.
 
-Both nucleus and cell segmentation models are trained with Adam optimizer~\cite{Diederik_2015} until validation loss does not improve anymore.
-I evaluate them with the mean Average Precision.
-I compute the \ac{IoU} score for each pair of predicted and ground truth instances (whose value ranges between 0 and 1).
+Both nucleus and cell segmentation models are trained with Adam optimizer~\cite{Diederik_2015} until validation loss does not improve anymore. Performance is assessed with the mean Average Precision.
+The \ac{IoU} score is computed for each pair of predicted and ground truth instances (whose value ranges between 0 and 1).
 Prediction matches the ground truth if the \ac{IoU} is above a specific threshold.
 Therefore, for a given threshold, I can compute True Positives (instances matched correctly), False Positives (predicted instances matching nothing), False Negatives (ground truth instances missed) and the \ac{AP} score such that:
 
@@ -403,26 +426,30 @@ Interestingly, the addition of nucleus information in input slightly improves ce
 	\label{table:segmentation_results}
 \end{table}
 
+\tw{I think, it would have been great to have Cellpose here with and without fine-tuning. I think you had that, no? This would answer the question whether it is better to rely on generalist networks, to fine-tune them or to learn from scratch. I know that such a benchmark would be incomplete, but I still think it would be good to report it. }
+
 \section{Improving cell segmentation}
 \label{sec:segmentation_improvements}
 
 I have contributed to two projects with the aim to improve specific aspects of biomedical segmentation.
-The first one is a personal project and consists in developing a deep learning version of the active contour algorithm.
-However, this work is not finished and it yields incomplete results, so here I only present the main idea.
-The second project results in a publication~\cite{Bonte_2022}.
-It leverages in-silico labelling protocol to pre-train segmentation models.
+The first project consisted in developing a deep learning version of the active contour algorithm.
+However, this work is not finished and it yielded incomplete results so far, so here I only present the main idea.
+The second project aimed at leveraging in-silico labeling in order to pre-train segmentation models without manual annotation and resulted in a publication~\cite{Bonte_2022}.
+%It leverages in-silico labelling protocol to pre-train segmentation models.
 
 \subsection{Snake-like model}
 \label{subsec:segmentation_snake}
 
-This project tries to address potential failures between nucleus and cell segmentation when these two tasks are performed independently.
+This project tries to address potential inconsistencies between nucleus and cell segmentation when these two tasks are performed independently.
 Sometimes the cell is correctly segmented, but not the nucleus, sometimes it is the opposite.
 If I cannot match a nucleus with a cell, the whole instance is discarded.
-In addition, nucleus is often far easier to segment than cell.
+In addition, nucleus is often far easier to segment than the cell.
 
-The idea is to propagate or extend the cell outline from the nucleus one.
-I want to base cell segmentation on a previous successful nucleus segmentation.
-This is kind of what is already happening with watershed algorithm when the nucleus is used as starting seed.
+The idea is to propagate or extend the cell outline from the nuclear region, which would perfectly solve this problem of inconsistency.
+The popular watershed approach does this, but it has a number of well-known limitations in the presence of strongly anisotropic cells and noisy boundaries (leakage). 
+
+%I want to base cell segmentation on a previous successful nucleus segmentation.
+%This is kind of what is already happening with watershed algorithm when the nucleus is used as starting seed.
 
 Inspired by active contour models, the goal is to deform a spline curve around cell instance, but instead of solving an energy minimization problem a neural network would predict the deformation of the polygon.
 Such method has already been proposed for natural image segmentation like Deep Snake~\cite{Peng_2020_CVPR} or DANCE~\cite{Liu_2021}.
@@ -430,15 +457,17 @@ However, these models need to first detect the candidate object instance and the
 Their entire pipeline relies on the performance of a detection model.
 In my case, the cell outline would be initialized from the nucleus outline (much easier to segment), before being iteratively distorted by a fully convolutional network.
 
+\tw{I think you will have to say how the status is. Something like: "Even though the method seemed appealing at first sight, I did not obtain convincing results."}
+
 \subsection{In silico pre-training}
 \label{subsec:segmentation_insilico}
 
-We leverage \ac{ISL} task to pre-train segmentation model and mitigate the need for annotated training images.
-\ac{ISL} consists in predicting fluorescent labels from bright-field or transmitted-light images~\cite{christiansen_silico_2018, ounkomol_label_free_2018}.
-We replace an invasive fluorescent labeling by a numerical and computational one, like illustrated in Figure~\ref{fig:example_insilico}.
-Furthermore, fluorescent channels are limited in numbers (up to 4 or 5).
-Therefore, the ability to predict cell morphology from a label-free channel would save fluorescent channels for another probe or stain.
-More complex experiments are possible.
+In a joint work with a master student and another PhD student, we aimed at leveraging \ac{ISL} task to pre-train segmentation model and mitigate the need for annotated training images.
+\ac{ISL} consists in predicting fluorescent labels from bright-field or transmitted-light images~\cite{christiansen_silico_2018, ounkomol_label_free_2018}. The idea is to replace some fluorescence microscopy channels by their predictions (illustrated in Figure~\ref{fig:example_insilico}), in order to free channels for other analyses. 
+%We replace an invasive fluorescent labeling by a numerical and computational one, like illustrated in Figure~\ref{fig:example_insilico}.
+%Furthermore, fluorescent channels are limited in numbers (up to 4 or 5).
+%Therefore, the ability to predict cell morphology from a label-free channel would save fluorescent channels for another probe or stain.
+%More complex experiments are possible.
 
 \begin{figure}[]
     \centering
@@ -453,12 +482,12 @@ More complex experiments are possible.
 In~\cite{Bonte_2022}, we use the same model to perform \ac{ISL} and segmentation.
 It is based on a U-Net architecture, with a DenseNet encoder branch~\cite{Huang_2017_CVPR}.
 The first training on \ac{ISL} makes the model learn intermediate visual representations of the cell.
-We speculate that these learned features are (partially) relevant for the segmentation task.
+We speculate that these learned features are relevant for the segmentation task.
 In this case, the following segmentation training should be more efficient.
 
 In Figure~\ref{fig:results_insilico} we compare the \ac{IoU} score of the trained models for different training set size.
 A second model pre-trained with a natural image classification task (from ImageNet~\cite{Deng_2009}) is also displayed for comparison purpose.
-The difference in term of pre-training vanishes when the size of the training set increases.
+The difference in terms of pre-training vanishes when the size of the training set increases.
 However, pre-training a segmentation model with \ac{ISL} clearly compensates a low number of training images.
 
 \begin{figure}[]
@@ -474,7 +503,7 @@ However, pre-training a segmentation model with \ac{ISL} clearly compensates a l
 \label{sec:segmentation_conclusion}
 
 This chapter details the different algorithms available in \emph{bigfish.segmentation} subpackage to segment nuclei and cells from fluorescent microscopy images.
-The main interest of these methods is to propose in-house segmentation solutions, easy to use in few lines of code, and therefore complete the quantitative pipeline defined in FISH-quant.
+The main interest of these methods is to propose in-house segmentation solutions, easy to use in a few lines of code, and therefore complete the quantitative pipeline defined in FISH-quant.
 Yet, the research community is quite dynamic concerning biomedical segmentation.
 A lot of publications are released every year, with new datasets and improved techniques.
 Beyond developing a potential state-of-the-art model (which would be surpassed a few months later), the ability to easily integrate results from external resources is essential for FISH-quant.
@@ -486,3 +515,5 @@ For this reason, the consistency between nucleus and cell segmentation is critic
 Such consistency can be directly enforced by the way an algorithm works, like in a watershed transform, or learned through a specific training strategy.
 Additionally, the need for a large amount of annotated images is still a hot topic in deep learning research.
 The use of in silico techniques to pre-train models seems to mitigate this limitation.
+
+
