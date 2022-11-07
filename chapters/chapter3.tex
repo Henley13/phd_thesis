@@ -20,33 +20,39 @@ These methods are published in the paper~\cite{Imbert_fq_2022}:
 \end{center}
 
 In a third part, I briefly present two projects for which I have contributed with the objective to boost segmentation efficiency, either by improving the consistency of segmentation masks or by reducing the number of training examples needed.
-The former is a preliminary work with incomplete results, but the latter ends in an accepted paper for publication~\cite{Bonte_2022}:
+The former is a preliminary work with incomplete results; the latter was published at the ECCV Bioimage Computing Workshop (BIC)~\cite{Bonte_2022}:
 
 \begin{center}
 	\color{green}
 	T. Bonte, M. Philbert et al. (2022), \textit{Learning with minimal effort: leveraging in silico labeling for cell and nucleus segmentation}, in 2022 European Conference on Computer Vision (ECCV 2022) Workshop on BioImage Computing \textit{(to be published)}.
 \end{center}
 
-\section{Segmentation of fluorescence microscopy}
+\section{Segmentation of nuclei and cells in fluorescence microscopy}
 \label{sec:segmentation_introduction}
 
-First, I describe the segmentation task, its input and the expected output.
+First, I describe the segmentation task that comes in different flavors. 
+%, its input and the expected output.
 Then, I review different methods that address nucleus and cell segmentation, especially deep learning based models.
 
-\subsection{Instance segmentation}
+\subsection{Computer Vision for cell segmentation}
 \label{subsec:segmentation_instance_introduction}
 
-Computer vision can be decomposed in several tasks.
-A classification model classifies images according to whether they have a targeted object in their frame.
-A detection model goes further and usually returns coordinates of the bounding box of the object.
-Such model can localize the object in the image but also detect several occurrences of the same object class.
-A segmentation model returns a mask for the targeted objects.
-If the model does not distinguish between two instances of the same object class, it is a semantic segmentation model.
-On the contrary, if the model can discriminate between different occurrences of the same object class, it is an instance segmentation model.
-This task is comparable to a pixel classification problem where every pixel from the frame should be assigned to an object mask or the background.
+The most useful tasks of Computer Vision in bioimage analysis are classification, object detection and object segmentation. 
+%Computer vision can be decomposed in several tasks.
+Classification is concerned with predicting a label for a given input image. 
+%A classification model classifies images according to whether they have a targeted object in their frame.
+Object detection aims at both classifying and localizing objects inside an image, where localization normally amounts to returning the coordinates of the bounding box of the object. 
+Of note, object detection is designed to detect several instances of the same object class. 
+%A detection model goes further and usually returns coordinates of the bounding box of the object.
+%Such model can localize the object in the image but also detect several occurrences of the same object class.
+Finally, a segmentation model returns returns a mask for the targeted objects.
+If the model does not distinguish between instances of the same object class, it is a semantic segmentation model. 
+Semantic segmentation resumes to pixel classification, where each individual pixel is classified into object or background (or potentially different foreground classes). 
+In contrast, the most important segmentation problem in bioimage analysis is instance segmentation, where the model not only distinguishes between foreground and background but also between different objects. This kind of models is of particular interest for cell and nuclei segmentation, as both cells and nuclei often touch each other. 
+
 An example of instance segmentation with nuclei and cells is shown in Figure~\ref{fig:instance_segmentation_example}.
 A unique identifier and segmentation mask are returned for every instance.
-In Figure~\ref{fig:instance_segmentation_example}, segmentation masks have been postprocessed such that a nucleus has the same identifier than its relative cell.
+In Figure~\ref{fig:instance_segmentation_example}, segmentation masks have been postprocessed such that a nucleus has the same identifier as its corresponding cell.
 
 \begin{figure}[]
     \centering
@@ -60,15 +66,20 @@ In Figure~\ref{fig:instance_segmentation_example}, segmentation masks have been 
 \end{figure}
 
 For the rest of the chapter, I only consider 2D segmentation.
-This constraint often implies to project the input images in 2D.
-Models for 3D segmentation are emerging in the literature, but are usually directly adapted from a 2D version or they require some difficult manual annotation in 3D images.
+%This constraint often implies to project the input images in 2D.
+Models for 3D segmentation are emerging in the literature, but as manual annotation in 3D is complex and time-consuming, it does not seem an interesting option for our applications. 
 
-A specific difficulty with instance segmentation, compared to the semantic one, is the need to discriminate between two adjacent instances.
-In case of cell segmentation, this is even more important because relevant spatial information can be extracted along the cell membrane.
-This highlights the need to be able to perform efficient segmentation to address specific phenotypes in cluttered cell images.
+ % ground truth is particularly complex, 
 
-Finally, cell and nucleus segmentation adds a great value to an analysis as it enables to assign every phenotype or pattern detected in an image to an individual cell.
-It is the building stone of any single-cell analysis.
+% but are usually directly adapted from a 2D version or they require some difficult manual annotation in 3D images.
+
+A specific difficulty with instance segmentation, compared to semantic segmentation, is the need to discriminate between two adjacent instances.
+In case of cell segmentation, this is particularly important. For instance, if we wish to quantify cell shape properties or assess the number of \ac{RNA} inside a cell, it is essential to be able to extract the contours of the cells with high accuracy. 
+
+%even more important because relevant spatial information can be extracted along the cell membrane.
+%This highlights the need to be able to perform efficient segmentation to address specific phenotypes in cluttered cell images.
+
+Even though it might be tempting in some applications to omit the cell segmentation step altogether and to classify images of entire cell populations~\cite{Godinez2017}, I believe that cell and nucleus segmentation add great value to the analysis pipelines as they enable one to assign every phenotype or pattern detected in an image to an individual cell. Segmentation is thus the corner stone of any single-cell analysis.
 Instance segmentation is a critical step to capture information at the cell level, especially when the biological mechanism studied exhibits a high intracellular heterogeneity.
 
 \subsection{Related work}
@@ -76,16 +87,17 @@ Instance segmentation is a critical step to capture information at the cell leve
 
 \subsubsection{From mathematical morphology\dots}
 
-Segmentation might be trivial for fluorescence microscopy when objects are isolated and can be easily discriminated from the background.
-This is sometimes the case for nuclei, with DAPI channel.
+Fluorescence Microscopy has been specifically designed to provide images, where structures of interest appear with high contrast, and irrelevant structures are invisible. This can greatly simplify the segmentation task, in particular when objects are isolated and can be easily discriminated from the background.
+This is often the case for nuclei, with DAPI channel.
 Therefore, a first approach, simple but often successful, is to threshold the image to discriminate instances from background, then identify each disconnected mask with a unique identifier to label the objects.
-To avoid manually setting the threshold for each image, refinement methods based on histogram intensity analysis can be exploited, such as Otsu thresholding~\cite{Otsu_1979}.
-For clustered nuclei or images with crowded cells, this method does not work and more reliable algorithms are needed.
+To avoid manual setting of the threshold for each image, automatic methods based on histogram intensity analysis can be exploited, such as Otsu thresholding~\cite{Otsu_1979}.
+For clustered nuclei or images with crowded cells, this method does not work and more complex algorithms are needed.
 
-A popular segmentation method is the watershed algorithm~\cite{Vincent_1991}.
+A popular segmentation method for segmentation of nuclei and cells is the watershed algorithm~\cite{Beucher1979,Serra1983,Vincent_1991}.
 An image is interpreted as a local topography (higher values are peaks and crests, lower values valleys and basins).
-There are several variants of this method, but basically the algorithm requires three elements: the starting points from which we flood the image (the markers or seeds), a relevant topographic representation of our image where the boundaries of the object have higher pixel values, and a binary mask limiting the flooding area (the mask).
-For cell segmentation, we can use a previous result of nucleus segmentation as markers and the cell image with any fluorescent label to which we apply the watershed algorithm (possibly with its intensity values inverted such that background pixels get higher values).
+There are several variants of this method, but basically the algorithm requires three elements: the starting points from which we flood the image (the markers or seeds; the local minima as default), a relevant topographic representation of our image where the boundaries of the object have higher pixel values, and optionally a binary mask limiting the flooding area (the mask). The Watershed algorithm simulates a flooding where pixels are subsequently added to the extending seed regions in such a way that pixels with lower value are always processed first. Object boundaries are found where the extending seed regions meet. 
+
+This is an attractive strategy for cell segmentation: we can use a previous result of nucleus segmentation as markers and the cell image with any fluorescent label to which we apply the watershed algorithm (possibly with its intensity values inverted such that background pixels get higher values).
 Unfortunately, if we miss some nuclei at the beginning, the error impacts the rest of the computational pipeline: not only we miss potentially interesting cells, but we also wrongly assign cytoplasmic regions to cells where they do not belong.
 For this reason, it is important that the nuclei detection returns accurate results.
 
