@@ -355,7 +355,7 @@ Regardless of the segmentation method applied, \emph{bigfish.segmentation} inclu
 The most simple operations consist in smoothing the mask boundaries with a median filter, removing the small disjoint masks or filling holes within the segmented areas.
 
 \tw{check whether this is correct: }
-It can also be useful to separate the labeled instances. For this, we can simply calculate the morphological gradient $\rho = \delta(y) - \vareps(y)$ and then separate the instance by setting $y(x) = 0 \forall x: \rho(x) > 0$. 
+It can also be useful to separate the labeled instances. For this, we can simply calculate the morphological gradient $\rho = \delta(y) - \varepsilon(y)$ and then separate the instance by setting $y(x) = 0 \forall x: \rho(x) > 0$. 
 %By subtracting an eroded segmentation mask to a dilated one, I can also prevent boundaries contact and delimitate segmented instances.
 An example of such refined results is illustrated in Figure~\ref{fig:instance_segmentation_example}.
 
