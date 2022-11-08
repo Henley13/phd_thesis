@@ -1,35 +1,84 @@
 %!TEX root = ../main.tex
 
-\chapter{Concluding remarks}
+\chapter{Conclusion and perspectives}
 \label{ch:conclusion}
 
 \minitoc
 \newpage
 
-\section{Goals and results of this thesis}
+The initial objectives defined for my PhD were to build, scale up and apply a pipeline to analyze and quantify \ac{RNA} localization patterns from \ac{smFISH} images.
+Overall, these different objectives have been achieved, in terms of methods, tools and biological applications.
+This provides new opportunities to explore more advanced algorithms, incorporate new input modalities, or answer more challenging questions.
+
+\section{Results of the thesis}
 \label{sec:conclusion_thesis}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+In \textbf{Chapter~\ref{ch:chapter1}}, I present FISH-quant v2, the general framework implemented and released during my PhD~\cite{Imbert_fq_2022}.
+It is a user-friendly, open-source and Python based tool that improves the initial MATLAB version of FISH-quant.
+It provides modules for the most commons operations needed for a \ac{smFISH} analysis.
+Spot detection is scalable.
+Cell and nuclei segmentation includes pre-trained deep learning models.
+Feature engineering is simplified be the selection and the implementation of proven spatial features.
+Modules are interchangeable and flexible.
+They can be combined to design a custom and complete pipeline or run independently.
+It comprises, \emph{bigfish}, a general Python package for the analysis, a \ac{GUI}, \emph{simfish}, a Python package for simulations, as well as documentation and interactive examples.
+In addition, the protocol and the analysis pipeline we have performed for different applications are described in a recent publication~\cite{safieddine_ht_smfish_2022}.
 
-% initial goal: running pipeline -> scaling -> application
-% description of the contributions
-% succcess excepted for transcriptome exploration and more practical use case (tissue dataset, medical use case, left for future students).
+In \textbf{Chapter~\ref{ch:chapter2}}, I present detection methods integrated in FISH-quant v2.
+The main improvement concerns the spot detection itself with the implementation of a heuristic to threshold the detected spots without any manual intervention.
+This enables a large scale application of our methods.
+Solutions to decompose regions with cluttered spots, detect clusters or spot colocalization are also described.
+Finally, I explain how to simulate spots images in order to assess the detection performance under different noise conditions.
+
+In \textbf{Chapter~\ref{ch:chapter3}}, I present methods integrated in FISH-quant v2 to segment nuclei and cells.
+It includes in-house deep learning models trained on various fluorescent microscopy images.
+Most importantly, the ability to use external frameworks and models is facilitated with postprocessing methods to format and refine segmentation masks.
+In addition, I describe joint work to help segmentation models perform well with less annotated data by exploiting in silico techniques~\cite{Bonte_2022}.
+
+In \textbf{Chapter~\ref{ch:chapter4}}, I present my different contributions to analyze \ac{RNA} distribution.
+First, previous detection and segmentation results are summarized in a homogeneous coordinate representation of each identified cell.
+Second, a set of relevant spatial features are implemented in FISH-quant v2, based on the extracted coordinates.
+It facilitates the frequent feature engineering stage of any analysis pipeline and the subsequent statistical computation.
+Third, I present alternative approaches to classify \ac{RNA} localization patterns, either with \ac{CNN}~\cite{dubois_deep_2019} or point cloud models~\cite{pointfish_2022}.
+These alternatives also leverage a simulation framework that generates localization patterns at will and available in FISH-quant v2.
+
+In \textbf{Chapter~\ref{ch:chapter5}}, I present three (published) applications of my quantitative methods.
+In the first study~\cite{CHOUAIB_2020}, I design a classification pipeline to discriminate several generic \ac{RNA} localization patterns: intranuclear, nuclear edge, perinuclear, foci and protrusion.
+I also detail additional quantifications performed on the impact of translation inhibitors for a newly characterized pattern, the \emph{translation factories}.
+In the second study~\cite{safieddine_choreography_2021}, I focus on the centrosomal pattern and adapt my analysis pipeline to detect centrosomes at scale.
+This enables a statistical description of several genes of interest.
+In the third study~\cite{pichon_kinesin_2021}, I analyze the the protrusion pattern and implement dedicated features recently described in the literature.
+All in all, these studies include several dozens of transcripts, analyzed through 100,000 individual cells.
+They reveals regulation mechanisms more complex than expected with various spatial and temporal dynamics.
 
 \section{Perspectives on the future of smFISH analysis}
 \label{sec:conclusion_future}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+Since the first design of \ac{smFISH} in the late 1990s, fluorescent microscopy techniques have dramatically improved.
+Fluorophores are cheaper or brighter, or both.
+The hybridization protocols are standardized and thus more reproducible.
+The fluorescent images have a higher \ac{SNR} and this trend is likely to continue.
+Therefore, in future experimental studies, the detection and segmentation steps could be facilitated.
 
-% experimental protocal improved -> tools adapt (ex: detection accuracy)
-% multimodality (different FISH, different markers, RNA-seq, etc.)
-% specialized tools // general tools -> natural selection in the community
-% identify building block because building blocks are reused even if tools evolved
-% exploration of the trancriptome // genome // proteonome
-% cultivated cell line -> tissue / fundamental biology -> medical application
+Conversely, a second trend could enrich the final analysis and bring new challenges.
+Recent experimental protocols enable the visualization of multiple elements simultaneously, at the single molecule level.
+Multiplexing and sequential hybridization can target thousand of transcripts.
+Polysome imaging enables dual-imaging experiments would allow us to better investigate the role of \ac{RNA} in translational regulation.
+Lastly, live cell imaging introduces a temporal dimension to modelize.
+
+Such novelties would require the adaptation of future computational frameworks.
+Overall, machine learning approaches should keep disseminating in bioinformatics.
+Computer vision methods to identify and extract relevant information from bioimages would need to increase their robustness and scalability to match advances in experimental protocols.
+This can take the form of few successful general models or the release of a zoo of specialized approaches, adapted to a diversity of bioimages.
+In the same time, computational frameworks should offer more refine and complex features or representation of the transcriptome.
+The progressive release of large and diversified datasets, with different cell lines and modalities of acquisitions, would also improve the training and evaluation of computational methods.
+However, with deep learning methods, beyond the volume of data, the real bottleneck is often the availability of a ground truth.
+Like with medical images, bioimages requires manual annotations from biomedical experts and can be difficult to obtain.
+To alleviate this limitation, future models could leverage or deploy the current research about self-supervised or weakly supervised training, as well as active learning frameworks.
+
+New experimental and computation methods will probably enable a more efficient exploration of the transcriptome and a better understanding of the gene expression process.
+Pipelines should be adapted from cultivated cell lines to actual tissues, from fundamental biological research to medical applications.
+Obviously, there is still a lot of work to achieve for future researchers and I hope that my contribution with this thesis will be useful to the community.
 
 \section{Publications}
 \label{sec:conclusion_publications}
@@ -48,6 +97,6 @@
 	\item Rémy Dubois, \textbf{Arthur Imbert}, Aubin Samacoïts, Marion Peter, Edouard Bertrand, Florian Mueller, Thomas Walter (2019), \textit{A Deep Learning Approach To Identify mRNA Localization Patterns}, in 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), pp. $\operatorname{1386-1390}$, iSSN: $\operatorname{1945-8452}$.
 	\item Adham Safieddine, Emeline Coleno, Soha Salloum\footnotemark[1], \textbf{Arthur Imbert\footnotemark[1]}, Abdel-Meneem Traboulsi, Oh Sung Kwon, Frederic Lionneton, Virginie Georget, Marie-Cécile Robert, Thierry Gostan, Charles-Henri Lecellier, Racha Chouaib, Xavier Pichon, Hervé Le Hir, Kazem Zibara, Florian Mueller, Thomas Walter, Marion Peter, Edouard Bertrand (2021), \textit{A choreography of centrosomal mRNAs reveals a conserved localization mechanism involving active polysome transport}, Nature Communications 12 (1), 1352.
 	\item Xavier Pichon\footnotemark[1], Konstadinos Moissoglu\footnotemark[1], Emeline Coleno, Tianhong Wang, \textbf{Arthur Imbert}, Marie-Cecile Robert, Marion Peter, Racha Chouaib, Thomas Walter, Florian Mueller, Kazem Zibara, Edouard Bertrand, Stavroula Mili (2021), \textit{The kinesin KIF1C transports APC-dependent mRNAs to cell protrusions}, RNA 27 (12), 1528.
-	\item Adham Safieddine, Emeline Coleno, Frederic Lionneton, Abdel-Meneem Traboulsi, Soha Salloum, Charles-Henri Lecellier, Thierry Gostan, Virginie Georget, Cédric Hassen-Khodja, \textbf{Arthur Imbert}, Florian Mueller, Thomas Walter, Marion Peter, Edouard Bertrand (2022), \textit{HT-smFISH: a cost-effective and flexible workflow for high-throughput single-molecule RNA imaging}, Nature Protocol \textit{(to be published)}.
+	\item Adham Safieddine, Emeline Coleno, Frederic Lionneton, Abdel-Meneem Traboulsi, Soha Salloum, Charles-Henri Lecellier, Thierry Gostan, Virginie Georget, Cédric Hassen-Khodja, \textbf{Arthur Imbert}, Florian Mueller, Thomas Walter, Marion Peter, Edouard Bertrand (2022), \textit{HT-smFISH: a cost-effective and flexible workflow for high-throughput single-molecule RNA imaging}, Nature Protocol.
 	\item Thomas Bonte, Maxence Philbert, Emeline Coleno, Edouard Bertrand, \textbf{Arthur Imbert}, Thomas Walter (2022), \textit{Learning with minimal effort: leveraging in silico labeling for cell and nucleus segmentation}, in 2022 European Conference on Computer Vision (ECCV 2022) Workshop on BioImage Computing \textit{(to be published)}.
 \end{itemize}
