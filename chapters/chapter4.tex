@@ -8,11 +8,14 @@
 \minitoc
 \newpage
 
-In this chapter, I present and discuss different approaches to analyze \ac{RNA} localization patterns.
-This task requires to quantify and measure indicators from fluorescent images.
-To do so, I use a coordinate representation of cells, merging results from the detection and segmentation modules (Chapters~\ref{ch:chapter2} and~\ref{ch:chapter3} respectively).
+In this chapter, I present and discuss different approaches to derive quantitative profiles describing \ac{RNA} localization patterns. By combining the outputs from detection and segmentation modules (Chapters~\ref{ch:chapter2} and~\ref{ch:chapter3} respectively), each cell is characterized by a point cloud (\ac{RNA}), a set of landmarks (e.g. the nucleus or other cellular compartments) and potentially by some pre-digested subpatterns (such as \ac{RNA} clusters). The challenge is then to derive a vector that is suitable for downstream analysis, namely quantification, supervised and unsupervised analysis. 
 
-In the first part, I describe the coordinate representation obtained with methods implemented in \emph{bigfish.multitask}.
+
+%This task requires to quantify and measure indicators from fluorescent images.
+%To do so, I use a coordinate representation of cells, merging results from the detection and segmentation modules (Chapters~\ref{ch:chapter2} and~\ref{ch:chapter3} respectively).
+
+%In the first part, I describe the coordinate representation obtained with methods implemented in \emph{bigfish.multitask}.
+In the first part, I describe the preparation of the input data, starting from segmentation and detection results obtained by the methods implemented in \emph{bigfish.multitask}.
 In the second part, I manually select or design a set of localization features.
 These features are implemented in \emph{bigfish.classification} and described in~\cite{Imbert_fq_2022}.
 In the third part, I present a different approach to compute spatial features.
@@ -27,12 +30,20 @@ This approach is described in the paper:
 \section{From images to coordinates}
 \label{sec:image_coordinates}
 
-My computations are based on the coordinate representation of cells as illustrated in Figure~\ref{fig:cell_extracted_0}.
-I exploit outcomes from detection and segmentation stages.
-More precisely, for each individual cell I extract and identify coordinates of detected objects and segmentation masks.
-As a reminder, current implementation in \emph{bigfish} allows a 2D or 3D detection, but only a 2D segmentation.
-An extension to 3D segmentation masks is not planned, but could be easily implemented.
-Any external methods for detection and segmentation could be used, as long as output formats match with \emph{bigfish} ones.
+\tw{This section was entirely unclear to me, and I have it rewritten entirely. Please check if everything is in.}
+
+The segmentation and detection methods presented in chapters ~\ref{ch:chapter2} and~\ref{ch:chapter3} provide us with a list of detected objects (e.g. \ac{RNA} and clusters) and segmentation masks (e.g. nucleus and cytoplasmic region), as illustrated in Figure ~\ref{fig:cell_extracted_0}. Here, the coordinates of the detected objects and segmentation masks are extracted and form the input data for which we will seek a quantitative description, amenable to machine learning. 
+
+We recall from the previous chapter that \emph{bigfish} proposes 2D and 3D detection, but only 2D segmentation. This is not a conceptual limitation, but rather a pragmatic choice in our projects. 
+Also, any external methods for detection and segmentation could be used, as long as output formats are compatible with \emph{bigfish}.
+
+% on the coordinate representation of cells as illustrated in Figure~\ref{fig:cell_extracted_0}.
+%My computations are based on the coordinate representation of cells as illustrated in Figure~\ref{fig:cell_extracted_0}.
+% I exploit outcomes from detection and segmentation stages.
+% More precisely, for each individual cell I extract and identify coordinates of detected objects and segmentation masks.
+% As a reminder, current implementation in \emph{bigfish} allows a 2D or 3D detection, but only a 2D segmentation.
+% An extension to 3D segmentation masks is not planned, but could be easily implemented.
+% Any external methods for detection and segmentation could be used, as long as output formats are compatible with \emph{bigfish}.
 
 \begin{figure}[]
     \centering
@@ -42,58 +53,22 @@ Any external methods for detection and segmentation could be used, as long as ou
     \label{fig:cell_extracted_0}
 \end{figure}
 
-\subsection{Object labelling}
-\label{subsec:object_labelling}
+\subsection{Gathering all information at the single cell level}
 
-In addition to detection and segmentation refinement, the possibility to merge results from both stages is highly valuable.
-Individual objects can be discriminated according to their localization in the cell.
-A user might want to label a detected object if it locates within a segmented surface or not.
-For example, some studies require to remove transcription sites before further analysis~\cite{CHOUAIB_2020}, or on the contrary to focus on them.
-User could define a \ac{RNA} cluster inside nucleus as a transcription site, as opposed to the ones detected outside nucleus.
-More generally, any detected object could be assigned to a specific cellular compartments, depending on the fluorescent labels available in the study.\\
+% a pladoyer for compartmentalization
+To extract and summarize \ac{FISH} results at the single cell level, the only requirement is a segmentation mask of the cell, that allows us to associate each detected \ac{RNA} and other objects to one cell. Segmentation of additional compartments is optional, but greatly improves the amount of relevant information on \ac{RNA} localization assigned to each cell. 
 
-% reference paper using transcription site only
+\subsubsection{Labeling detected objects according to their localization in the cell}
+The nuclei segmentation masks allows us to identify the intra-nuclear RNAs.
+Technically, this amounts to assigning a region label to each of the detected RNAs or clusters. In general, the more subcellular compartments are available, the more detailed the description of RNA localization can become in the following
 
-\begin{minipage}{0.9\textwidth}
-\begin{lstlisting}[language=Python]
-import bigfish.multistack as multistack
+% example of transcription sites vs. other interpretations.
+This compartmentalization might also change the interpretation we are giving to detected clusters. For instance, a cluster inside a nucleus might be interpreted as transcription site, while a cluster in the cytoplasm can have various biological interpretations (e.g. P-bodies, translation factories, stress granules). 
+In Figure~\ref{fig:cell_extracted_0} we see a cropped \ac{smFISH} image on the left, with cell and nuclear membranes in red and blue respectively.
+On the right, these membranes are illustrated in black and blue respectively. 
+In addition, we see \ac{RNA} spots (in red), \ac{RNA} clusters (in orange, with the estimated number of \ac{RNA} clustered) and transcription sites (in green). 
 
-# discriminate foci and transcription sites
-spots_no_ts, foci, ts = multistack.remove_transcription_site(
-	rna=spots,
-	clusters=clusters,
-	nuc_mask=nuc_label,
-	ndim=3)
-\end{lstlisting}
-\end{minipage}
-
-\subsection{Coordinate representation}
-\label{subsec:coordinate_representation}
-
-\subsubsection{Cell extraction}
-
-To extract and summarize my \ac{FISH} results at the single cell level, the only requirement is a segmentation mask of the cell.
-At least, user needs to perform instance segmentation to be able to identify individual cells.
-Additional results are optional, but they greatly improve the quality of the information assigned to each cell.
-Detected \ac{RNA} and cluster (or anything else detected) can be assigned to individual cells.
-Nuclei segmentation masks make us able to delimitate nuclear membrane and define transcription sites or any nucleus-related object.
-Input images can be also cropped around the identified cells, for every available channel.
-
-In Figure~\ref{fig:cell_extracted_0} we can observe a cropped \ac{smFISH} image on the left, with cell and nuclear membranes in red and blue respectively.
-On the right, these membranes are also visible (in black and blue respectively), in addition with \ac{RNA} spots (in red), \ac{RNA} clusters (in orange, with the estimated number of \ac{RNA} clustered) and transcription sites (in green).
-With such \emph{extraction} I lose pixel-wise information like intensity values or image texture.
-I also deeply rely on detection and segmentation performances to return meaningful coordinates.
-Nonetheless, coordinate representation is a sparse and more natural representation for \ac{mRNA} localization pattern classification.
-Indeed \ac{mRNA} molecules can be viewed as single point objects distributed in a 3D space.
-Microscopic images with fluorescent labels are here the only medium I have to measure and approximate their localization, but still a medium.
-Ultimately, the original and relevant information is the 3D spatial coordinates of molecules I target.
-
-Eventually I propose optional criteria to identify individual cells and refine the outcome.
-First, I can ensure that only one nucleus is assigned to each cell.
-Second, I can remove cropped cells at the border of the \ac{FoV}.
-Their segmentation is incomplete and might bias final results.
-Third, extracted cells can be filtered out according to the number of detected objects (especially the number of \ac{RNA}s).
-By censoring empty cells, I remove potential outliers, detection or segmentation failures and therefore help a subsequent statistical analysis.\\
+In \emph{bigfish} this labeling detected RNAs and clusters can be achieved with a few lines: \\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -111,13 +86,145 @@ fov_results = multistack.extract_cell(
 \end{lstlisting}
 \end{minipage}
 
-\subsubsection{Statistical description}
 
-At this stage I can already compute standard, but useful statistics for every cell.
-I measure cell and nucleus areas, but also \ac{RNA} distribution, inside and outside nucleus.
-With cluster coordinates, estimation of cluster size is available, as well as proportion of clustered \ac{RNA}s.
+% Advantage of this representation
+\subsubsection{The advantage of a coordinate representation}
+With such \emph{extraction} we lose pixel-wise information like intensity values or image texture.
+We also rely on detection and segmentation performances to return meaningful coordinates.
+Nonetheless, coordinate representation is a sparse and more natural representation for \ac{mRNA} localization pattern classification: the coordinates - rather than the fluorescence images themselves - represent the actual measurement I want to make, when I perform smFISH experiments. Finally, in contrast to raw images, coordinates of detected objects allow a much more convincing data integration: the number of potential batch effects and biases is greatly reduced. 
+
+
+\subsubsection{Filtering}
+We can also filter the data at the cellular and object level. 
+At the cellular level, we might want to ensure that only one nucleus is assigned to each cell, and we can remove cells at the border of the \ac{FoV}. 
+Their segmentation is incomplete and might bias final results.
+Third, extracted cells can be filtered out according to the number of detected objects (especially the number of \ac{RNA}s).
+By censoring empty cells, we remove potential outliers, detection or segmentation failures and therefore help a subsequent statistical analysis.
+
+We can also filter out individual objects according to their localization in the cell. 
+A user might want to exclude a detected object if it locates within a segmented surface.
+For example, some studies require to remove transcription sites before further analysis~\cite{CHOUAIB_2020}, or on the contrary focus on quantification of transcription sites.\\
+
+\begin{minipage}{0.9\textwidth}
+\begin{lstlisting}[language=Python]
+import bigfish.multistack as multistack
+
+# discriminate foci and transcription sites
+spots_no_ts, foci, ts = multistack.remove_transcription_site(
+    rna=spots,
+    clusters=clusters,
+    nuc_mask=nuc_label,
+    ndim=3)
+\end{lstlisting}
+\end{minipage}
+
+%Individual objects can be discriminated according to their localization in the cell.
+% % %A user might want to label a detected object if it locates within a segmented surface or not.
+% % For example, some studies require to remove transcription sites before further analysis~\cite{CHOUAIB_2020}, or on the contrary to focus on them.
+% % User could define a \ac{RNA} cluster inside the nucleus as a transcription site, as opposed to the ones detected outside nucleus.
+% % More generally, any detected object can be assigned to a specific cellular compartments.\\
+
+
+
+% Eventually I propose optional criteria to identify individual cells and refine the outcome.
+% First, I can ensure that only one nucleus is assigned to each cell.
+% Second, I can remove cropped cells at the border of the \ac{FoV}.
+% Their segmentation is incomplete and might bias final results.
+% Third, extracted cells can be filtered out according to the number of detected objects (especially the number of \ac{RNA}s).
+% By censoring empty cells, I remove potential outliers, detection or segmentation failures and therefore help a subsequent statistical analysis.\\
+
+
+
+%make us able to delimitate nuclear membrane and define transcription sites or any nucleus-related object.
+
+
+
+%Additional results are optional, but they greatly improve the quality of the information assigned to each cell.
+%Detected \ac{RNA} and cluster (or anything else detected) can be assigned to individual cells.
+%Nuclei segmentation masks make us able to delimitate nuclear membrane and define transcription sites or any nucleus-related object.
+%Input images can be also cropped around the identified cells, for every available channel.
+
+% In Figure~\ref{fig:cell_extracted_0} we can observe a cropped \ac{smFISH} image on the left, with cell and nuclear membranes in red and blue respectively.
+% On the right, these membranes are also visible (in black and blue respectively), in addition with \ac{RNA} spots (in red), \ac{RNA} clusters (in orange, with the estimated number of \ac{RNA} clustered) and transcription sites (in green).
+
+% With such \emph{extraction} I lose pixel-wise information like intensity values or image texture.
+% I also deeply rely on detection and segmentation performances to return meaningful coordinates.
+% Nonetheless, coordinate representation is a sparse and more natural representation for \ac{mRNA} localization pattern classification.
+% Indeed \ac{mRNA} molecules can be viewed as single point objects distributed in a 3D space.
+% Microscopic images with fluorescent labels are here the only medium I have to measure and approximate their localization, but still a medium.
+% Ultimately, the original and relevant information is the 3D spatial coordinates of molecules I target.
+
+% Eventually I propose optional criteria to identify individual cells and refine the outcome.
+% First, I can ensure that only one nucleus is assigned to each cell.
+% Second, I can remove cropped cells at the border of the \ac{FoV}.
+% Their segmentation is incomplete and might bias final results.
+% Third, extracted cells can be filtered out according to the number of detected objects (especially the number of \ac{RNA}s).
+% By censoring empty cells, I remove potential outliers, detection or segmentation failures and therefore help a subsequent statistical analysis.\\
+
+
+
+% % Labeling detected objects (such as \ac{RNA} or clusters) according to their cellular compartment provides us with the opportunity to filter out some \ac{RNA} or other detected structures, depending on the scientific question. 
+% % %In addition to detection and segmentation refinement, the possibility to merge results from both stages is highly valuable.
+% % %Individual objects can be discriminated according to their localization in the cell.
+% % %A user might want to label a detected object if it locates within a segmented surface or not.
+% % For example, some studies require to remove transcription sites before further analysis~\cite{CHOUAIB_2020}, or on the contrary to focus on them.
+% % User could define a \ac{RNA} cluster inside the nucleus as a transcription site, as opposed to the ones detected outside nucleus.
+% % More generally, any detected object can be assigned to a specific cellular compartments.\\
+
+% % % reference paper using transcription site only
+
+% % \begin{minipage}{0.9\textwidth}
+% % \begin{lstlisting}[language=Python]
+% % import bigfish.multistack as multistack
+
+% % # discriminate foci and transcription sites
+% % spots_no_ts, foci, ts = multistack.remove_transcription_site(
+% % 	rna=spots,
+% % 	clusters=clusters,
+% % 	nuc_mask=nuc_label,
+% % 	ndim=3)
+% % \end{lstlisting}
+% % \end{minipage}
+
+% \subsection{Coordinate representation}
+% \label{subsec:coordinate_representation}
+
+% \subsubsection{Cell extraction}
+
+% \tw{this is entirely unclear ... needs to be rewritten}
+
+% To extract and summarize \ac{FISH} results at the single cell level, the only requirement is a segmentation mask of the cell.
+% At least, user needs to perform instance segmentation to be able to identify individual cells.
+
+% Additional results are optional, but they greatly improve the quality of the information assigned to each cell.
+% Detected \ac{RNA} and cluster (or anything else detected) can be assigned to individual cells.
+% Nuclei segmentation masks make us able to delimitate nuclear membrane and define transcription sites or any nucleus-related object.
+% Input images can be also cropped around the identified cells, for every available channel.
+
+% In Figure~\ref{fig:cell_extracted_0} we can observe a cropped \ac{smFISH} image on the left, with cell and nuclear membranes in red and blue respectively.
+% On the right, these membranes are also visible (in black and blue respectively), in addition with \ac{RNA} spots (in red), \ac{RNA} clusters (in orange, with the estimated number of \ac{RNA} clustered) and transcription sites (in green).
+% With such \emph{extraction} I lose pixel-wise information like intensity values or image texture.
+% I also deeply rely on detection and segmentation performances to return meaningful coordinates.
+% Nonetheless, coordinate representation is a sparse and more natural representation for \ac{mRNA} localization pattern classification.
+% Indeed \ac{mRNA} molecules can be viewed as single point objects distributed in a 3D space.
+% Microscopic images with fluorescent labels are here the only medium I have to measure and approximate their localization, but still a medium.
+% Ultimately, the original and relevant information is the 3D spatial coordinates of molecules I target.
+
+% Eventually I propose optional criteria to identify individual cells and refine the outcome.
+% First, I can ensure that only one nucleus is assigned to each cell.
+% Second, I can remove cropped cells at the border of the \ac{FoV}.
+% Their segmentation is incomplete and might bias final results.
+% Third, extracted cells can be filtered out according to the number of detected objects (especially the number of \ac{RNA}s).
+% By censoring empty cells, I remove potential outliers, detection or segmentation failures and therefore help a subsequent statistical analysis.\\
+
+
+\subsection{Statistical description}
+
+At this stage, standard and useful statistics for every cell can already be computed.
+In particular, we can measure cell and nucleus areas, but also \ac{RNA} distribution, inside and outside nucleus.
+From cluster coordinates, we can estimate cluster size, as well as proportion of clustered \ac{RNA}s.
 \ac{RNA} proportion in specific cellular compartments are also noteworthy.
-Such indicators are already relevant to quantify or validate meaningful biological insights.
+Such indicators are already relevant to quantify or validate meaningful biological properties.
 For example, a recent study~\cite{cochard_rna_2022} uses \emph{bigfish} to estimate \ac{RNA} recruitment in bioengineered condensates (segmented from a \ac{GFP} channel).\\
 
 \begin{minipage}{0.9\textwidth}
