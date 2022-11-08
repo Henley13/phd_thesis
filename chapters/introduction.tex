@@ -60,8 +60,7 @@ This step consists in copying a gene (a sequence of nucleotides along the \ac{DN
 While the \ac{DNA} is stuck within the nucleus, the \ac{RNA} can convey the blueprint of the future protein outside.
 In many cases, \ac{RNA} can be non-coding (they do not lead to the synthesis of a protein) and fulfill a variety of functions itself, for instance the regulation of gene expression.
 In a \ac{RNA}, the nucleotide Uracil (U) replaces the Thymine (T) and a ribose sugar serves as backbone instead of a desoxyribose sugar.
-If both \ac{DNA} and \ac{RNA} contain genetic information, \ac{RNA} is a shorter single-stranded molecule compared to the double-stranded \ac{DNA}.
-It has only a single strand and is therefore less stable.
+If both \ac{DNA} and \ac{RNA} contain genetic information, \ac{RNA} is a shorter single-stranded molecule, compared to the double-stranded \ac{DNA}, and, therefore, is less stable.
 However, they both have two distinctive ends 5' and 3' (corresponding to the number of carbon atoms in their sugar backbone extremities).\\
 
 \noindent
@@ -563,6 +562,8 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 \subsection{A zoo of FISH}
 \label{subsec:intro_fish}
 
+% thesis adham: "the invention of single molecule FISH (Femino et al., 1998)"
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -573,6 +574,11 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
+
+% learning principles + generic modules of deep learning + flexible architecture
+% advantage/limitations over traditionnal methods -> need to train (heterogeneity of dataset // self or weaekly supervised methods, simulations)
+% caveats + evaluation (varoquaux)
+% specificity to bioimage
 
 \subsection{Detect, segment and analyze}
 \label{subsec:intro_pipeline}
@@ -714,20 +720,34 @@ The ribosome sequentially chains the amino acids, which then fold into a protein
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Contributions and summary}
+\section{Goals and contributions}
 \label{sec:contributions}
+
+\subsection{Goals}
+\label{subsec:intro_goals}
+
+At the beginning of my PhD, three main goals were defined with my supervisors.
+The first one was the development and the implementation of a complete pipeline to process \ac{smFISH} images and return valuable insights about \ac{RNA} localization.
+In particular, it was expected to integrate and adapt the latest successful developments in computer vision.
+The second goal was the identification of bottlenecks that would prevent scaling the analysis to thousands images, in high content screening assays.
+Such bottlenecks should be minimized or solved during the thesis to be able to scale any computational analysis based on \ac{smFISH} experiments.
+Lastly, this complete framework would be applied to real experimental datasets in ongoing biological studies.
+
+% add presentation of the localization patterns (from pixel to coord + patterns)
+% mention Weeks et al. (1985) as firstpublication about RNA localization
+% adham thesis: "Messenger localization was first discovered in Xenopus oocytes (Weeks et al., 1985)."
 
 \subsection{Contributions}
 \label{subsec:intro_contributions}
 
-Beyond this own manuscript, my contributions are essentially summarized by lines of code.
+Beyond this own manuscript, my contributions are essentially lines of code.
 With a effort of transparency, reproducibility and documentation, I try to develop computational tools as useful as possible for any biologist interested in \ac{FISH} experiments.
 My PhD results in three major contributions.
 
 \begin{itemize}
 	\setlength\itemsep{0.1em}
 	\item My first and main contribution is FISH-quant V2.
-	This online framework gathers Python packages and \ac{GUI} to process \ac{FISH} images, build robust analysis pipelines and even perform simulations.
+	This online framework gathers Python packages and a \ac{GUI} to process \ac{FISH} images, build robust analysis pipelines and even perform simulations.
 	\item My second important contribution is an alternative method to compute relevant features in order to discriminate \ac{RNA} localization patterns.
 	This method implies the development of PointFISH, a dedicated deep learning model for point cloud.
 	\item My third contribution is my participation to biological studies with meaningful results.
