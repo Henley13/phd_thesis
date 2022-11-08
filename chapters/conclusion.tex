@@ -15,13 +15,13 @@ This provides new opportunities to explore more advanced algorithms, incorporate
 
 In \textbf{Chapter~\ref{ch:chapter1}}, I present FISH-quant v2, the general framework implemented and released during my PhD~\cite{Imbert_fq_2022}.
 It is a user-friendly, open-source and Python based tool that improves the initial MATLAB version of FISH-quant.
-It provides modules for the most commons operations needed for a \ac{smFISH} analysis.
+It provides modules for the most common operations needed for a \ac{smFISH} analysis.
 Spot detection is scalable.
 Cell and nuclei segmentation includes pre-trained deep learning models.
-Feature engineering is simplified be the selection and the implementation of proven spatial features.
+Feature engineering is simplified by the selection and the implementation of proven spatial features.
 Modules are interchangeable and flexible.
 They can be combined to design a custom and complete pipeline or run independently.
-It comprises, \emph{bigfish}, a general Python package for the analysis, a \ac{GUI}, \emph{simfish}, a Python package for simulations, as well as documentation and interactive examples.
+It includes \emph{bigfish}, a general Python package for the analysis, a \ac{GUI}, \emph{simfish}, a Python package for simulations, as well as documentation and interactive examples.
 In addition, the protocol and the analysis pipeline we have performed for different applications are described in a recent publication~\cite{safieddine_ht_smfish_2022}.
 
 In \textbf{Chapter~\ref{ch:chapter2}}, I present detection methods integrated in FISH-quant v2.
@@ -31,7 +31,7 @@ Solutions to decompose regions with cluttered spots, detect clusters or spot col
 Finally, I explain how to simulate spots images in order to assess the detection performance under different noise conditions.
 
 In \textbf{Chapter~\ref{ch:chapter3}}, I present methods integrated in FISH-quant v2 to segment nuclei and cells.
-It includes in-house deep learning models trained on various fluorescent microscopy images.
+It includes in-house deep learning models trained on various fluorescence microscopy images.
 Most importantly, the ability to use external frameworks and models is facilitated with postprocessing methods to format and refine segmentation masks.
 In addition, I describe joint work to help segmentation models perform well with less annotated data by exploiting in silico techniques~\cite{Bonte_2022}.
 
@@ -47,9 +47,9 @@ In the first study~\cite{CHOUAIB_2020}, I design a classification pipeline to di
 I also detail additional quantifications performed on the impact of translation inhibitors for a newly characterized pattern, the \emph{translation factories}.
 In the second study~\cite{safieddine_choreography_2021}, I focus on the centrosomal pattern and adapt my analysis pipeline to detect centrosomes at scale.
 This enables a statistical description of several genes of interest.
-In the third study~\cite{pichon_kinesin_2021}, I analyze the the protrusion pattern and implement dedicated features recently described in the literature.
+In the third study~\cite{pichon_kinesin_2021}, I analyze the protrusion pattern and implement dedicated features recently described in the literature.
 All in all, these studies include several dozens of transcripts, analyzed through 100,000 individual cells.
-They reveals regulation mechanisms more complex than expected with various spatial and temporal dynamics.
+They reveal regulation mechanisms more complex than expected with various spatial and temporal dynamics.
 
 \section{Perspectives on the future of smFISH analysis}
 \label{sec:conclusion_future}
@@ -62,8 +62,8 @@ Therefore, in future experimental studies, the detection and segmentation steps 
 
 Conversely, a second trend could enrich the final analysis and bring new challenges.
 Recent experimental protocols enable the visualization of multiple elements simultaneously, at the single molecule level.
-Multiplexing and sequential hybridization can target thousand of transcripts.
-Polysome imaging enables dual-imaging experiments would allow us to better investigate the role of \ac{RNA} in translational regulation.
+Multiplexing and sequential hybridization can target thousands of transcripts.
+Polysome imaging enables dual-imaging experiments and would allow us to better investigate the role of \ac{RNA} in translational regulation.
 Lastly, live cell imaging introduces a temporal dimension to modelize.
 
 Such novelties would require the adaptation of future computational frameworks.
@@ -73,7 +73,7 @@ This can take the form of few successful general models or the release of a zoo 
 In the same time, computational frameworks should offer more refine and complex features or representation of the transcriptome.
 The progressive release of large and diversified datasets, with different cell lines and modalities of acquisitions, would also improve the training and evaluation of computational methods.
 However, with deep learning methods, beyond the volume of data, the real bottleneck is often the availability of a ground truth.
-Like with medical images, bioimages requires manual annotations from biomedical experts and can be difficult to obtain.
+Like with medical images, bioimages require manual annotations from biomedical experts and can be difficult to obtain.
 To alleviate this limitation, future models could leverage or deploy the current research about self-supervised or weakly supervised training, as well as active learning frameworks.
 
 New experimental and computation methods will probably enable a more efficient exploration of the transcriptome and a better understanding of the gene expression process.
