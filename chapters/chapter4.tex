@@ -310,35 +310,52 @@ A third set of features is based on assessing \ac{RNA} density measured in subce
 Lastly, dispersion and polarization indices are implemented.
 %Some of my own hand-crafted features are implementations or improvements of this work.
 
-\subsection{Expert features}
+\subsection{Handcrafted features for the quantitative description of RNA localization patterns}
 \label{subsec:expert_features}
 
-A large part of hand-crafted features I implemented in \emph{bigfish.classification} were initially designed for our own studies~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}.
-These features capture more specific information about \ac{RNA} localization, beyond surface areas (\emph{cell\_area} and \emph{nuc\_area}) or expression levels (\emph{nb\_rna}).
+Here, I present the features that I have implemented in \emph{bigfish.classification}. 
+Many of these features were designed for our own studies~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}, but are sufficiently generic to be of general utility. 
+
+These features capture more specific information about \ac{RNA} localization, beyond surface areas (\emph{cell\_area} and \emph{nuc\_area}) or expression levels (\emph{nb\_rna}). 
+\tw{I do not understand what you mean by "beyond surface areas". Surface areas are not RNA related features, no?}
+
+One of the important aspects is the normalization of these features. Indeed, many features are per definition highly dependent on the expression level or the cellular morphology. Here, the objective is to define features that characterize preferential localization of \ac{RNA}, independently from expression levels. 
 
 \subsubsection{Distance features}
 
-I first reuse and adapt some distance features already implemented in FISH-quant v1 and presented in a recent paper~\cite{samacoits_computational_2018}.
-Distances from cell or nuclear membranes are computed in 2D as I only use 2D segmentation results so far.
-However, such features could be easily extended with 3D segmentation masks.
-I compute the average distance between detected \ac{RNA}s and cell membrane \emph{index\_mean\_distance\_cell} such that:
+%I first use and adapt some distance features already implemented in FISH-quant v1~\cite{samacoits_computational_2018}.
+%Distances from cell or nuclear membranes are computed in 2D as I only use 2D segmentation results so far.
+%However, such features could be easily extended with 3D segmentation masks.
+
+
+
+In order to capture preferential localization with respect to the cell membrane, we define \emph{index\_mean\_distance\_cell}: 
+
+%I compute the average distance between detected \ac{RNA}s and cell membrane \emph{index\_mean\_distance\_cell} such that:
 
 \begin{equation}
 	{\displaystyle \operatorname{index\_mean\_distance\_cell} = \frac{\overline{d_{cell}(x_i, y_i)}}{\lambda_{cell}}}
 \end{equation}
 
 \noindent
-With $d_{cell}(x_i, y_i)$ the euclidean distance to the cell membrane for the rna $i$ and $\lambda_{cell}$ the expected average distance under uniform \ac{RNA} distribution.
-A previous study~\cite{battich_control_2015} used the square root of cell area to normalize its distance features.
-However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in terms of cell morphology.
-For this reason I approximate $\lambda_{cell}$ as the average value of the 2D distance map from the cell membrane.
-Similarly, I compute the normalized average distance of \ac{RNA}s to the nucleus: \emph{index\_mean\_distance\_nuc}.
+With $d_{cell}(x_i, y_i)$ the euclidean distance to the cell membrane for the \ac{RNA} $i$ and $\lambda_{cell}$ the expected average distance under uniform \ac{RNA} distribution. $\lambda_{cell}$ is calculated efficiently as the average value of the 2D distance map from the cell membrane. The normalization with respect to $\lambda_{cell}$ makes the feature robust with respect to different cell morphologies~\cite{samacoits_computational_2018}: we measure how much we deviate from a uniform distribution, given the cell morphology and the expression level. 
+
+%A previous study~\cite{battich_control_2015} used the square root of cell area to normalize its distance features.
+%However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in terms of cell morphology.
+
+%$\lambda_{cell}$ is calculated efficiently as the average value of the 2D distance map from the cell membrane.
+Similarly, we compute the normalized average distance of \ac{RNA}s to the nucleus: \emph{index\_mean\_distance\_nuc}.
 Alternative computation with the median function is available for these two features too.
 
-Unlike FISH-quant v1, I do not compute distances to cell or nucleus centroids, nor quantiles of the \ac{RNA} distance distribution.
-These features might appear redundant to quantify distance information.
+In the current version, segmentations are provided in 2D (and consequently, the distances are also defined in 2D).
 
-\subsubsection{Morphological features}
+\tw{I do not think that it is useful to say what you have removed w.r.t. previous versions.}
+%Unlike FISH-quant v1, I do not compute distances to cell or nucleus centroids, nor quantiles of the \ac{RNA} distance distribution.
+%These features might appear redundant to quantify distance information.
+
+\subsubsection{Compartment density features}
+
+\tw{Clearly, this is not "morphology feature". But it could be "spatial histogram features". "Compartment density features" may be better ... up to you!}
 
 A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
 I already count the number of transcripts detected inside the nucleus.
