@@ -280,19 +280,20 @@ Generally such features are inspired by literature on spatial statistics~\cite{r
 Furthermore, several packages implement modules to perform \ac{smFISH} analysis and compute these hand-crafted features~\cite{mueller_fish-quant_2013,savulescu_dypfish_2019,mah_bento_2022}.
 
 In~\cite{battich_image-based_2013}, authors designed 18 features ''that reflect the relative localization of each spot in a single cell, with respect to both the cell and other spots''.
-They compute per-transcript features, then exploit their per-cell mean and standard deviation to identify subcellular localization patterns.
-They even complete and extend their pipeline analysis in a subsequent work~\cite{stoeger_computer_2015}, by integrating segmentation and detection algorithms.
+The authors compute per-transcript features, then exploit their per-cell mean and standard deviation to identify subcellular localization patterns.
+In a subsequent work~\cite{stoeger_computer_2015}, the workflow is completed and extended by integration of segmentation and detection algorithms.
 
-Two recent Python libraries greatly extend and facilitate the quantification of \ac{FISH} experiments.
+Two recent Python libraries propose algorithms for the quantification of \ac{FISH} experiments.
 DypFISH~\cite{savulescu_dypfish_2019} was developed to analyze \ac{RNA} and protein (co-)localization.
 It includes features to investigate clustering and \ac{MTOC}-related patterns.
 Across different imaging acquisitions of cells with a architecture constraints, they propose techniques to study \ac{mRNA}-protein spatial distribution~\cite{savulescu_interrogating_2021}.
 Bento~\cite{mah_bento_2022} proposes modules to analyze images generated with \ac{SeqFISH} and \ac{MERFISH}.
 They adapt feature extraction pipeline to highly multiplexed spatial transcriptomics data.
 
-In FISH-quant v1~\cite{mueller_fish-quant_2013} more than 20 features are implemented in MATLAB.
-They are extensively evaluated in a recent publication~\cite{samacoits_computational_2018} with simulated localization patterns.
-Compared to previous features developed in the literature~\cite{battich_image-based_2013}, they return a better performance to classify \ac{RNA} localization patterns.
+The features I present in this chapter extends previous work in our groups, implemented in MATLAB~\cite{mueller_fish-quant_2013, samacoits_computational_2018}, where more than 20 features were proposed to analyze mRNA localization patterns. 
+% implemented in MATLAB.
+% They are extensively evaluated in a recent publication~\cite{samacoits_computational_2018} with simulated localization patterns.
+Compared to previous feature sets~\cite{battich_image-based_2013}, they led to better performance in \ac{RNA} pattern classification, as shown by simulations.  
 A first set of features includes distance features between \ac{RNA} spots and cell or nucleus.
 A second set of features involved the Ripley K-function~\cite{ripley2005spatial}:
 
@@ -301,13 +302,13 @@ A second set of features involved the Ripley K-function~\cite{ripley2005spatial}
 \end{equation}
 
 \noindent
-With $N_i$ Npi (r) the number of \ac{RNA}s in a circle of radius $r$ centered on the $i^{th}$ \ac{RNA} and $\lambda$ the total density of \ac{RNA}s in the cell.
+With $N_i(r)$ the number of \ac{RNA}s in a circle of radius $r$ centered on the $i^{th}$ \ac{RNA} and $\lambda$ the total density of \ac{RNA}s in the cell.
 It quantifies the aggregation or dispersion of mRNAs.
 Several features are designed from these values, exploiting their maximum or their correlation with the radius $r$.
 However, Ripley features are sensitive to boundary effects (\ac{RNA}s close to a membrane have a limited neighborhood) and require to be correctly normalized.
-A third set of features is based on morphological operations, like opening, to identify cell extensions.
+A third set of features is based on assessing \ac{RNA} density measured in subcellular regions, defined by morphological operators. 
 Lastly, dispersion and polarization indices are implemented.
-Some of my own hand-crafted features are implementations or improvements of this work.
+%Some of my own hand-crafted features are implementations or improvements of this work.
 
 \subsection{Expert features}
 \label{subsec:expert_features}
