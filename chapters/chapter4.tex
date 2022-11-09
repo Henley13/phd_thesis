@@ -239,22 +239,39 @@ df = multistack.summarize_extraction_results(fov_results, ndim=3)
 \section{Hand-crafted localization features}
 \label{sec:hand_features}
 
-I now present the first approach to analyze \ac{RNA} localization patterns in depth: I manually design spatial features.
+Here I present hand-crafted features I have implemented for the analysis of \ac{RNA} localization patterns. 
+In section \ref{subsec:related_work_hand_features}, I present related work. We will see that there is already a large number of features available in the literature. In section \ref{subsec:expert_features}, I present the features I have chosen for our studies. 
+
+
 
 \subsection{Related work}
 \label{subsec:related_work_hand_features}
 
 \subsubsection{Feature engineering with bioimages}
 
-Bio-image computing field has long proposed quantitative frameworks and features to explore cellular mechanisms.
-Some popular software includes complete analysis pipelines from image preprocessing to feature engineering.
-For example CellProfiler~\cite{mcquin_cellprofiler_2018} allows researchers to count cell organelles and measure their size, analyze cell shape or extract pixel-wise texture information.
-Expression level computation is also a standard, through proteome quantification.
-CellCognition~\cite{held_cellcognition_2010} proposes a computational framework to annotate and classify relevant biological phenotypes, mostly through morphological measures.
-More than 150 features are available.
-Last but not least, ilastik~\cite{berg_ilastik_2019} also offers classification pipelines, with pixel-wise features such that intensity values, texture, brightness or color gradient.
-Although useful and widely employed, these frameworks appear quickly limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
-More specialized libraries are needed.
+In bioimage analysis, in particular for High Content Screening, there is an abundant literature on feature families that have been used for cell and whole image classification. They can be roughly categorized into shape features and texture features. Examples include Haralick features~\cite{Haralick1973}, statistical geometric features~\cite{Walker1996}, local binary patterns~\cite{ahonen_2006}, moment based features~\cite{Reeve1992} and morphological granulometries~\cite{Serra1983}, to name a few. 
+
+Such features have been used to classify cells according to their protein localization patterns~\cite{Boland1998, Glory2007}, or their phenotypes~\cite{Wang2008, Jones2009, Walter2010} or classify directly full images with entire cell populations~\cite{Uhlmann2016}. 
+
+Importantly, such feature families are readily available in standard open-source software for computational phenotyping, such as CellProfiler~\cite{Carpenter2006, Jones2008, mcquin_cellprofiler_2018}, CellCognitionn~\cite{held_cellcognition_2010}, Mahotas \cite{mahotas_2013} and ilastik~\cite{berg_ilastik_2019}.  
+
+Most of these hand-crafted features come from the computer vision literature: they are pretty generic with limited biological interpretability. Furthermore, they are designed to quantitatively describe object shapes and textures, rather than directly representing spatial distributions of biomolecules. Of note, this also holds for protein localization screens~\cite{Glory2007, Ouyang2019b}. This is due to the fact that with traditional microscopy, individual proteins cannot be resolved. In addition, proteins can be abundant and often concentrate on specific structures. As a consequence, the protein signal cannot be decomposed into single points, and it is therefore logical to describe their spatial distribution by texture features. A notable exception is provided by super-resolution microscopy, where protein distributions are indeed modeled as point clouds~\cite{Levet2019}. 
+
+In conclusion, there is a need for features describing spatial distributions of RNA molecules inside the cell, implemented in user-friendly open-source tools. 
+
+%existing tools appear limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
+
+%Features describing the spatial distribution of molecules are therefore still required. 
+
+% Bio-image computing field has long proposed quantitative frameworks and features to explore cellular mechanisms.
+% Some popular software includes complete analysis pipelines from image preprocessing to feature engineering.
+% For example CellProfiler~\cite{mcquin_cellprofiler_2018} allows researchers to count cell organelles and measure their size, analyze cell shape or extract pixel-wise texture information.
+% Expression level computation is also a standard, through proteome quantification.
+% CellCognition~\cite{held_cellcognition_2010} proposes a computational framework to annotate and classify relevant biological phenotypes, mostly through morphological measures.
+% More than 150 features are available.
+% Last but not least, ilastik~\cite{berg_ilastik_2019} also offers classification pipelines, with pixel-wise features such that intensity values, texture, brightness or color gradient.
+% Although useful and widely employed, these frameworks appear quickly limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
+% More specialized libraries are needed.
 
 \subsubsection{\ac{RNA} localization features}
 
