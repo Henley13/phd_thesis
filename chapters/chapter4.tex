@@ -273,7 +273,7 @@ In conclusion, there is a need for features describing spatial distributions of 
 % Although useful and widely employed, these frameworks appear quickly limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
 % More specialized libraries are needed.
 
-\subsubsection{\ac{RNA} localization features}
+\subsubsection{Feature design to describe RNA localization}
 
 Hand-crafted features to classify \ac{RNA} localization patterns were already developed in previous studies~\cite{battich_image-based_2013,samacoits_computational_2018}.
 Generally such features are inspired by literature on spatial statistics~\cite{ripley2005spatial} and adapted for fluorescence microscopy images~\cite{lagache_statistical_2015,stueland_rdi_2019}.
@@ -356,39 +356,65 @@ In the current version, segmentations are provided in 2D (and consequently, the 
 \subsubsection{Compartment density features}
 
 \tw{Clearly, this is not "morphology feature". But it could be "spatial histogram features". "Compartment density features" may be better ... up to you!}
+\tw{And you need to better structure your text.}
 
-A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
-I already count the number of transcripts detected inside the nucleus.
-Specifically, the proportion of \ac{RNA}s within the nucleus (\emph{proportion\_rna\_in\_nuc}) is a good enough indicator to identify the intranuclear pattern.
+The idea of this feature family is to partition the cellular region into several subregions and to evaluate the \ac{RNA} density in these regions. This corresponds to spatial histograms of \ac{RNA} distribution. These features come in two variants: 
+\begin{enumerate}
+\item \emph{propotion} is the proportion of RNAs inside the region with respect to the total number of RNAs in the cell. 
+\item \emph{index} is the ratio between measured and expected RNAs inside the region.
+\end{enumerate}
 
-\begin{figure}[]
+The choice of the partition then conditions the kind of patterns that will can be differentiated with the feature family. First, as already indicated above, we defined as a coarse partition the nuclear and cytoplasmic region and calculate the proportion of \ac{RNA}s within the nucleus (\emph{proportion\_rna\_in\_nuc}). 
+
+Second, we defined regions according to distance intervals to the nucleus and the cell membrane respectively. 
+Region $R_i$ is thus defined as:
+\begin{equation}
+    R_i = \{ x \, \, | \, \, d_{compartment}(x) \in  [\tau_i, \tau_{i+1}] \}
+\end{equation}where $x$ is a point in the image plane, and "compartment" can mean the nucleus or cytoplasmic membrane. 
+We count the number of \ac{RNA} falling in $R_i$ and calculate the proportion and the index. 
+
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter4/plot_topography}
     \caption[Proportion of mRNAs in several subcellular regions]{Proportion of mRNAs at various distances from cell and nuclear membranes.
-	Dataset and annotated patterns from~\cite{CHOUAIB_2020}.
-	\textit{Colored areas} represent the 95\% confidence interval}
+    Dataset and annotated patterns from~\cite{CHOUAIB_2020}.
+    \textit{Colored areas} represent the 95\% confidence interval}
     \label{fig:features_topography}
 \end{figure}
 
-Still I can go further to partition cell regions.
-I define a list of features to measure the distribution of \ac{RNA}s within different cell regions.
-Regions of interest are delimited with concentric circles from cell or nuclear membranes, with an interval distance of 500nm each.
-More precisely, area between 0 and 3000nm from the cell membrane is divided in six concentric regions.
-In each region I compute \ac{RNA} proportion (\emph{proportion\_rna\_cell\_radius\_1000\_1500} for the proportion between 1000nm and 1500nm from the cell membrane) or I count the number of \ac{RNA}s I detect, normalized by the expected number of \ac{RNA}s under random distribution (\emph{index\_rna\_cell\_radius\_1000\_1500}).
-I also define 5 more regions around the nuclear membrane between 500nm and 3000nm.
-Another region is defined along the nuclear membrane, including detected \ac{RNA}s inside or outside the nucleus, but within 500nm from its membrane.
-Likewise, proportion (\emph{proportion\_rna\_nuc\_radius\_500\_1000}) and normalized \ac{RNA} count (\emph{index\_rna\_nuc\_radius\_500\_1000}) are computed for all regions around the nuclear membrane.
-When I manually annotate real cells and identify different localization pattern I can measure how discriminative these features can be.
-In Figure~\ref{fig:features_topography} we observe average \ac{RNA} proportion for the different regions I described.
-The 95\% confidence interval is also reported in the plot.
-Logically, nuclear edge and perinuclear patterns present a higher proportion of \ac{RNA}s along the nuclear membrane.
-On the opposite, cells with a protrusion pattern have a higher \ac{RNA} density along the cell membrane.
+In our studies, we defined regions with respect to their distance to the nucleus, where the interval boundaries were $\tau in \{-500, 500, 1000, 1500, 2000\}$ (in nm) and where $d_{nucleus}<0$ refers to points inside the nucleus. 
+Furthermore, we defined regions with respect to their distance to the cytplasmic membranes, using the interval boundaries $\tau in \{0, 5000, 1000, 1500, 2000\}$ (in nm). 
 
-I focus on a last relevant region in a cell: protrusions.
-To design features related to cell extension I first need to define such extension.
-Like~\cite{samacoits_computational_2018} I define this region as the lost area after applying a morphological opening (an erosion followed by a dilation) to the cell mask.
-For this operation I use a disk with 3000nm radius as a structuring element.
-I then compute the proportion of \ac{RNA}s (\emph{proportion\_rna\_protrusion}) or the normalized \ac{RNA} count (\emph{index\_rna\_protrusion}) in protrusion.
+
+% A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
+% I already count the number of transcripts detected inside the nucleus.
+% Specifically, the proportion of \ac{RNA}s within the nucleus (\emph{proportion\_rna\_in\_nuc}) is a good enough indicator to identify the intranuclear pattern.
+
+% Still I can go further to partition cell regions.
+% I define a list of features to measure the distribution of \ac{RNA}s within different cell regions.
+% Regions of interest are delimited with concentric circles from cell or nuclear membranes, with an interval distance of 500nm each.
+% More precisely, area between 0 and 3000nm from the cell membrane is divided in six concentric regions.
+% In each region I compute \ac{RNA} proportion (\emph{proportion\_rna\_cell\_radius\_1000\_1500} for the proportion between 1000nm and 1500nm from the cell membrane) or I count the number of \ac{RNA}s I detect, normalized by the expected number of \ac{RNA}s under random distribution (\emph{index\_rna\_cell\_radius\_1000\_1500}).
+% I also define 5 more regions around the nuclear membrane between 500nm and 3000nm.
+% Another region is defined along the nuclear membrane, including detected \ac{RNA}s inside or outside the nucleus, but within 500nm from its membrane.
+% Likewise, proportion (\emph{proportion\_rna\_nuc\_radius\_500\_1000}) and normalized \ac{RNA} count (\emph{index\_rna\_nuc\_radius\_500\_1000}) are computed for all regions around the nuclear membrane.
+
+%When I manually annotate real cells and identify different localization pattern I can measure how discriminative these features can be.
+In order to investigate the discriminative power of these features, we visualized the average \ac{RNA} proportion for the different regions in Figure~\ref{fig:features_topography} and the corresponding 95\% confidence interval
+for different patterns. These patterns will be introduced in detail in chapter \ref{ch:chapter5}. In brief, \emph{intranuclear} refers to an accumulation of \ac{RNA} inside the nucleus, \emph{nuclear edge} to an accumulation in proximity of the nuclear envelope, \emph{perinuclear} to a preferred  localization close to the nucleus but less pronounced than \emph{nuclear edge}, \emph{protrusion} to an accumulation in cell extensions, \emph{foci} to \ac{RNA} clusters and \emph{random} to the absence of all the other patterns. 
+% we observe average \ac{RNA} proportion for the different regions I described.
+%The 95\% confidence interval is also reported in the plot.
+As expected, nuclear edge and perinuclear patterns present a higher proportion of \ac{RNA}s along the nuclear membrane.
+On the opposite, cells with a protrusion pattern have a higher \ac{RNA} density along the cell membrane. 
+
+
+Sometimes, it can also make sense to probe for the presence of RNAs in specific regions that are not necessarily present in all cells. In order to quantify the RNA presence in protrusions for instance, we build the partition by a morphological top-hat: $f-\gamma_B f$, where $\gamma_B$ is the morphological opening with a structuring Element $B$. This operation extracts the parts of the cytoplasm that cannot contain the structuring element. Here, we use a disk with radius $300 nm$.   
+
+% I focus on a last relevant region in a cell: protrusions.
+% To design features related to cell extension I first need to define such extension.
+% Like~\cite{samacoits_computational_2018} I define this region as the lost area after applying a morphological opening (an erosion followed by a dilation) to the cell mask.
+% For this operation I use a disk with 3000nm radius as a structuring element.
+% I then compute the proportion of \ac{RNA}s (\emph{proportion\_rna\_protrusion}) or the normalized \ac{RNA} count (\emph{index\_rna\_protrusion}) in protrusion.
 
 \subsubsection{Dispersion features}
 
@@ -415,6 +441,7 @@ In addition to the extracted coordinates, its computation also implies pixel int
 
 \noindent
 With $r_i$ and $r_j$ the euclidean distance of \ac{RNA} $i$ and cell pixel $j$ to the \ac{RNA} centroid respectively, $I_i$ the pixel intensity of \ac{RNA} $i$ and $I_j$ the pixel intensity of cell pixel $j$.
+\tw{Would be better to use $d_i$ and $d_j$ (to be coherent with the formulas above). }
 Pixel intensity of transcripts distant from the \ac{RNA} centroid are overweighted.
 As the index is normalized considering every pixel $j$ from the cell mask, it tends to 1 when \ac{RNA} point cloud is uniformly distributed.
 A diffuse point cloud has a value greater than 1.
