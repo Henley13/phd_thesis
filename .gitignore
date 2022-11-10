@@ -1,6 +1,7 @@
 # Folder
 .idea/
 external_ressources/
+.chapters/old/
 
 # Files
 .DS_Store
