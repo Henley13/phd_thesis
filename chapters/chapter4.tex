@@ -383,7 +383,15 @@ We count the number of \ac{RNA} falling in $R_i$ and calculate the proportion an
 \end{figure}
 
 In our studies, we defined regions with respect to their distance to the nucleus, where the interval boundaries were $\tau in \{-500, 500, 1000, 1500, 2000\}$ (in nm) and where $d_{nucleus}<0$ refers to points inside the nucleus. 
-Furthermore, we defined regions with respect to their distance to the cytplasmic membranes, using the interval boundaries $\tau in \{0, 5000, 1000, 1500, 2000\}$ (in nm). 
+Furthermore, we defined regions with respect to their distance to the cytplasmic membranes, using the interval boundaries $\tau in \{0, 5000, 1000, 1500, 2000\}$ (in nm), 
+
+In summary, we thus have:
+\begin{itemize} 
+    \item \emph{proportion\_rna\_nuc\_radius\_$\tau_i$\_$\tau_{i+1}$}
+    \item \emph{index\_rna\_nuc\_radius\_$\tau_i$\_$\tau_{i+1}$}
+    \item \emph{proportion\_rna\_cell\_radius\_$\tau_i$\_$\tau_{i+1}$}
+    \item \emph{index\_rna\_cell\_radius\_$\tau_i$\_$\tau_{i+1}$}
+\end{itemize}
 
 
 % A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
@@ -462,9 +470,9 @@ Again, an aggregation of transcripts around the nucleus centroid (often close to
 	\end{center}
 \end{wrapfigure}
 
-If I detect additional object and extract new coordinates besides individual and clustered \ac{RNA}s, more specific features can be designed.
-For example, these objects can be cell organelles labelled during the experimentation.
-I design such features with the centrosomes to further study \ac{RNA} localization related to the \ac{MTOC}~\cite{safieddine_choreography_2021}.
+The nuclear and cytoplasmic membranes are major landmarks of the cell, but in more specific screens, it might be interesting to assess the distance distributions with respect to other compartments in the cell, if such compartments are labeled in the experiments.
+For instance, I have worked on a screen, where we wanted to study \ac{RNA} localization related to the Microtubule Organizing Centers \ac{MTOC}~\cite{safieddine_choreography_2021}, which I detail in chapter \ref{ch:chapter5}, where centrosomes were fluorescently labeled.
+%I design such features with the centrosomes to further study \ac{RNA} localization related to the \ac{MTOC}~\cite{safieddine_choreography_2021}.
 
 A first obvious feature is the average (or median) distance between \ac{RNA}s and the closest detected centrosomes (up to two centrosomes can be detected in the cell): \emph{index\_mean\_distance\_centrosome}.
 Similarly to the distance features I compute with the cell or nuclear membranes, I compute the expected distance under uniform \ac{RNA} distribution for normalization.
@@ -474,11 +482,13 @@ In my case I manually choose a radius of 2000nm around centrosomes to define suc
 I can then compute normalized \ac{RNA} count (\emph{index\_rna\_centrosome}) or \ac{RNA} proportion (\emph{proportion\_rna\_centrosome}) in these regions.
 
 Lastly, I derived a feature from the dispersion index described above.
-I define a centrosomal dispersion index to quantify \ac{RNA} dispersion around centrosomes: \emph{index\_centrosome\_dispersion}.
-I design it like the dispersion index, but instead of \ac{RNA} centroid, I use the closest centrosome coordinates to compute the euclidean distance.
+I define a centrosomal dispersion index to quantify \ac{RNA} dispersion around centrosomes: \emph{index\_centrosome\_dispersion}. The feature is designed like the 
+dispersion index, but instead of \ac{RNA} centroid, I use the closest centrosome coordinates to compute the euclidean distance.
 The lower, the closer \ac{RNA}s localized to the centrosomes.
 
 \subsubsection{Cluster features}
+
+In addition, to the distances to landmarks, it is often useful to also analyze inter-point distances. In particular, small clusters of \ac{RNA}s are of biological interest. 
 
 Concerning cluster localization patterns, I observed that my clustering method (see subsection~\ref{subsec:dense_decomposition}) already captures good enough information.
 More specifically, number of detected clusters (\emph{nb\_foci}) or \ac{RNA} proportion inside these clusters (\emph{proportion\_rna\_in\_foci}) are relevant features to identify transcripts with a tendency for clustering.
