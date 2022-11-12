@@ -60,25 +60,23 @@ Finally, the software should integrate the latest generation of computer vision 
 \label{subsec:related_work_fishquant}
 
 Processing a large-scale \ac{smFISH} study requires both specific methods to analyze \ac{RNA} distribution and more general techniques to read and manipulate images based on robust computer vision algorithms.
-The \ac{FISH} analysis pipeline has to include an accurate \ac{RNA} detection method, the segmentation of relevant subcellular regions, and potentially preprocessing techniques to prepare the images (such that filtering, denoising or projection algorithms).
+A \ac{FISH} analysis pipeline hence has to include several inter-dependent subtasks: an accurate \ac{RNA} detection method, the segmentation of relevant subcellular regions such as the cytoplasm and the nucleus, and preprocessing techniques to prepare the images (such that filtering, denoising or projection algorithms).
 The obtained results can then be exploited to compute gene expression levels, by counting \ac{RNA} molecules, or develop localization features, to study non-random \ac{RNA} localization.
 
-Recently, the Pelkmans Lab's publication series illustrates the need for a complete and robust pipeline to quantify a high-dimensional feature space for each transcript.
-After designing \ac{RNA} localization features to capture spatial properties of transcripts~\cite{battich_image-based_2013}, the authors propose to complete their analysis pipeline with computer vision algorithms.
-In~\cite{stoeger_computer_2015}, researchers describe techniques to detect and segment, in addition to the set of spot features they previously developed.
-They also support that such a pipeline could be use independently of their \ac{RNA}-focused task, for any similar study that imply to quantify phenotypes in fluorescent microscopic images.
-As an example, they reused part of their pipeline and features in a study~\cite{battich_control_2015} where they model the heterogeneity of transcript abundance in mammalian cells.
-Their previous analysis pipeline allow them to perform a single-cell analysis on a large-scale experimental dataset to validate their biological insights.
+Specialized solutions for many of these subtasks exist, like BlobFinder~\cite{ALLALOU200958} for spot detection, but using them requires the end-user to assemble a complex analysis workflow, often across different programming languages.
+This can be a daunting task, especially for wet-lab biologists with no formal training in computer science.
 
-On the opposite, another approach can be observed with BlobFinder~\cite{ALLALOU200958}, which can be see as a niche software.
-Researchers intentionally narrowed the scope of the project such that ''an analysis can be performed using less parameters and less user input''.
-Indeed, BlobFinder allows to quantify and localize cells and spots (''point like source signals'') in fluorescence microscopy images, then export a result file.
+As an alternative, the development of complete analysis workflows can provide a modular and extensible pipeline for the analysis of \ac{RNA} abundance and localization.
+As an example, the Pelkmans Lab published several papers illustrating the need for such complete and robust pipelines.
+In~\cite{battich_image-based_2013, stoeger_computer_2015}, the authors develop a modular analysis pipeline permitting to analyze subcellular \ac{RNA} localization from their high-content screen.
+The latter paper is a detailed protocol, that permits new users to perform their analysis quickly by providing a detailed description of the implemented approaches.
+Further, the advantage of their modular approach, is that additional analysis tasks can be integrated to study related biological questions.
+In latter work~\cite{battich_control_2015}, they reused parts of this pipeline to infer \ac{RNA} abundance per cell, and completed this analysis with morphological and phenotypic analysis to explain the observed heterogeneity in \ac{RNA} abundance.
 
-%\fm{How do those examples support those conclusions?}
-From these examples we can draw several conclusions that should guide the development of our tools.
-First, we need a framework that deals with every part of a \ac{smFISH} analysis pipeline, otherwise the pipeline would have a bottleneck at some point, that should be solved manually or by using an external framework.
+These examples can provide several guidelines for future developments.
+First, it is preferable to have a modular framework addressing every step in the \ac{smFISH} analysis pipeline, to facilitate usage.
 Second, there is a balance to find between the scope of a framework, its flexibility, its scalability and the amount of user input required.
-Lastly, a more general or flexible framework should not drown a user with a complex and vast documentation and keep its process simple, robust and modular.
+Lastly, to increase usability of a flexible framework, the analysis steps should be kept modular and be clearly explained.
 
 While several tools exist for each stage illustrated in Figure~\ref{fig:pipeline}, there was - to our knowledge - no tool available that permits performing the entire analysis in one framework.
 A complete analysis pipeline has then to be built by mixing these tools and requires some in-house developments, which can be daunting for non-specialists and may provide solutions that are unstable and difficult to scale.
@@ -125,7 +123,7 @@ In this section, I will describe the overall organisation of FISH-quant v2 and t
 \end{figure}
 
 FISH-quant v2 is entirely open-source and hosted on GitHub under the FISH-quant organization\footnote{\url{https://github.com/fish-quant}}.
-Using a GitHub organization allowed us to provide dedicated repositories with well defined and dedicated scope (see Figure~\ref{fig:fishquant}).
+Using a GitHub organization allowed me to provide dedicated repositories with well defined and dedicated scope (see Figure~\ref{fig:fishquant}).
 Further, it gives the flexibility for future extension where new projects can be integrated as new, independent repositories, without affecting and complexifying the already existing code.
 The user can choose the adequate code for the analysis needs, without the overhead of installing unnecessary packages.
 This GitHub organization is organized in several resources with dedicated repositories and documentation.
