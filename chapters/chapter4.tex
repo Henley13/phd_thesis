@@ -488,12 +488,12 @@ The lower, the closer \ac{RNA}s localized to the centrosomes.
 
 \subsubsection{Cluster features}
 
-In addition, to the distances to landmarks, it is often useful to also analyze inter-point distances. In particular, small clusters of \ac{RNA}s are of biological interest. 
+In addition, to the distances to landmarks, it is often useful to also analyze inter-point distances. In particular, small clusters of \ac{RNA}s are of biological interest. For this, we decided to rather represent these clusters by detection (see subsection~\ref{subsec:dense_decomposition}) and not by generic inter-point features, such as those based on the Ripley's K-function. 
+%Concerning cluster localization patterns, I observed that my clustering method (see subsection~\ref{subsec:dense_decomposition}) already captures good enough information.
+More specifically, number of detected clusters (\emph{nb\_foci}) or \ac{RNA} proportion inside these clusters (\emph{proportion\_rna\_in\_foci}) are relevant features to identify transcripts with a tendency for clustering.\\
+%As a consequence, and unlike~\cite{samacoits_computational_2018}, I do not implement diverse features based on the famous Ripley's K-function.
+%This would require tuning a lot more parameters than just reusing the detected number of clusters.
 
-Concerning cluster localization patterns, I observed that my clustering method (see subsection~\ref{subsec:dense_decomposition}) already captures good enough information.
-More specifically, number of detected clusters (\emph{nb\_foci}) or \ac{RNA} proportion inside these clusters (\emph{proportion\_rna\_in\_foci}) are relevant features to identify transcripts with a tendency for clustering.
-As a consequence, and unlike~\cite{samacoits_computational_2018}, I do not implement diverse features based on the famous Ripley's K-function.
-This would require tuning a lot more parameters than just reusing the detected number of clusters.\\
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -523,24 +523,24 @@ features, features_names = classification.compute_features(
 \label{sec:learned_features}
 
 A second approach to analyze \ac{RNA} localization patterns is to learn features.
-To this end I design and train a deep learning model, PointFISH, on a simulated pretext task~\cite{pointfish_2022}.
-I then reuse the internal representation learned by the model as a point cloud embedding to discriminate \ac{RNA} localization patterns.
-The later is evaluated on an experimental dataset.
+To this end I designed and trained a deep learning model, PointFISH, on a simulated pretext task~\cite{pointfish_2022}.
+I then reused the internal representation learned by the model as a point cloud embedding to discriminate \ac{RNA} localization patterns.
+The later was evaluated on an experimental dataset.
 
 \subsection{Related work}
 \label{subsec:related_work_learned_features}
 
 \subsubsection{Learning features and embeddings}
 
-A neural network learns representations that I can use for transfer learning.
-One advantage is to pretrained relevant representations on a first task with a large and general annotated dataset, before addressing a more difficult or specific task with sometimes a limited dataset available.
+A neural network learns representations that can be used for transfer learning.
+One advantage is to pre-train relevant representations on a first task with a large and general annotated dataset, before addressing a more difficult or specific task with sometimes a limited dataset available.
 Such model can be used as a feature extractor by computing features from one of its intermediate layers.
 Computer vision community progressively replaces hand-crafted features~\cite{Lowe_1999,Bay_2006} by deep learning features to analyze images.
-Best convolutional neural networks pretrained on large and general classification challenges~\cite{He_2016_CVPR,Szegedy_2016_CVPR,Tan_2019,Huang_2017_CVPR} are used as backbone or feature extractor for more complex task like face recognition, detection or segmentation.
-NLP community follows this trend as well with a heavy use of word embeddings~\cite{Mikolov_2013,Joulin_2016} or the more recent transformers models.
+The best convolutional neural networks pretrained on large and general classification challenges~\cite{He_2016_CVPR,Szegedy_2016_CVPR,Tan_2019,Huang_2017_CVPR} are used as backbone or feature extractor for more complex task like face recognition, detection or segmentation.
+NLP community follows this trend as well with a heavy use of word embeddings~\cite{Mikolov_2013,Joulin_2016} or the more recent transformer models.
 As a last example, with graph computation, node2vec~\cite{Grover_2016} learns ''task-independent representations'' for nodes in networks.
 
-Such embedding has also the advantage to be a continuous and numerical representation.
+Such embeddings have also the advantage to be a continuous and numerical representation.
 This is especially useful when dealing with a non-structured data like text or graph.
 With spage2vec~\cite{Partel_2021}, authors learn a low dimensional embedding of local spatial gene expression (expressed as graphs).
 Eventually, they identify meaningful gene expression signatures by computing this embedding for tissue datasets.
@@ -549,7 +549,7 @@ Eventually, they identify meaningful gene expression signatures by computing thi
 
 Because I analyze smFISH images, a first intuition would be to build a convolutional neural network to directly classify localization patterns from the fluorescent image.
 This approach is actually already in place for protein localization.
-Unlike RNA, proteins are usually studied with fluorescent protein, like \ac{GFP} markers, and are difficult to resolve individually.
+Unlike RNA, proteins are usually studied with fluorescent protein, like \ac{GFP} markers, and are in general impossible to resolve individually (except by using super-resolution microscopy, a technique that is not used in HCS today).
 In this case, they appear as a gradient of intensity in the fluorescent image and thus protein localization has often been approached like texture classification problem.
 First studies~\cite{boland_automated_1998} for example compute a set of feature from the microscopy image before training a classifier.
 With recent successes of deep learning, protein localization is now tackled with convolutional neural network, but still framed as a texture classification problem.
@@ -575,18 +575,16 @@ I postulate that learning to classify RNA localization patterns directly from de
 A point cloud has an unordered and irregular structure.
 Projecting the coordinates into images or voxels~\cite{Maturana_2015} transforms the problem as an easier vision challenge, but it comes along with some input degradations.
 It dramatically increases the memory needed to process the sample and loses relevant spatial information.
-In case of \ac{RNA} point cloud, I have already explored this approach by using convolutional neural network on a binary image of the point cloud~\cite{dubois_deep_2019}.
-It makes the recognition of 3D localization patterns harder~\cite{dubois_deep_2019}.
-A more detailed description of the method is available in appendix~\ref{ch:convolutional_features}.
+In case of \ac{RNA} point cloud, I have contributed to a study, where we explored this approach by using convolutional neural network on a binary image of the point cloud~\cite{dubois_deep_2019}. Qualitative analysis of the clustering results indicated that the method does capture relevant signal, but it still cumbersome to first detect individual \ac{RNA}s, to represent them in a binary image, which is then processed with a CNN~\cite{dubois_deep_2019} (a more detailed description of the method is available in appendix~\ref{ch:convolutional_features}). 
 
 A recent paper~\cite{khater_caveolae_2019} proposes to train a machine learning pipeline to discriminate caveolae clusters from scaffolds clusters.
 These cell structures can be recognized through the detection of caveolin-1 proteins and the shape of the resulting point clouds acquired from \ac{SMLM} techniques.
-Authors compare three pipelines to address the problem: a random forest classifier trained on hand-crafted features, a convolutional neural network applied on the point cloud image and more importantly a PointNet fed directly with point cloud.
+The authors compare three pipelines to address the problem: a random forest classifier trained on hand-crafted features, a convolutional neural network applied on the point cloud image and more importantly a PointNet fed directly with point cloud.
 Albeit legitimate, the PointNet method is less successful for this task than the two others pipelines.
-Possibly, this model is too naive.
+%Possibly, this model is too naive.
 
 PointNet~\cite{Qi_2017_CVPR} is a seminal work that leads the way for innovative models to address shape classification.
-It directly processes point clouds with share MLPs and a max pooling layer, making the network invariant to input permutation.
+It directly processes point clouds with shared MLPs and a max pooling layer, making the network invariant to input permutation.
 However, the pooling step is the only way for the model to share information between close points, which ultimately limits its performance.
 Yet, recent research dramatically improves point cloud modelling and especially the capture of local information.
 
@@ -604,7 +602,7 @@ Last but not least, PointMLP~\cite{ma2022rethinking} proposes a simple but still
 I want to train a model, where I can provide directly the point cloud coordinates as an input and compute a continuous vector representation.
 This representation can then be used for classification of different \ac{RNA} localization patterns.
 Such a deep learning model might require a large volume of annotated data to reach a satisfying performance.
-To generate such a large data sets, I used simulated data to train my point cloud model and then use it as a trained feature extractor.
+To generate such a large data set, I used simulated data to train my point cloud model and then use it as a trained feature extractor.
 Eventually I evaluate these learned features on a experimental dataset.
 
 \begin{figure}[]
