@@ -418,7 +418,7 @@ Sometimes, it can also make sense to probe for the presence of RNAs in specific 
 
 \subsubsection{Dispersion features}
 
-I implement three features described and tested in a recent paper~\cite{stueland_rdi_2019} to quantify \ac{RNA} polarization and dispersion within the cell.
+I implemented three features described and tested in a recent paper~\cite{stueland_rdi_2019} to quantify \ac{RNA} polarization and dispersion within the cell.
 
 Polarization index is computed by comparing \ac{RNA} point cloud centroid and cell centroid:
 
@@ -432,7 +432,7 @@ The radius of gyration $Rg_{cell}$ normalizes the index for different cell sizes
 It is defined as the root-mean-squared distance between every cell pixel and the cell centroid.
 The higher, the more polarized \ac{RNA}s are.
 
-Dispersion index measures the dispersion of the \ac{RNA} point cloud.
+The dispersion index measures the dispersion of the \ac{RNA} point cloud.
 In addition to the extracted coordinates, its computation also implies pixel intensities from the original \ac{smFISH} image:
 
 \begin{equation}
@@ -447,7 +447,7 @@ As the index is normalized considering every pixel $j$ from the cell mask, it te
 A diffuse point cloud has a value greater than 1.
 On the opposite, if \ac{RNA}s are concentrated anywhere in the cell, index value is lower than 1.
 
-Peripheral distribution index measures how close the \ac{RNA}s localize to the cell periphery (\emph{index\_peripheral\_distribution}).
+The peripheral distribution index measures how close the \ac{RNA}s localize to the cell periphery (\emph{index\_peripheral\_distribution}).
 Its computation is similar to the dispersion index, but the \ac{RNA} centroid is replaced by the nucleus centroid in the equation.
 A completely dispersed point cloud still has a value of 1, but it increases if \ac{RNA}s move toward the cell periphery, with a concentrated or diffused pattern.
 Again, an aggregation of transcripts around the nucleus centroid (often close to the cell centroid too) decreases index value.
