@@ -599,11 +599,12 @@ Last but not least, PointMLP~\cite{ma2022rethinking} proposes a simple but still
 \subsection{Problem statement}
 \label{subsec:problem_statement}
 
-I want to train a model, where I can provide directly the point cloud coordinates as an input and compute a continuous vector representation.
+The objective is to train a model, that takes as input directly the point cloud coordinates as an input and compute a continuous vector representation.% suitable for downstream classification tasks.
 This representation can then be used for classification of different \ac{RNA} localization patterns.
-Such a deep learning model might require a large volume of annotated data to reach a satisfying performance.
-To generate such a large data set, I used simulated data to train my point cloud model and then use it as a trained feature extractor.
-Eventually I evaluate these learned features on a experimental dataset.
+Such a deep learning model might require a large volume of annotated data to reach satisfying performance.
+Manual annotation of \ac{RNA} localization patterns is complex and time consuming. For rare patterns, it might even be impossible to find cells in sufficient numbers. 
+For this reason, I turned to simulation to build a large training set, from which I can train a point cloud neural network, providing a feature vector that describes \ac{RNA} spatial distributions.  
+Finally, I evaluate these learned features on a experimental dataset.
 
 \begin{figure}[]
 	\centering
@@ -628,23 +629,27 @@ Eventually I evaluate these learned features on a experimental dataset.
 To build my simulated dataset, I use methods implemented in \emph{simfish}.
 My package exploits a template of 318 real cells to simulate realistic point clouds.
 They were originally extracted for FISH-quant v1~\cite{samacoits_computational_2018} to simulate realistic cell and nucleus shapes.
-I have the 3D segmentation masks for the cell and the nucleus.
-In addition, I have manual annotations about potential protrusions, in case I want to simulate this specific pattern.
-Several improvements are brought by \emph{simfish}:
+The 3D segmentation masks for the cell and the nucleus were extracted from smFISH experiments against GAPDH, an abundant house-keeping gene localizing in the cytoplasm. 
+With respect to the previous version ~\cite{samacoits_computational_2018}, I made the following improvements:
+%tential protrusions, in case I want to simulate this specific pattern.
+%Several improvements are brought by \emph{simfish}:
 \begin{itemize}
 	\setlength\itemsep{0.1em}
-	\item I migrate to Python and do not rely on a proprietary framework anymore.
-	\item I accelerate the simulation process.
-	\item I extend the number of localization patterns available.
-	\item I make simulations more consistent in terms of pattern strength.
+	\item Migration to Python and removal of any proprietary dependencies.
+	\item Significant acceleration of the simulation process.
+	\item Extension of available localization patterns.
+	\item Redefinition of pattern strength to make simulations more consistent.
 \end{itemize}
 
 Simulation's outcome includes the cell mask and its membrane coordinates (in 2D), the nucleus mask and its membrane coordinates (in 2D) and the \ac{RNA} coordinates (in 3D).
 To match with the rest of the \emph{bigfish} pipeline, I voluntarily return 2D membrane coordinates.
-A first parameter to set is the number of \ac{RNA}s $n$ I want to simulate.
-To modulate the pattern strength, I set the proportion of \ac{RNA}s $p$ with a biased localization I want.
-For example to simulate pattern with a moderate strength, I can simulate between 30\% and 50\% of the \ac{RNA} with the targeted localization bias, and the rest uniformly across the cell.
-Lastly, I choose a pattern to simulate.
+
+For the simulation, we have to set 3 parameters: (1) the number $n$ of \ac{RNA}s, (2) the pattern strength $p$ referring to the proportion of \ac{RNA}s that localize according to the simulated pattern, where $(1-p) \times n$ \ac{RNA}s are placed uniformly across the cell or cytoplasm and (3) the localization pattern for the $n_{pattern} = p \times n$ \ac{RNA}s. 
+
+%A first parameter to set is the number of \ac{RNA}s $n$ I want to simulate.
+%To modulate the pattern strength, I set the proportion of \ac{RNA}s $p$ with a biased localization I want.
+%For example to simulate patterns with a moderate strength, I can simulate between 30\% and 50\% of the \ac{RNA} with the targeted localization bias, and the rest uniformly across the cell.
+%Lastly, I choose a pattern to simulate.
 
 \begin{figure}[]
 	\centering
@@ -666,15 +671,15 @@ Lastly, I choose a pattern to simulate.
 
 The 9 patterns currently available are: random, foci, intranuclear, extranuclear, nuclear edge, perinuclear, cell edge, pericellular and protrusion.
 Random pattern is the default pattern where \ac{RNA}s are simulated uniformly within the cell.
-Foci pattern consists in a random number of \ac{RNA} clusters localizing outside the nucleus.
-More precisely, I compute the total number of clustered \ac{RNA}s as $n_{pattern} = n \times p$.
+The foci pattern consists in a random number of \ac{RNA} clusters localizing outside the nucleus.
+%More precisely, I compute the total number of clustered \ac{RNA}s as $n_{pattern} = n \times p$.
 I draw the expected number of \ac{RNA}s $\lambda$ per cluster from a uniform distribution between 5 and 21 \ac{RNA}s.
 The number of clusters itself results from $n_{cluster}= \frac{n_{pattern}}{\lambda}$.
 For each cluster, a distinct number of \ac{RNA}s is drawn again with a Poisson distribution of mean $\lambda$.
 Clusters are then localized outside the nucleus and remaining \ac{RNA}s uniformly in the cell.
-In Figure~\ref{fig:foci_panel} we can observe foci simulations with an increasing pattern strength (from 10\% to 90\% of clustered \ac{RNA}s)
+In Figure~\ref{fig:foci_panel} we can observe foci simulations with an increasing pattern strength (from 10\% to 90\% of clustered \ac{RNA}s).
 
-Other patterns are simulated with a common scheme.
+Other patterns are simulated with a similar scheme.
 In a first step I generate a probability map to bias the localization of $n_{pattern}$ \ac{RNA}s.
 In a second step I complete the point cloud with random \ac{RNA}s until I reach the expected number of transcripts.
 Intranuclear pattern has a uniform probability map inside the nucleus and zeros outside.
@@ -682,12 +687,13 @@ Extranuclear pattern is the exact opposite, with nonzero probabilities outside t
 Nuclear edge and cell edge have nonzero probabilities along the nuclear and cell membranes.
 Similarly, perinuclear and pericellular are patterns where \ac{RNA}s are polarized towards nuclear and cell membranes.
 Perinuclear probability map is build from the cell distance map.
-I contrast the euclidean distance by computing its quadratic values.
+The euclidean distance is contrasted by computing its quadratic values.
 The same operation is performed to build the pericellular probability map, using the nucleus distance map.
 As a result, for pericellular pattern, \ac{RNA}s have a higher probability to localize in regions distant from nucleus.
-Protrusion pattern has a uniform probability map within the annotated protrusion regions and zeros everywhere else.
+The protrusion pattern has a uniform probability map within the annotated protrusion regions and zeros everywhere else.
 In Figure~\ref{fig:perinuclear_panel} different perinuclear simulations can be observed as an example.
 In addition, an overview of every simulated pattern is available in appendix~\ref{sec:appendix_simulations_pattern}.\\
+
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -733,8 +739,8 @@ With random simulations the pattern strength has no effect.
 I split my dataset between train, validation and test, with 60\%, 20\% and 20\% respectively.
 In order to avoid data leakage, I make sure that simulations from the same cell template cannot be assigned to different splits.
 Finally, point clouds are augmented with random rotation along the up-axis, centered and normalized into the unit sphere.
-In order to test how my trained features generalize to unknown localization patterns, I did not simulate \ac{RNA} localization in protrusions, while these localization class is present in the experimental dataset.
-It also prevent my model from training on a too specific pattern.
+In order to test how the trained features generalize to unknown localization patterns, I did not simulate \ac{RNA} localization in protrusions, while these localization class is present in the experimental dataset.
+%It also prevent my model from training on a too specific pattern.
 
 \subsubsection{Experimental dataset}
 
@@ -779,21 +785,32 @@ I use these annotations as a ground truth for validation.
 
 \subsubsection{Input preparation}
 
-Besides the original \ac{RNA} point cloud, I can use an optional second input vector with my model.
-Let $X \in \mathbb{R}^{N \times 3}$ be the original input point cloud with $N$ the number of \ac{RNA}s.
-I define my second input vector as $\tilde{X} \in \mathbb{R}^{N \times d}$ with $d \in \{1, 2, 3, 4, 5\}$.
-The latter is composed of three contextual inputs.
-First I can integrate morphological information by merging \ac{RNA} point cloud with 2D coordinates from the cell and the nucleus membranes.
-Such coordinates are localized to the average height of the \ac{RNA} point cloud (0 if it is centered).
-This morphological input substantially increases the size of the original point cloud, because I subsample 300 nodes from the cell membrane and 100 nodes from the nucleus one.
-I also define an extra boolean vector to indicate the cell nodes and a second one to label the nucleus nodes.
-By construction, each \ac{RNA} in the point cloud has then two \emph{False} values.
-I end up with $X \in \mathbb{R}^{\tilde{N} \times 3}$ (with $\tilde{N} = N + 300 + 100$) and $\tilde{X} \in \{0, 1\}^{\tilde{N} \times 2}$ as inputs.
-Second, I can compute the distance from cell and nucleus for every \ac{RNA} node.
-This adds an extra input $\tilde{X} \in \mathbb{R}^{N \times 2}$.
-Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not.
-It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ to indicate if a RNA belongs to a RNA cluster of not.
-Depending on whether or not I choose to add the morphological, the clustering or the distance information, I can exploit up to 5 additional dimensions of input.
+\tw{After re-reading this, I found it a bit confusing. Please check if my version is entirely correct.}
+
+% old version: 
+% Besides the original \ac{RNA} point cloud, I can use an optional second input vector with my model.
+% Let $X \in \mathbb{R}^{N \times 3}$ be the original input point cloud with $N$ the number of \ac{RNA}s.
+% I define my second input vector as $\tilde{X} \in \mathbb{R}^{N \times d}$ with $d \in \{1, 2, 3, 4, 5\}$.
+% The latter is composed of three contextual inputs.
+% First I can integrate morphological information by merging \ac{RNA} point cloud with 2D coordinates from the cell and the nucleus membranes.
+% Such coordinates are localized to the average height of the \ac{RNA} point cloud (0 if it is centered).
+% This morphological input substantially increases the size of the original point cloud, because I subsample 300 nodes from the cell membrane and 100 nodes from the nucleus one.
+% I also define an extra boolean vector to indicate the cell nodes and a second one to label the nucleus nodes.
+% By construction, each \ac{RNA} in the point cloud has then two \emph{False} values.
+% I end up with $X \in \mathbb{R}^{\tilde{N} \times 3}$ (with $\tilde{N} = N + 300 + 100$) and $\tilde{X} \in \{0, 1\}^{\tilde{N} \times 2}$ as inputs.
+% Second, I can compute the distance from cell and nucleus for every \ac{RNA} node.
+% This adds an extra input $\tilde{X} \in \mathbb{R}^{N \times 2}$.
+% Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not.
+% It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ to indicate if a RNA belongs to a RNA cluster of not.
+% Depending on whether or not I choose to add the morphological, the clustering or the distance information, I can exploit up to 5 additional dimensions of input.
+
+The original \ac{RNA} point cloud $X \in \mathbb{R}^{N \times 3}$ can be extended in two ways. First, we can add 2D coordinates from the cell and the nucleus membranes. As they only exist in 2D, the z-coordinate is chosen arbitrarily to the average height of the \ac{RNA} point cloud (0 if it is centered). Here, we sampled 300 and 100 points from the cytoplasmic and nuclear membrane, respectively. Also, we have to make sure that the network can distinguish between the different roles of spatial coordinates of the \ac{RNA}s and the spatial coordinates of nuclear and cytoplasmic membrane. For this, we add two extra boolean variables for each position (\ac{RNA} and membrane points), indicating their origin: \ac{RNA} points are caracterized by $(0,0)$, nuclear membrane points by $(1,0)$ and cytoplasmic membrane by $(0,1)$. 
+Second, I can compute the distance from cell and nucleus for every \ac{RNA} node. 
+%This adds an extra input $\tilde{X} \in \mathbb{R}^{N \times 2}$.
+Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not, represented by an additional boolean variable. 
+%It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ to indicate if a RNA belongs to a RNA cluster of not.
+If morphological, clustering and distance information are used, our input matrix is thus $\tilde{X} \in \mathbb{R}^{N \times d}$, where $\tilde{N} = N + 300 + 100$ and $d=8$ (3 point coordinates, 2 coordinates to indicate the spot type, 2 coordinates to indicate distance to nuclear and cytoplasmic membrane and 1 to indicate whether the spot belongs to an \ac{RNA} cluster). 
+
 
 \subsubsection{Model architecture}
 
