@@ -119,20 +119,29 @@ It can also be silenced by translational repressors and stored, transported in a
 Until recently, the scientific community thought translation mostly occurred at the endoplasmic reticulum and then proteins were transported where they were needed.
 New evidence suggests on the contrary that \ac{mRNA} localization within the cell is not always random and \ac{mRNA}s-proteins colocalization could be an important aspect of cell organization and gene expression regulation~\cite{lecuyer_global_2007}.
 However, the involved mechanisms are not well understood yet and the extend of \ac{mRNA}s concerned by a specific localization pattern is still unknown.
-Beyond the number of \ac{mRNA} molecules within a cell (the expression level of a gene), researchers manifest now an increasing interest for \ac{mRNA} localization.
+Beyond the number of \ac{mRNA} molecules within a cell (the expression level of a gene), researchers manifest now an increasing interest for \ac{mRNA} localization~\cite{Chin_lecuyer_2017}.
 
 \subsubsection{mRNA transport}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+There is a specific sequence in the 3'UTR of the \ac{mRNA} molecule that acts like a \emph{zipcode}~\cite{Chabanon_2004}.
+This sequence can be recognized by a \ac{RBP} and starts the formation of a \ac{RNP} complex.
+This structure is then central to coordinate the transport, the translation and the degradation of the \ac{mRNA} molecule throughout the cell.\\
 
-Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have been identified:
-\begin{itemize}
-	\item Usage of motor proteins to move the \ac{mRNA}s along the cytoskeleton.
-	\item Prevention of \ac{mRNA} degradation at a precise location.
-	\item Local entrapment to anchor the \ac{mRNA}s.
-\end{itemize}
+\noindent
+Three mechanisms to transport \ac{mRNA} or locally enrich them are identified~\cite{das_intracellular_2021}:
+\begin{enumerate}
+	\setlength\itemsep{0.1em}
+	\item Active transport of \ac{mRNA}s along the cytoskeleton, potentially coupled with an anchoring mechanism.
+	This is the most common transport mechanism observed.
+	Motor proteins are recruited by the \ac{RBP}s, bind to the \ac{mRNA} complex and transport it along actin filaments or microtubules.
+	\item At specific places, \ac{mRNA} molecules are protected from degradation complexes.
+	This localization is then locally enriched and the spatial distribution of the transcript is biased in favor of these protected localizations.
+	\item Transcripts diffuse randomly across the cell, but local entrapment make them accumulate with an asymmetric distribution.
+	This mechanism is notably observed in bacteria, where no active transport of \ac{RNA} has been observed.
+\end{enumerate}
+
+\noindent
+These mechanisms are illustrated in Figure~\ref{fig:rna_transport}.
 
 \begin{figure}[]
     \centering
@@ -145,7 +154,28 @@ Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have b
     \label{fig:rna_transport}
 \end{figure}
 
+
+
+
+
 %Figure~\ref{fig:rna_transport}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -154,21 +184,21 @@ Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have b
 % Three distinct mechanisms have been proposed to account for the asymmetric distribution of mRNAs within cells: localized protection from degradation,
 % diffusion-coupled local entrapment, and directed transport along a polarized cytoskeleton (Fig. 2).
 
-% Experimentally, distinguishing these mechanisms often requires combining analyses of RNA regulatory sequences with live imaging (Box 1).
 % Generalized RNA degradation coupled to local protection has been described in Drosophila, where Hsp83 mRNA is uniformly distributed in early fertilized eggs,
 % but restricted to the posteriorly localized germ plasm at later stages (Ding et al., 1993). In the absence of the RNA degradation machinery,
 % this selective accumulation is lost and Hsp83 transcripts are stabilized throughout the embryo (Semotok et al., 2005). How the posterior pool of Hsp83 transcripts
 % is protected from decay in wild-type conditions is, however, still unclear.
+
 % Localization through diffusion/entrapment has been illustrated for Drosophila nanos mRNA, accumulation of which at the posterior pole of late-stage oocytes
 % does not depend on a polarized cytoskeleton, but rather on cortical actin-dependent entrapment and anchoring (Forrest and Gavis, 2003). In early Xenopus oocytes,
 % localization of the germ plasm RNAs Xcat2 (Nanos1) and Xdazl has also been proposed to rely on entrapment and association of freely diffusing RNA molecules with
 % a densely packed endoplasmic reticulum (ER) concentrated in the vegetally localized mitochondrial cloud (Chang et al., 2004).
+
 % Directed transport of transcripts along a polarized cytoskeletal network is a predominant mechanism to direct mRNA localization (Bullock, 2011) that has been
 % observed in a variety of cell types, including Drosophila oocytes and embryos, Xenopus oocytes, migrating mammalian cells and vertebrate neurons (Gagnon and Mowry, 2011).
 % A surprising finding from live-imaging analyses (Box 1) was that active motion is not restricted to localizing mRNAs, as uniformly distributed transcripts also undergo
 % cytoskeleton-dependent movements (Fusco et al., 2003; Bullock et al., 2006). Rather, the unique feature of localized mRNA movement is that it is non-random, exhibiting
 % a net bias explained by increased frequency and duration of directed transport events. How is this net transport achieved? As described below, key
-
 % features appear to involve specific recognition by trans-acting factors, assembly of localization-competent ribonucleoprotein (RNP) complexes, recruitment of molecular
 % motors and transport along the cytoskeleton, as well as anchoring of the mRNA at the final destination. Finally, tight coupling with translational regulation
 % is required to achieve spatially restricted protein synthesis.
@@ -189,15 +219,18 @@ Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have b
 % It has been shown that central to mRNA localization is an mRNA sequence called zipcode, located mainly in the 3’UTR [18,78]. These zipcodes are recognized
 % by RNA-binding proteins (RBP) forming a ribonucleo-protein complex (RNP) when bound
 % to the mRNA. The regulation of the transport, translation and degradation of the mRNA is then coordinated by the RBP.
+
 % Active transport and anchorage
 % Directed mRNA transport through the cytoskeleton is the predominant mechanism for mRNA localization. Here, the RNP interacts with specific motor proteins via the zipcode [18,78].
 % Important examples include the localization of β actin mRNA at the lamelopodia of motile fibroblasts (Fig 1.10, [45]), or the localization of multiple mRNAs in drosophila
 % in the apical cytoplasm of epithelial cells [13].
+
 % Selective degradation
 % Here, cell locally enrich an mRNA by protecting it from the degradation machinery in a specific location. For instance, it has been shown that HSP83 mRNA
 % localizes at the posterior pole of the Drosophilia embryo [6]. However, when the degradation machinery is not functional, this specific localization is
 % lost and HSP83 is present uniformly in the embryo [74]. It has been further shown that the RNA degradation is induced by the RNA-binding protein Smaug
 % targeting the 3’UTR of the mRNA, again establishing an important link between the 3’UTR and mRNA localization.
+
 % Diffusion and anchorage
 % Localization occurs by diffusion of the mRNAs and achoring at a specific cellular com- partment. A well studied example is XCAT2 mRNA which localizes at the
 % vegetal cortex (Fig 1.11, [19]).
