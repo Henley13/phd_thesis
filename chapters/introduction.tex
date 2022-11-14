@@ -8,6 +8,10 @@
 \minitoc
 \newpage
 
+In this introduction, I will present the gene expression process in order to describe the biological context where \ac{RNA} localization happens.
+Then, I will present the experimental protocols that allows us to visualize and analyse \ac{RNA} molecules as well as the machine learning tools I applied.
+I will finish this introduction with an overview of my thesis goals, a list of the contributions I made and a summary of this manuscript to guide the reader.
+
 \section{Gene expression process}
 \label{sec:gene_expression}
 
@@ -43,7 +47,7 @@ A cell can regulate either the transcription or the translation step to control 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/introduction/cell_eukaryotic.jpg}
-    \caption[Eukariotic cell]{Illustration of an eukaryotic cell, from~\cite{parker2017microbiology}}
+    \caption[Illustration of an eukaryotic cell]{Illustration of an eukaryotic cell, from~\cite{parker2017microbiology}}
     \label{fig:eukaryotic_cell}
 \end{figure}
 
@@ -57,7 +61,7 @@ While the \ac{DNA} is stuck within the nucleus, the \ac{RNA} can convey the blue
 In many cases, \ac{RNA} can be non-coding (they do not lead to the synthesis of a protein) and fulfill a variety of functions itself, for instance the regulation of gene expression.
 In a \ac{RNA}, the nucleotide Uracil (U) replaces the Thymine (T) and a ribose sugar serves as backbone instead of a desoxyribose sugar.
 If both \ac{DNA} and \ac{RNA} contain genetic information, \ac{RNA} is a shorter single-stranded molecule, compared to the double-stranded \ac{DNA}, and, therefore, is less stable.
-However, they both have two distinctive ends 5' and 3' (corresponding to the number of carbon atoms in their sugar backbone extremities).\\
+However, they both have two distinctive untranslated regions at their ends: 5'UTR and 3'UTR (corresponding to the number of carbon atoms in their sugar backbone extremities).\\
 
 \noindent
 Transcription proceeds as follows:
@@ -78,52 +82,123 @@ At this point, different sorts of \ac{RNA} are transcribed, depending of \ac{RNA
 	\item \ac{tRNA}, the most abundant \ac{RNA} molecule, which carries amino acids to the ribosome.
 \end{itemize}
 
-\subsubsection{RNA maturation}
-
-For the rest of the manuscript, I mainly focus on the \ac{mRNA}s.
-They do not fit translation requirements yet and need to undergo three processes before leaving the nucleus: the 5' end is transformed (\textbf{\ac{RNA} capping}), a poly(A) tail (repeated adenine-based molecules) is added at the 3' end (\textbf{polyadenylation}), then the non-coding parts of the \ac{RNA} sequence are removed (\textbf{splicing}).
-Those transformations allow to move the \ac{mRNA} out of the nucleus, regulate its degradation and promote the translation.
-
 \begin{figure}[]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/introduction/gene_expression_process.jpg}
-    \caption[Gene expression process]{Overview of gene expression process, from~\cite{cell_essential_nature}}
+    \caption[Schema of gene expression process]{Overview of gene expression process, from~\cite{cell_essential_nature}}
     \label{fig:gene_expression}
 \end{figure}
 
+\subsubsection{RNA maturation}
+
+For the rest of the manuscript, I mainly focus on the \ac{mRNA}s.
+They do not fit translation requirements yet and need to undergo three processes before leaving the nucleus:
+\begin{itemize}
+	\setlength\itemsep{0.1em}
+	\item the 5' end is transformed (\ac{RNA} capping)
+	\item a poly(A) tail (repeated adenine-based molecules) is added at the 3' end (polyadenylation)
+	\item the non-coding parts of the \ac{RNA} sequence are removed (splicing)
+\end{itemize}
+
+\noindent
+Those transformations enable to move the \ac{mRNA} out of the nucleus, regulate its degradation and promote the translation.
+Figure~\ref{fig:gene_expression} shows a simplified illustration of the gene expression process.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{RNA transport mechanisms}
+\subsection{mRNA transport and localization}
 \label{subsec:intro_rna_transport}
 
 When an \ac{mRNA} is ready for export, it is moved out of the nucleus through the nuclear pore complex.
-This complex recognizes a mature \ac{mRNA} if a specific set of proteins is bounded to it (poly(a) binding proteins, cap binding proteins, and proteins related to the splicing step).
+This complex recognizes a mature \ac{mRNA} if a specific set of proteins is bounded to it - poly(a) binding proteins, cap binding proteins, and proteins related to the splicing step.
 Once in the cytoplasm, an \ac{mRNA} is not necessarily exploited by a ribosome for translation.
 It can also be silenced by translational repressors and stored, transported in a specific region of the cell or degraded.
 
 Until recently, the scientific community thought translation mostly occurred at the endoplasmic reticulum and then proteins were transported where they were needed.
-New evidence suggests on the contrary that \ac{mRNA} localization within the cell is not always random and \ac{mRNA}s-proteins colocalization could be an important aspect of cell organization and gene expression regulation \cite{Lecuyer2007}.
+New evidence suggests on the contrary that \ac{mRNA} localization within the cell is not always random and \ac{mRNA}s-proteins colocalization could be an important aspect of cell organization and gene expression regulation~\cite{lecuyer_global_2007}.
 However, the involved mechanisms are not well understood yet and the extend of \ac{mRNA}s concerned by a specific localization pattern is still unknown.
 Beyond the number of \ac{mRNA} molecules within a cell (the expression level of a gene), researchers manifest now an increasing interest for \ac{mRNA} localization.
 
-\noindent
-Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have already been identified:
+\subsubsection{mRNA transport}
+
+Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have been identified:
 \begin{itemize}
 	\item Usage of motor proteins to move the \ac{mRNA}s along the cytoskeleton.
 	\item Prevention of \ac{mRNA} degradation at a precise location.
 	\item Local entrapment to anchor the \ac{mRNA}s.
 \end{itemize}
 
-%\begin{figure}[]
-%    \centering
-%    \includegraphics[width=0.8\textwidth]{figures/introduction/gene_expression_process.jpg}
-%    \caption[Gene expression process]{Overview of gene expression process, from~\cite{cell_essential_nature}}
-%    \label{fig:gene_expression}
-%\end{figure}
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\textwidth]{figures/introduction/rna_transport}
+    \caption[Schema of RNA transport or locally enrichment mechanisms]{Schema of RNA transport or locally enrichment mechanisms, adapted from~\cite{Medioni_2012}.
+	(\textit{Left}) RNAs are locally protected from degradation.
+	(\textit{Center}) RNAs diffuse randomly, then they are locally entrapped.
+	(\textit{Right}) RNAs are actively transported along cytoskeleton, thanks to RNP complexes and molecular motors.
+	Directed transport can be coupled with an anchoring mechanism}
+    \label{fig:rna_transport}
+\end{figure}
+
+Figure~\ref{fig:rna_transport}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%~\cite{Medioni_2012}
+
+% Three distinct mechanisms have been proposed to account for the asymmetric distribution of mRNAs within cells: localized protection from degradation,
+% diffusion-coupled local entrapment, and directed transport along a polarized cytoskeleton (Fig. 2).
+
+% Experimentally, distinguishing these mechanisms often requires combining analyses of RNA regulatory sequences with live imaging (Box 1).
+% Generalized RNA degradation coupled to local protection has been described in Drosophila, where Hsp83 mRNA is uniformly distributed in early fertilized eggs,
+% but restricted to the posteriorly localized germ plasm at later stages (Ding et al., 1993). In the absence of the RNA degradation machinery,
+% this selective accumulation is lost and Hsp83 transcripts are stabilized throughout the embryo (Semotok et al., 2005). How the posterior pool of Hsp83 transcripts
+% is protected from decay in wild-type conditions is, however, still unclear.
+% Localization through diffusion/entrapment has been illustrated for Drosophila nanos mRNA, accumulation of which at the posterior pole of late-stage oocytes
+% does not depend on a polarized cytoskeleton, but rather on cortical actin-dependent entrapment and anchoring (Forrest and Gavis, 2003). In early Xenopus oocytes,
+% localization of the germ plasm RNAs Xcat2 (Nanos1) and Xdazl has also been proposed to rely on entrapment and association of freely diffusing RNA molecules with
+% a densely packed endoplasmic reticulum (ER) concentrated in the vegetally localized mitochondrial cloud (Chang et al., 2004).
+% Directed transport of transcripts along a polarized cytoskeletal network is a predominant mechanism to direct mRNA localization (Bullock, 2011) that has been
+% observed in a variety of cell types, including Drosophila oocytes and embryos, Xenopus oocytes, migrating mammalian cells and vertebrate neurons (Gagnon and Mowry, 2011).
+% A surprising finding from live-imaging analyses (Box 1) was that active motion is not restricted to localizing mRNAs, as uniformly distributed transcripts also undergo
+% cytoskeleton-dependent movements (Fusco et al., 2003; Bullock et al., 2006). Rather, the unique feature of localized mRNA movement is that it is non-random, exhibiting
+% a net bias explained by increased frequency and duration of directed transport events. How is this net transport achieved? As described below, key
+
+% features appear to involve specific recognition by trans-acting factors, assembly of localization-competent ribonucleoprotein (RNP) complexes, recruitment of molecular
+% motors and transport along the cytoskeleton, as well as anchoring of the mRNA at the final destination. Finally, tight coupling with translational regulation
+% is required to achieve spatially restricted protein synthesis.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %~\cite{das_intracellular_2021}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% aubin thesis
+
+% It is now well appreciated that non-random sub-cellular mRNA localization is important for cellular organization and its misregulation
+% is linked to an increasing number of dis- eases [23]. It has been shown that in large and highly polarized cells - like neurons - mRNA localization
+% is beneficial for translation. Indeed, it is advantageous for the cell to synthesize the protein at the site of action, rather than at random
+% locations in the cytoplasm, requiring thus transport to specific sites [29]. Recent evidence suggests that sub-cellular mRNA localization is
+% not restricted to a certain cell or mRNA type, but seems to be generalizable to most cell and mRNAs and is not only linked to local transla- tion [7,12,77].
+% It has been shown that central to mRNA localization is an mRNA sequence called zipcode, located mainly in the 3’UTR [18,78]. These zipcodes are recognized
+% by RNA-binding proteins (RBP) forming a ribonucleo-protein complex (RNP) when bound
+% to the mRNA. The regulation of the transport, translation and degradation of the mRNA is then coordinated by the RBP.
+% Active transport and anchorage
+% Directed mRNA transport through the cytoskeleton is the predominant mechanism for mRNA localization. Here, the RNP interacts with specific motor proteins via the zipcode [18,78].
+% Important examples include the localization of β actin mRNA at the lamelopodia of motile fibroblasts (Fig 1.10, [45]), or the localization of multiple mRNAs in drosophila
+% in the apical cytoplasm of epithelial cells [13].
+% Selective degradation
+% Here, cell locally enrich an mRNA by protecting it from the degradation machinery in a specific location. For instance, it has been shown that HSP83 mRNA
+% localizes at the posterior pole of the Drosophilia embryo [6]. However, when the degradation machinery is not functional, this specific localization is
+% lost and HSP83 is present uniformly in the embryo [74]. It has been further shown that the RNA degradation is induced by the RNA-binding protein Smaug
+% targeting the 3’UTR of the mRNA, again establishing an important link between the 3’UTR and mRNA localization.
+% Diffusion and anchorage
+% Localization occurs by diffusion of the mRNAs and achoring at a specific cellular com- partment. A well studied example is XCAT2 mRNA which localizes at the
+% vegetal cortex (Fig 1.11, [19]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % google
 % Ribonucleoprotein (RNP) granules are non-membrane bound compartments that form from RNA molecules and
@@ -133,21 +208,11 @@ Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Translation}
-\label{subsec:intro_translation}
+\subsubsection{mRNA localization}
 
-Finally, a cell synthesizes a protein through the translation process.
-A ribosome is assembled around a \ac{mRNA} and moves along its nucleotides.
-At the same time, \ac{tRNA}s carry amino acids matching the \ac{mRNA} sequence.
-According to the genetic code, three successive nucleotides of the \ac{mRNA} (a codon) correspond to an amino acid.
-The ribosome sequentially chains the amino acids, which then fold into a functional protein with a specific 3-dimensional structure.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{mRNA localization}
-\label{subsec:intro_rna_loc}
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -245,28 +310,21 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{Translation}
+\label{subsec:intro_translation}
+
+Finally, a cell synthesizes a protein through the translation process.
+A ribosome is assembled around a \ac{mRNA} and moves along its nucleotides.
+At the same time, \ac{tRNA}s carry amino acids matching the \ac{mRNA} sequence.
+According to the genetic code, three successive nucleotides of the \ac{mRNA} (a codon) correspond to an amino acid.
+The ribosome sequentially chains the amino acids, which then fold into a functional protein with a specific 3-dimensional structure.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Imaging cells and RNAs}
 \label{sec:fish}
-
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
-
-% paper racha (dual protein-rna localization screens)
-
-% In order to simultaneously visualize mRNAs with their encoded proteins, we based our screen on a library of HeLa cell lines,
-% each containing a bacterial artificial chromosome (BAC) stably integrated in their genome (Poser et al., 2008).
-% Each BAC con- tains a GFP-tagged gene harboring all its regulatory sequences (promoter, enhancers, introns, and 50 and 30 UTRs; Figure 1A).
-% The resulting mRNAs are, thus, identical to the endogenous mol- ecules in terms of sequence and isoform diversity, except for the added tag.
-% Previous studies showed that such tagged genes are expressed at near endogenous levels and with the proper spatio- temporal pattern (Poser et al., 2008).
-% Since the tagged mRNAs contain all the regulatory sequences, we hypothesized that they would localize like the endogenous ones,
-% provided that the tag does not interfere with localization. Using BACs offers two advantages. First, a single smFISH probe set
-% against the GFP sequence is sufficient to detect all the studied mRNAs. Sec- ond, using mild hybridization conditions,
-% GFP fluorescence can be detected together with the smFISH signal (Fusco et al., 2003), and thus, both the mRNA and the encoded protein can be detected in the same cell.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[]
     \centering
@@ -278,12 +336,21 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 \subsection{Fluorescent proteins}
 \label{subsec:intro_fluorescence}
 
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
+
 \subsection{A zoo of FISH}
 \label{subsec:intro_fish}
+
+\begin{center}
+	\textit{(To be completed)}
+\end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % thesis adham: "the invention of single molecule FISH (Femino et al., 1998)"
+% ~\cite{Femino_1998}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -316,15 +383,95 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 \section{Measuring images: from pixels to numbers}
 \label{sec:computation_biology}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+\subsection{Working with bioimages}
+\label{subsec:intro_bioimages}
 
-\subsection{Working with images}
-\label{subsec:intro_images}
+Recent developments in life sciences and technological breakthroughs greatly increase the importance of quantitative approaches.
+A typical example is the Human Genome Project~\cite{lander_initial_2001} that aims to decipher human genome by the use of novel sequencing techniques.
+Data collection and maintenance, as well as development of methods to extract valuable insights from it, is transforming biology in depth.
+Current experimental platforms allow us to perform a large number of experiments under varied conditions and highly informative content.
+These techniques are referred as High Content Screening and pave the way for a systematic analysis of living systems.
+Finally, the increasing degree of automation of experimental protocols justifies the development of bioinformatics as a discipline in its own right to assist biologists.
 
-% specificity to bioimage
-% from pixels to numbers
+The use of images in biology brings several advantages.
+It enables the study of morphological patterns that could subsequently be related to phenotypes.
+It also preserves the spatial dimension of the living system studied, as well as its temporal dimension in the case of repeated image acquisitions or live imaging experiments.
+Last but not least, an analysis can be performed at different scales, from the molecule to the whole organ, through the tissues.
+Overall, the tasks addressed with these bioimages can be
+In general, the tasks performed with these bioimages can be as varied as the visualization of a living system, the reconstruction of a microscopy images, its denoising or the recognition of specific phenotypes.
+
+One word to summarize bioimages would be \emph{heterogeneity}.
+A living system can be imaged at different scales, with different modalities of acquisition and evolving technology.
+In addition, the fluorescent markers used in microscopy or the question investigated by researcher could differ, making images of the same object from two different studies not necessarily compatible.
+As a consequence, the subsequent computational analysis should be adapted for one set of images to another.
+
+\subsection{Machine learning for bioimages}
+\label{subsec:intro_ml_tools}
+
+\subsubsection{A machine learning boom}
+
+The recent years have seen a renewed interest for machine learning research, the cornerstone of current artificial intelligence era, driven by successful applications in vision, language understanding, speech recognition, etc\dots
+This term of machine learning was coined to describe the set of techniques and models that make automatic decision based on patterns \emph{learned} and found in data.
+For some specific tasks (like image classification) these algorithms have reached human-like capabilities.
+For other fields, the gap between computer and human performances keeps decreasing.
+In computer vision, the success of machine learning models makes their use legitimate for bioinformatics applications.\\
+
+\noindent
+Overall, three ingredients make these successes possible:
+\begin{enumerate}
+	\setlength\itemsep{0.1em}
+	\item models fitted with learning algorithms
+	\item large annotated datasets
+	\item increased computing power to process an ever growing number of operations
+\end{enumerate}
+
+\noindent
+The first ingredient is not necessarily new.
+Machine learning and deep learning models (a family of machine learning models based on artificial neural networks), as well as learning algorithms have been studied and developed for decades (see~\cite{Bishop_2006, Tibshirani_2009} for a review of different machine learning methods).
+As a symbol, the release of a large dataset with manual annotations for natural image classification problem~\cite{Deng_2009}, followed by a breakthrough performance with a \ac{CNN}~\cite{alexnet_2012}, marks the beginning of a new era for deep learning.
+Obviously, the impact of these models has been consequent for every computational field.
+In biomedical community, machine learning techniques are disseminating and address more challenges every year (see~\cite{jumper_highly_2021} for an example with the protein folding problem).
+
+\subsubsection{Neural networks as the next generation tool}
+
+In case of deep learning, model architecture is based on a neural network with successive layers of artificial neurons.
+Each neuron is defined by a set of weights and perform a linear combination of the input signal with its weights, followed by a potential non linear transformation (usually a \emph{maxout}, \emph{sigmoid} or \emph{tanh} function).
+A complete network usually combines these layers of neurons with normalization steps.
+It can be seen as a parametrized model, whose weights need to be optimized to minimize for a specific task.
+
+Given an input, a loss function enables to compare the output signal of the model with a ground truth (the expected output signal) and thus compute a gradient (the first order derivative of the loss function).
+The backpropagation of this gradient to the rest of the network makes it possible to update the weights of the layers in order to minimize the loss~\cite{rumelhart_learning_1986}.
+This process defines a training step.
+After several iterations, the loss and the gradient should decrease, and the network progressively stabilizes its weights.
+The weights are ultimately frozen and the model is trained.
+
+Such architecture is highly flexible and different variants have been developed, with convolutional or recurrent layers to name a few~\cite{lecun_deep_2015}.
+For a general introduction to deep learning techniques, one can refer to~\cite{Goodfellow_2016}.
+
+\subsubsection{Limitations and caveats}
+
+Beyond the great performances returned by machine learning models, a number of limitations and caveats should be consider.
+
+First, they require annotated datasets to train and evaluate the models.
+Compare to natural images, this ground truth is particularly costly to obtained with biomedical images as it often involves the assignation of experts (medical doctor or biologists) to a time-consuming, repetitive and annoying task.
+As a consequence, datasets available for a given biomedical problem are often too small, highly diversified or released without any useful manual annotations.
+
+Second, machine learning algorithms require robust evaluation protocol, strong benchmarks and a rigorous choice of evaluation metrics\footnote{One can see~\cite{varoquaux_machine_2022} for a description of these evaluation caveats when machine learning models are applied to medical images.}.
+It is necessary to prevent data leakage and firmly separate the train set from the test set in our dataset, otherwise models overfit to the training samples and badly generalize to unknown data.
+If the test set is not representative of the data distribution, or too small, the evaluation will be biased and hardly reproducible~\cite{Varoquaux_cv_2018}.
+Obviously, all these limitations are worsen by the inherent heterogeneity of bioimages and the difficulty to assemble manual annotations.
+Working with machine learning models, one needs strong and diversified baselines that reflect the state-of-the-art of performances, as well as the right choice of metrics to compare his methods to the rest of the literature.
+
+Third, flexibility of some models comes at a price: a sensitivity to the selected hyperparameters, which makes the evaluation all the more important.
+
+Last but not least, most of the deep learning models appear like a black box solution with an internal process that cannot be easily or directly interpreted.
+If this problem is more critical for direct medical applications than biological ones, yet it requires an important pedagogical effort to diffuse deep learning techniques to the rest of the scientific community.
+
+\section{Goals and contributions}
+\label{sec:contributions}
+
+\subsection{Goals}
+\label{subsec:intro_goals}
 
 \begin{figure}[]
 	\centering
@@ -358,35 +505,17 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 		\includegraphics[width=0.95\linewidth]{figures/introduction/real_coord_protrusion}
 		\subcaption{Protrusion}
 	\endminipage
-	\caption[RNA localization patterns: from pixels to numbers]{RNA localization patterns from~\cite{pointfish_2022}.
+	\caption[RNA localization patterns from pixels to numbers]{RNA localization patterns from~\cite{pointfish_2022}.
 	(\textit{Top}) Typical smFISH images with different RNA localization patterns.
-	(\textit{Bottom}) Coordinate representations with RNA spots (red), cell membrane (black) and nuclear membrane (blue).
+	(\textit{Bottom}) Coordinate representations with RNA spots (\textit{red}), cell membrane (\textit{black}) and nuclear membrane (\textit{blue}).
 	Detection and segmentation results are extracted and visualized with FISH-quant~\cite{Imbert_fq_2022}}
 	\label{fig:intro_localization_patterns}
 \end{figure}
 
-\subsection{A machine learning boom}
-\label{subsec:intro_ml_tools}
-
-% learning principles + generic modules of deep learning + flexible architecture
-% advantage/limitations over traditionnal methods -> need to train (heterogeneity of dataset // self or weaekly supervised methods, simulations)
-% caveats + evaluation (varoquaux)
-
-%~\cite{lecun_deep_2015}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Goals and contributions}
-\label{sec:contributions}
-
-\subsection{Goals}
-\label{subsec:intro_goals}
-
 At the beginning of my PhD, three main goals were defined with my supervisors.
 The first one was the development and the implementation of a complete pipeline to process \ac{smFISH} images and return valuable insights about \ac{RNA} localization.
 In particular, it was expected to integrate and adapt the latest successful developments in computer vision.
+Figure~\ref{fig:intro_localization_patterns} illustrates the gap that needs to be bridged between the input images and an adequate representation of the \ac{RNA} localization, making their quantitative analysis possible.
 The second goal was the identification of bottlenecks that would prevent scaling the analysis to thousands images, in high content screening assays.
 Such bottlenecks should be minimized or solved during the thesis to be able to scale any computational analysis based on \ac{smFISH} experiments.
 Lastly, this complete framework would be applied to real experimental datasets in ongoing biological studies.
