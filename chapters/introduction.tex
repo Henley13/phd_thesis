@@ -104,10 +104,6 @@ They do not fit translation requirements yet and need to undergo three processes
 Those transformations enable to move the \ac{mRNA} out of the nucleus, regulate its degradation and promote the translation.
 Figure~\ref{fig:gene_expression} shows a simplified illustration of the gene expression process.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{mRNA transport and localization}
 \label{subsec:intro_rna_transport}
 
@@ -119,16 +115,26 @@ It can also be silenced by translational repressors and stored, transported in a
 Until recently, the scientific community thought translation mostly occurred at the endoplasmic reticulum and then proteins were transported where they were needed.
 New evidence suggests on the contrary that \ac{mRNA} localization within the cell is not always random and \ac{mRNA}s-proteins colocalization could be an important aspect of cell organization and gene expression regulation~\cite{lecuyer_global_2007}.
 However, the involved mechanisms are not well understood yet and the extend of \ac{mRNA}s concerned by a specific localization pattern is still unknown.
-Beyond the number of \ac{mRNA} molecules within a cell (the expression level of a gene), researchers manifest now an increasing interest for \ac{mRNA} localization.
+Beyond the number of \ac{mRNA} molecules within a cell (the expression level of a gene), researchers manifest now an increasing interest for \ac{mRNA} localization~\cite{Chin_lecuyer_2017}.
 
 \subsubsection{mRNA transport}
 
-Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have been identified:
-\begin{itemize}
-	\item Usage of motor proteins to move the \ac{mRNA}s along the cytoskeleton.
-	\item Prevention of \ac{mRNA} degradation at a precise location.
-	\item Local entrapment to anchor the \ac{mRNA}s.
-\end{itemize}
+There is a specific sequence in the 3'UTR of the \ac{mRNA} molecule that acts like a \emph{zipcode}~\cite{Chabanon_2004}.
+This sequence can be recognized by a \ac{RBP} and starts the formation of a \ac{RNP} complex.
+This structure is then central to coordinate the transport, the translation and the degradation of the \ac{mRNA} molecule throughout the cell.\\
+
+\noindent
+Three mechanisms to transport \ac{mRNA} or locally enrich them are identified (see Figure~\ref{fig:rna_transport} for illustration):
+\begin{enumerate}
+	\setlength\itemsep{0.1em}
+	\item Active transport of \ac{mRNA}s along the cytoskeleton, potentially coupled with an anchoring mechanism.
+	This is the most common transport mechanism observed.
+	Motor proteins are recruited by the \ac{RBP}s, bind to the \ac{mRNA} complex and transport it along actin filaments or microtubules.
+	\item At specific places, \ac{mRNA} molecules are protected from degradation complexes.
+	This localization is then locally enriched and the spatial distribution of the transcript is biased in favor of these protected localizations.
+	\item Transcripts diffuse randomly across the cell, but local entrapment make them accumulate with an asymmetric distribution.
+	This mechanism is notably observed in bacteria, where no active transport of \ac{RNA} has been observed~\cite{das_intracellular_2021}.
+\end{enumerate}
 
 \begin{figure}[]
     \centering
@@ -141,174 +147,14 @@ Some mechanisms used by the cell to transport or locally enrich \ac{mRNA} have b
     \label{fig:rna_transport}
 \end{figure}
 
-Figure~\ref{fig:rna_transport}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%~\cite{Medioni_2012}
-
-% Three distinct mechanisms have been proposed to account for the asymmetric distribution of mRNAs within cells: localized protection from degradation,
-% diffusion-coupled local entrapment, and directed transport along a polarized cytoskeleton (Fig. 2).
-
-% Experimentally, distinguishing these mechanisms often requires combining analyses of RNA regulatory sequences with live imaging (Box 1).
-% Generalized RNA degradation coupled to local protection has been described in Drosophila, where Hsp83 mRNA is uniformly distributed in early fertilized eggs,
-% but restricted to the posteriorly localized germ plasm at later stages (Ding et al., 1993). In the absence of the RNA degradation machinery,
-% this selective accumulation is lost and Hsp83 transcripts are stabilized throughout the embryo (Semotok et al., 2005). How the posterior pool of Hsp83 transcripts
-% is protected from decay in wild-type conditions is, however, still unclear.
-% Localization through diffusion/entrapment has been illustrated for Drosophila nanos mRNA, accumulation of which at the posterior pole of late-stage oocytes
-% does not depend on a polarized cytoskeleton, but rather on cortical actin-dependent entrapment and anchoring (Forrest and Gavis, 2003). In early Xenopus oocytes,
-% localization of the germ plasm RNAs Xcat2 (Nanos1) and Xdazl has also been proposed to rely on entrapment and association of freely diffusing RNA molecules with
-% a densely packed endoplasmic reticulum (ER) concentrated in the vegetally localized mitochondrial cloud (Chang et al., 2004).
-% Directed transport of transcripts along a polarized cytoskeletal network is a predominant mechanism to direct mRNA localization (Bullock, 2011) that has been
-% observed in a variety of cell types, including Drosophila oocytes and embryos, Xenopus oocytes, migrating mammalian cells and vertebrate neurons (Gagnon and Mowry, 2011).
-% A surprising finding from live-imaging analyses (Box 1) was that active motion is not restricted to localizing mRNAs, as uniformly distributed transcripts also undergo
-% cytoskeleton-dependent movements (Fusco et al., 2003; Bullock et al., 2006). Rather, the unique feature of localized mRNA movement is that it is non-random, exhibiting
-% a net bias explained by increased frequency and duration of directed transport events. How is this net transport achieved? As described below, key
-
-% features appear to involve specific recognition by trans-acting factors, assembly of localization-competent ribonucleoprotein (RNP) complexes, recruitment of molecular
-% motors and transport along the cytoskeleton, as well as anchoring of the mRNA at the final destination. Finally, tight coupling with translational regulation
-% is required to achieve spatially restricted protein synthesis.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%~\cite{das_intracellular_2021}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% aubin thesis
-
-% It is now well appreciated that non-random sub-cellular mRNA localization is important for cellular organization and its misregulation
-% is linked to an increasing number of dis- eases [23]. It has been shown that in large and highly polarized cells - like neurons - mRNA localization
-% is beneficial for translation. Indeed, it is advantageous for the cell to synthesize the protein at the site of action, rather than at random
-% locations in the cytoplasm, requiring thus transport to specific sites [29]. Recent evidence suggests that sub-cellular mRNA localization is
-% not restricted to a certain cell or mRNA type, but seems to be generalizable to most cell and mRNAs and is not only linked to local transla- tion [7,12,77].
-% It has been shown that central to mRNA localization is an mRNA sequence called zipcode, located mainly in the 3’UTR [18,78]. These zipcodes are recognized
-% by RNA-binding proteins (RBP) forming a ribonucleo-protein complex (RNP) when bound
-% to the mRNA. The regulation of the transport, translation and degradation of the mRNA is then coordinated by the RBP.
-% Active transport and anchorage
-% Directed mRNA transport through the cytoskeleton is the predominant mechanism for mRNA localization. Here, the RNP interacts with specific motor proteins via the zipcode [18,78].
-% Important examples include the localization of β actin mRNA at the lamelopodia of motile fibroblasts (Fig 1.10, [45]), or the localization of multiple mRNAs in drosophila
-% in the apical cytoplasm of epithelial cells [13].
-% Selective degradation
-% Here, cell locally enrich an mRNA by protecting it from the degradation machinery in a specific location. For instance, it has been shown that HSP83 mRNA
-% localizes at the posterior pole of the Drosophilia embryo [6]. However, when the degradation machinery is not functional, this specific localization is
-% lost and HSP83 is present uniformly in the embryo [74]. It has been further shown that the RNA degradation is induced by the RNA-binding protein Smaug
-% targeting the 3’UTR of the mRNA, again establishing an important link between the 3’UTR and mRNA localization.
-% Diffusion and anchorage
-% Localization occurs by diffusion of the mRNAs and achoring at a specific cellular com- partment. A well studied example is XCAT2 mRNA which localizes at the
-% vegetal cortex (Fig 1.11, [19]).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% google
-% Ribonucleoprotein (RNP) granules are non-membrane bound compartments that form from RNA molecules and
-% RNA-binding proteins. Different classes of RNPs carry out diverse roles: for example, some can regulate gene expression while another (the nucleolus) produces ribosomes.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsubsection{mRNA localization}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%~\cite{Medioni_2012}
-
-% Transporting mRNAs rather than proteins presents several significant advantages for a cell.
-% First, transport costs are reduced, as several protein molecules can be translated from a single RNA molecule.
-% Second, transporting mRNAs can prevent proteins from acting ectopically before they reach the appropriate site,
-% which is particularly important in the case of maternal determinants, as spatially inappropriate expression disrupts embryonic patterning.
-% Third, localized translation can facilitate incorporation of proteins into macromolecular complexes by generating high local
-% protein concentrations and allowing co-translation of different subunits (Mingle et al., 2005).
-% Fourth, nascent proteins may have properties distinct from pre-existing copies, by virtue of post-translational
-% modifications or through chaperone-aided folding pathways (Lin and Holt, 2007).
-% Lastly, a major advantage of mRNA targeting is that it allows fine-tuning of gene expression in both space and time.
-% Examples of this include targeting of different splice variants to distinct cellular compartments (Baj et al., 2011)
-% and activation of localized mRNA translation specifically at their destination, in response to signals
-% such as guidance cues, neurotransmitter release or fertilization (Besse and Ephrussi, 2008).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% chpater 5 intro racha
-
-% Most of \ac{mRNA}s have a random distribution throughout the cytoplasm, but some localize in specific subcellular regions~\cite{Blower_2013, Jung_2014, Eliscovich_2017, Bovaird_2018}.
-
-% Such localization can be related to either \ac{RNA} metabolism, for example with untranslated \ac{mRNA}s stored and repressed in \ac{P-bodies} (but not degraded~\cite{Hubstenberger_2017}), or  protein metabolism with locally translated proteins.
-% This local synthesis concerns both mature proteins and nascent peptides.
-% Different cellular processes imply the delivery of mature proteins in specific subcellular regions and a local regulation of the proteome.
-% Local translation can contributes to cell fate determination during metazoan development, as observed in~\cite{melton_translocation_1987} with a clear modification of the Vg1 \ac{RNA} spatial distribution between mature and immature Xenopus oocytes.
-% In mammalian cells, \ac{RNA} localization influences cell polarization and motility, usually through actin localization at the cell edge~\cite{Lawrence_1986}.
-% Locally translated proteins are also known to be involved in axonal growth and so neural plasticity~\cite{VanDriesche_2018}.
-% Finally, by precisely controlling the \ac{mRNA} localization and the subsequent translation process, cells can avoid to release proteins at inappropriate places~\cite{Muller_myelin_2013} and help the synthesis of protein complexes~\cite{pichon_visualization_2016}.
-
-% Several mechanisms drive the localization of \ac{mRNA}s.
-% Sometimes the nascent peptide can serve as a targeting signal, but most of the time the \ac{RNA} molecule itself will initiate its localization.
-% The molecule often include a zip-code sequence that is read by a \ac{RBP} and starts the assembly of a transport complex comprising different organelles or motor proteins.
-% Such complex can then directly transport the \ac{RNA} along the cytoskeleton~\cite{Blower_2013}.
-% Coupled with an anchoring mechanism at the targeted destination, it provides a better stability of the \ac{RNA} localization.
-% Following a random diffusion across the cell, a transcript can also be trapped in specific subcellular compartments.
-% Likewise, a local protection from degradation will bias the \ac{RNA} spatial distribution.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% thesis adham
-
-%2. mRNA localization in cell lines: generalities
-%The two mRNA localization screens provided insights into general mRNA localization features in cell lines:
-
-%First, even in the case of mRNAs that produce a strong pattern (DYNC1H1 mRNAs localizing in foci for example), a non-negligible fraction of mRNA molecules
-% always seems to have random distribution. This is not the case in other systems such as developing embryos or oocytes in which most molecules of a
-% localized transcript actually display the pattern. The reasons behind this difference are unclear; but (i) they could be a general aspect of mRNA
-% localization in cell lines, in which they are much less stereotyped than embryos, especially cancer ones like HeLa; (ii) they could arise due to
-% the relatively smaller size of HeLa cells (although similar observations are made in neurons which argues against this); (iii) localizing only a
-% fraction of mRNA molecules is sufficient to carry out the intended biological function (discussed in detail below), in which there is no need to
-% localize all transcripts for the cell to function properly.
-
-%mRNA localization occurs in a wide range of subcellular locations in cell lines. These include cellular protrusions, the Golgi apparatus,
-% endosomes, the nuclear envelope, cell edges, centrosomes, and even the cytosolic space itself (as in the case of mRNA foci and polarized distributions).
-% This demonstrates the variety of mRNA trafficking and the diverse functions of mRNA localization.
-
-%Most localized mRNAs display ìsimpleî localization patterns in which they belong to one of the described localization classes (intranuclear, nuclear envelope,
-% cell edge, cell extension, polarized, foci, centrosomes). However, some transcripts show ìcomplexî patterns in which they localize to multiple compartments
-% either simultaneously or at different times. An example of this is HMMR mRNA that localizes to both centrosomes and P-bodies during interphase.
-% This difference is probably related to the function of each transcript but it implies that mRNA localization can be complex and can involve multiple
-% sub-cellular compartments at once (see ASPM below for a detailed example).
-
-%mRNA localization often exhibits cellular heterogeneity. Indeed, not all cells exhibit the pattern, and the strength of the pattern could vary between cells that display it.
-% The is probably related to:
-% (i) cells having different physiological states and thus different gene expression needs;
-% (ii) cells being in different stages of the cell cycle;
-% (iii) variations in mRNA
-%expression levels; (iv) variation in motors protein availability, RBP expression, cytoskeletal arrangements; or (v) a stochastic process yet unidentified.
-
-%3. A variety of local translation flavors
-% In many cases, mRNAs co-localized with the protein they encode suggesting local translation. This was observed in a variety of regions such as cell extensions,
-% cell edges, centrosomes, endosomes, and the Golgi network. Local translation could function in:
-
-% Protein targeting: ASPM mRNA for instance was the first case of local translation at the nuclear pore during interphase and this could facilitate nucleoplasmic
-% targeting of the mature ASPM protein.
-
-% Preventing aberrant dispersal of proteins that could have harmful effects. For example, NUMA1 mRNA and protein are only localized on centrosomes during mitosis.
-% Targeting NUMA1 protein to centrosomes during interphase could have deleterious effects.
-
-% Enhancing translation efficiencies: this applies to mRNAs that are localized and translated in cytoplasmic foci referred to as translation factories.
-% These structures could host an environment more suitable for translation (a more favorable concentration of translation factors for instance).
-% In fact, DYNC1H1 mRNAs are translated as both single molecules and mRNA foci. However, mRNAs in the foci are more often found engaged in translation than ones that
-% exist as single molecules. Here, it is tempting to speculate that translation factories harbor specialized ribosomes or components of the translation machinery that
-% are dedicated for localized cases of protein synthesis.
-
-% Nascent peptide metabolism: synthesizing components of a protein complex locally can enhance the efficiency of complex assembly for example. Another possibility
-% is co- translational assembly at certain organelles. For instance, translating mRNAs encoding centrosomal proteins such as PCNT, CEP350, NIN, and HMMR could help
-% to incorporate the mature protein into centrosomes during the expansion of the pericentriolar material that occurs during the late G2 phase of the cell cycle.
-% Finally, local translation could allow certain
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The localization of \ac{mRNA} can be see as an elegant and efficient mechanisms of regulation for the gene expression process.
+By transporting one \ac{mRNA} molecule and promoting a local translation, several proteins can be directly produced at a desired place.
+It saves the transport of a large amount of proteins~\cite{Medioni_2012}.
+It also enables the cell to quickly react external stimuli.
+This mechanism could be critical to modulate the synaptic plasticity in neuron cells for example~\cite{jung_axonal_2012}.
+More generally, \ac{mRNA} localization will increase the cell compartmentalization and enable a higher flexibility and ''fine-tuning of gene expression in both space and time''~\cite{Medioni_2012}.
 
 \subsection{Translation}
 \label{subsec:intro_translation}
