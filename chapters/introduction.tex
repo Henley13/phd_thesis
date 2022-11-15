@@ -156,6 +156,9 @@ It also enables the cell to quickly react external stimuli.
 This mechanism could be critical to modulate the synaptic plasticity in neuron cells for example~\cite{jung_axonal_2012}.
 More generally, \ac{mRNA} localization will increase the cell compartmentalization and enable a higher flexibility and ''fine-tuning of gene expression in both space and time''~\cite{Medioni_2012}.
 
+% mention Weeks et al. (1985) as first publication about RNA localization
+% adham thesis: "Messenger localization was first discovered in Xenopus oocytes (Weeks et al., 1985)."
+
 \subsection{Translation}
 \label{subsec:intro_translation}
 
@@ -165,33 +168,101 @@ At the same time, \ac{tRNA}s carry amino acids matching the \ac{mRNA} sequence.
 According to the genetic code, three successive nucleotides of the \ac{mRNA} (a codon) correspond to an amino acid.
 The ribosome sequentially chains the amino acids, which then fold into a functional protein with a specific 3-dimensional structure.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Imaging cells and RNAs}
+\section{Imaging RNAs}
 \label{sec:fish}
+
+Our interest about \ac{RNA} localization requires advanced experimental protocol to analyze the \ac{RNA} subcellular distribution.
+Traditional techniques are based on biochemical bulk-measurements, like microarrays~\cite{Schena_1995} or qRT-PCR~\cite{bustin_absolute_2000}.
+They cannot operate at the single cell level and make the study of a spatial distribution within the cell impossible.
+However, technical improvements are progressively addressing these limitations, for example with single cells \ac{RNA} sequencing~\cite{Hedlund_2018} or fluorescent in situ \ac{RNA} sequencing (FISSEQ)~\cite{Church_2014}.
+
+An alternative option is to rely on images, which naturally provide the spatial insights and, with sufficient resolution, enable single cell analysis.
+In addition, experiments should be scalable.
+The design of large screens enables a systemic study of complex mechanisms and to cope with gene expression stochasticity, as well as heterogeneous \ac{RNA} distribution.
 
 \begin{figure}[]
     \centering
-    \includegraphics[width=\textwidth]{figures/introduction/multichannel_input}
-    \caption[Example of DAPI and smiFISH images]{Example of DAPI (\textit{left}) and smiFISH (\textit{right}) images}
-    \label{fig:multichannel_input}
+    \includegraphics[width=0.7\textwidth]{figures/introduction/multichannel_input}
+	\caption[Example of smiFISH image]{Example of smiFISH images with a maximum intensity projection.
+	Each spot is a single RNA molecule}
+    \label{fig:smFISH_input}
 \end{figure}
 
-\subsection{Fluorescent proteins}
-\label{subsec:intro_fluorescence}
+\subsection{The smFISH experiment}
+\label{subsec:intro_smfish}
+
+Notably, \ac{smFISH} technique~\cite{Femino_1998}, is the first to reach single molecule resolution in fixed cells.
+It uses multiple fluorescent oligonucleotides (or probes) to target and hybridize a transcript.
+Importantly, this technique preserves the cell environment, and thus enriches the contextual information available in the images.
+However, probes need to be specifically designed against the transcript of interest, making this solution costly to scale.
+A \ac{smFISH} experiment includes four steps:
+
+\begin{enumerate}
+	\setlength\itemsep{0.1em}
+	\item Cell fixation and permeabilization
+	\item Hybridization of the fluorescent probes for several hours
+	\item Cell washing to remove unbound probes
+	\item Image acquisition under a wide field microscope
+\end{enumerate}
+
+\noindent
+As \ac{RNA} molecules are smaller than the diffraction limit of the microscope, the final image results in diffraction limited spots over a fluorescent background (see Figure~\ref{fig:smFISH_input}).
+In \ac{smFISH} images, we do not observe the actual molecule, but its \ac{PSF}.
+The background comes from both the cellular autofluorescence and the unbound probes.
+Single \ac{RNA} molecule can be resolved because of the hybridizations of multiple fluorescent probes on the same molecule.
+This technique increases the \ac{SNR} and ensures that the \ac{RNA} signal is brighter than the background.
+
+\begin{wrapfigure}{R}{0.50\textwidth}
+	\begin{center}
+	\includegraphics[width=\linewidth]{figures/introduction/smiFISH}
+	\caption[Schema of smiFISH protocol]{Schema of smiFISH protocol from~\cite{tsanov_smifish_2016}}
+	\label{fig:smiFISH}
+	\end{center}
+\end{wrapfigure}
+
+In~\cite{tsanov_smifish_2016}, a cheaper and simpler version of \ac{smFISH} is presented: \ac{smiFISH}.
+The fluorescent probe is built through a pre-hybridization step that matches a primary (unlabeled) probe with a secondary fluorescent oligonucleotide (see Figure~\ref{fig:smiFISH}).
+This design with indirect labeling presents a higher flexibility and saves cost.
+%Indeed, the fluorescent oligonucleotide can be generic while several specialized primary probes can target the \ac{RNA} molecule.
+
+\subsection{Scaling up FISH}
+\label{subsec:intro_scale_fish}
 
 \begin{center}
 	\textit{(To be completed)}
 \end{center}
 
-\subsection{A zoo of FISH}
-\label{subsec:intro_fish}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+
+%Such indirect labeling techniques is also observed with more complex designs.
+
+
+
+% indirect labelling (smifish, bDNA)
+
+%- large scale screen (lecuyer, battich)
+%- Merfish
+%- seqfish
+%- seqfish+
+
+%\newacro{SeqFISH}{Sequential FISH}
+%\newacro{MERFISH}{Multiplexed Error-Robust FISH}
+
+%~\cite{lecuyer_global_2007} first large screen
+
+%~\cite{Hedlund_2018} single cells RNA sequencing
+%~\cite{bustin_absolute_2000} qRT-PCR
+%~\cite{Hedlund_2018}
+%~\cite{Hedlund_2018}
+%~\cite{Hedlund_2018}
+%~\cite{Femino_1998}
+
+
+
+
+%Nevertheless, these techniques are witnessing rapid improvements in specificity, robustness, multiplexity, and background suppression.
+
+%The first high-throughput mRNA localization screen was done in Drosophila embryos using whole mount FISH (LÈcuyer et al., 2007).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -214,13 +285,7 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{wrapfigure}{R}{0.60\textwidth}
-	\begin{center}
-	\includegraphics[width=\linewidth]{figures/introduction/smiFISH}
-	\caption[Schema of smiFISH protocol]{Schema of smiFISH protocol from~\cite{tsanov_smifish_2016}}
-	\label{fig:smiFISH}
-	\end{center}
-\end{wrapfigure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -429,132 +494,3 @@ I design a classification pipeline to recognize generic localization patterns.
 I evaluate the impact of translation inhibitor on \ac{RNA} localization and help identifying a singular translation-dependent pattern.
 I quantify a cell cycle dependent pattern, which is related to centrosomes.
 Finally, I also contribute to a a study focused on the protrusion pattern.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% plots
-
-% (RNA maturation)
-% RNA transport mechanism
-
-% smFISH + microscope
-% multichannel images (dapi + smfish)
-% multiplexed FISH
-
-% (deep learning architecture)
-
-% add presentation of the localization patterns (from pixel to coord + patterns)
-% mention Weeks et al. (1985) as firstpublication about RNA localization
-% adham thesis: "Messenger localization was first discovered in Xenopus oocytes (Weeks et al., 1985)."
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% paper racha (introduction)
-
-%how
-%- rna metabolism
-%- protein metabolism (mature protein or nascent protein)
-
-%why
-%- storage of untranslated rna
-%- local translation
-%- rapid cell division cycle (linked to local translation of cyclin B mRNAs)
-%- cell polarization
-%- cell motility (actin at the leading edge)
-%- axonal growth and synaptic plasticity of neurons
-%- assembly of protein complexes
-%- avoid proteins in wrong place
-
-%how
-%- targeting signal of nascent protein
-%- targeting from rna zip-code sequence (with RNA-binding proteins)
-%- direct transport on the cytoskeleton by molecular motors
-%- anchoring mechanism
-%- diffusion, trapping, degradation and local rna stabilization
-
-%claim
-%- lack a global view of local translation in the entire cellular space or at the genomic level
-%- need a systematic manner
-
-%examples
-%- pioneering study in Drosophila
-%- human cell lines
-
-%limitations
-%- information on RNA localization but did not directly investigate local translation as the encoded proteins were not detected
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% paper racha (introduction)
-
-% Most mRNAs are distributed randomly throughout the cytoplasm, but some localize to specific
-% subcellular areas (Blower, 2013; Bovaird et al., 2018; Eliscovich and Singer, 2017; Jung et al., 2014 for reviews).
-
-% This phenomenon is linked to either RNA metabolism, when untranslated mRNAs are stored in P- bodies or other cellular structures (Hubstenberger et al., 2017),
-% or to protein metabolism, when a protein is synthesized locally.
-
-% Local translation has been observed from bacteria and yeast to humans (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018).
-
-% It is commonly involved in the delivery of mature proteins to specific cellular compartments, while allowing local regulation, and this is involved in many processes.
-% For instance, it contributes to patterning and cell fate determination during metazoan development, mainly through asymmetric cell division
-% (Melton, 1987; Driever and Nu€sslein- Volhard, 1988).
-% In Xenopus embryos, local translation of cyclin B mRNAs at the mitotic spindle is also believed to be important for the rapid cell
-% division cycles occurring during early embryo- genesis (Groisman et al., 2000).
-% In mammals, mRNA localization is involved in cell polarization and motility, mainly through the localization of actin and related mRNAs at the leading edge (Lawrence and Singer, 1986), and it is also involved in axonal
-% growth and synaptic plasticity of neurons (Van Driesche and Martin, 2018).
-
-% Importantly, local translation can also be linked to the
-% metabolism of the nascent peptide rather than to directly localize the mature protein. For instance, translation of secreted proteins
-% at the endoplasmic reticulum (ER) allows nascent pro- teins to translocate through the membrane to reach the ER lumen (Aviram and Schuldiner, 2017).
-% Translation of mRNAs at specific sites may also be important for the assembly of protein complexes (Pichon et al., 2016) or
-% to avoid the deleterious effects of releasing free proteins at inappropriate places (Mu€ller et al., 2013).
-
-% RNA localization can be accomplished through several mech- anisms. In the case of secreted proteins, the nascent peptide serves as a
-% targeting signal, via the signal recognition particle (SRP) and its receptor on the ER (Aviram and Schuldiner, 2017).
-
-% In most other cases, targeting is an RNA-driven process (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018 for reviews).
-% Localized mRNAs often contain a zip-code sequence, frequently located within their 30-UTR, which is necessary and sufficient to transport them to their destination.
-% The zip code is recognized by one or several RNA-binding proteins (RBPs), and it drives the formation of a transport complex sometimes called locasome.
-% This complex can be transported by centrosomes, endosomal vesicles, or other cellular structures (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018).
-
-% However, direct transport on the cytoskeleton by molecular motors is a frequent mechanism (Blower, 2013; Bovaird et al., 2018; Eliscovich and Singer, 2017; Jung et al., 2014).
-
-% Once at destination, an anchoring mechanism may limit diffusion away from the target site.
-
-% Alternatives to these transport mechanisms include diffusion and trap- ping at specific locations and degradation coupled to local RNA stabilization.
-
-% Localized mRNAs are often subjected to a spatial control of translation (Besse and Ephrussi, 2008).
-% In the case of Ash1 mRNA in yeast and b-actin mRNA in neurons, translation is repressed during transport and
-% is activated at their final location by phosphorylation-dependent mechanisms (Hu€ttelmaier et al., 2005; Paquin et al., 2007).
-% This spatial regulation of translation provides an additional layer of control ensuring that mRNAs are translated only at the desired location.
-
-% The first locally translated mRNAs were found by chance or using a candidate approach.
-% Purification of cellular structures and localized RBPs have significantly increased the number of known localized mRNAs
-% (Blower, 2013; Jung et al., 2014; Eliscovich and Singer, 2017; Bovaird et al., 2018).
-
-% However, only specific compartments or RBPs were examined, and we currently lack a global view of local translation in the entire cellular space or at the genomic level.
-% Few reports described attempts to characterize mRNA localization in a systematic manner.
-
-% A pioneering study in Drosophila used whole-mount fluorescent in situ hybrid- ization (FISH) to analyze the localization of more than 2,000 mRNAs (Lecuyer et al., 2007).
-% As many as 71\% of them had a non-random distribution, and a range of new localization patterns were observed.
-% More recent reports confirmed that RNA localization is widespread during Drosophila development (Jam- bor et al., 2015; Wilk et al., 2016).
-
-% However, it is not known whether this is also true in other organisms, particularly in humans. Few recent studies addressed this question in cell lines
-% using the more sensitive single-molecule FISH technique (smFISH). Several thousands of mRNAs were analyzed, which
-% showed a correlation of intracellular mRNA distribution with gene annotation (Battich et al., 2013; Chen et al., 2015; Eng et al., 2019; Xia et al., 2019).
-% Specifically, these studies identified three groups of localized mRNAs, in the perinuclear area, the mitochondria, and the cell periphery,
-% the latter being possibly linked to actin metabolism (Chen et al., 2015).
-
-% These studies provided information on RNA localization but did not directly investigate local translation as the encoded proteins were not detected.
-% Thus, we still lack a good understanding of the various functions played by local translation at the cellular level.
-
-% In this study, we developed a smFISH screen to specifically address this issue. Using a set of 523 GFP-tagged cell lines spanning
-% a variety of cellular functions and an approach that allows simultaneous visualization of mRNA and proteins,
-% we found that local translation occurs at various unanticipated locations. In particular, we discovered specialized
-% translation factories, where specific mRNAs are translated. These factories are remarkable in that they provide
-% a unique mean to regulate the metabolism of nascent proteins and also create a fine granular compartmentalization of translation.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
