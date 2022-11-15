@@ -239,43 +239,61 @@ df = multistack.summarize_extraction_results(fov_results, ndim=3)
 \section{Hand-crafted localization features}
 \label{sec:hand_features}
 
-I now present the first approach to analyze \ac{RNA} localization patterns in depth: I manually design spatial features.
+Here I present hand-crafted features I have implemented for the analysis of \ac{RNA} localization patterns. 
+In section \ref{subsec:related_work_hand_features}, I present related work. We will see that there is already a large number of features available in the literature. In section \ref{subsec:expert_features}, I present the features I have chosen for our studies. 
+
+
 
 \subsection{Related work}
 \label{subsec:related_work_hand_features}
 
 \subsubsection{Feature engineering with bioimages}
 
-Bio-image computing field has long proposed quantitative frameworks and features to explore cellular mechanisms.
-Some popular software includes complete analysis pipelines from image preprocessing to feature engineering.
-For example CellProfiler~\cite{mcquin_cellprofiler_2018} allows researchers to count cell organelles and measure their size, analyze cell shape or extract pixel-wise texture information.
-Expression level computation is also a standard, through proteome quantification.
-CellCognition~\cite{held_cellcognition_2010} proposes a computational framework to annotate and classify relevant biological phenotypes, mostly through morphological measures.
-More than 150 features are available.
-Last but not least, ilastik~\cite{berg_ilastik_2019} also offers classification pipelines, with pixel-wise features such that intensity values, texture, brightness or color gradient.
-Although useful and widely employed, these frameworks appear quickly limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
-More specialized libraries are needed.
+In bioimage analysis, in particular for High Content Screening, there is an abundant literature on feature families that have been used for cell and whole image classification. They can be roughly categorized into shape features and texture features. Examples include Haralick features~\cite{Haralick1973}, statistical geometric features~\cite{Walker1996}, local binary patterns~\cite{ahonen_2006}, moment based features~\cite{Reeve1992} and morphological granulometries~\cite{Serra1983}, to name a few. 
 
-\subsubsection{\ac{RNA} localization features}
+Such features have been used to classify cells according to their protein localization patterns~\cite{Boland1998, Glory2007}, or their phenotypes~\cite{Wang2008, Jones2009, Walter2010} or classify directly full images with entire cell populations~\cite{Uhlmann2016}. 
+
+Importantly, such feature families are readily available in standard open-source software for computational phenotyping, such as CellProfiler~\cite{Carpenter2006, Jones2008, mcquin_cellprofiler_2018}, CellCognitionn~\cite{held_cellcognition_2010}, Mahotas \cite{mahotas_2013} and ilastik~\cite{berg_ilastik_2019}.  
+
+Most of these hand-crafted features come from the computer vision literature: they are pretty generic with limited biological interpretability. Furthermore, they are designed to quantitatively describe object shapes and textures, rather than directly representing spatial distributions of biomolecules. Of note, this also holds for protein localization screens~\cite{Glory2007, Ouyang2019b}. This is due to the fact that with traditional microscopy, individual proteins cannot be resolved. In addition, proteins can be abundant and often concentrate on specific structures. As a consequence, the protein signal cannot be decomposed into single points, and it is therefore logical to describe their spatial distribution by texture features. A notable exception is provided by super-resolution microscopy, where protein distributions are indeed modeled as point clouds~\cite{Levet2019}. 
+
+In conclusion, there is a need for features describing spatial distributions of RNA molecules inside the cell, implemented in user-friendly open-source tools. 
+
+%existing tools appear limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
+
+%Features describing the spatial distribution of molecules are therefore still required. 
+
+% Bio-image computing field has long proposed quantitative frameworks and features to explore cellular mechanisms.
+% Some popular software includes complete analysis pipelines from image preprocessing to feature engineering.
+% For example CellProfiler~\cite{mcquin_cellprofiler_2018} allows researchers to count cell organelles and measure their size, analyze cell shape or extract pixel-wise texture information.
+% Expression level computation is also a standard, through proteome quantification.
+% CellCognition~\cite{held_cellcognition_2010} proposes a computational framework to annotate and classify relevant biological phenotypes, mostly through morphological measures.
+% More than 150 features are available.
+% Last but not least, ilastik~\cite{berg_ilastik_2019} also offers classification pipelines, with pixel-wise features such that intensity values, texture, brightness or color gradient.
+% Although useful and widely employed, these frameworks appear quickly limited for a \ac{smFISH} analysis which does not only rely on image texture or cell morphology.
+% More specialized libraries are needed.
+
+\subsubsection{Feature design to describe RNA localization}
 
 Hand-crafted features to classify \ac{RNA} localization patterns were already developed in previous studies~\cite{battich_image-based_2013,samacoits_computational_2018}.
 Generally such features are inspired by literature on spatial statistics~\cite{ripley2005spatial} and adapted for fluorescence microscopy images~\cite{lagache_statistical_2015,stueland_rdi_2019}.
 Furthermore, several packages implement modules to perform \ac{smFISH} analysis and compute these hand-crafted features~\cite{mueller_fish-quant_2013,savulescu_dypfish_2019,mah_bento_2022}.
 
 In~\cite{battich_image-based_2013}, authors designed 18 features ''that reflect the relative localization of each spot in a single cell, with respect to both the cell and other spots''.
-They compute per-transcript features, then exploit their per-cell mean and standard deviation to identify subcellular localization patterns.
-They even complete and extend their pipeline analysis in a subsequent work~\cite{stoeger_computer_2015}, by integrating segmentation and detection algorithms.
+The authors compute per-transcript features, then exploit their per-cell mean and standard deviation to identify subcellular localization patterns.
+In a subsequent work~\cite{stoeger_computer_2015}, the workflow is completed and extended by integration of segmentation and detection algorithms.
 
-Two recent Python libraries greatly extend and facilitate the quantification of \ac{FISH} experiments.
+Two recent Python libraries propose algorithms for the quantification of \ac{FISH} experiments.
 DypFISH~\cite{savulescu_dypfish_2019} was developed to analyze \ac{RNA} and protein (co-)localization.
 It includes features to investigate clustering and \ac{MTOC}-related patterns.
 Across different imaging acquisitions of cells with a architecture constraints, they propose techniques to study \ac{mRNA}-protein spatial distribution~\cite{savulescu_interrogating_2021}.
 Bento~\cite{mah_bento_2022} proposes modules to analyze images generated with \ac{SeqFISH} and \ac{MERFISH}.
 They adapt feature extraction pipeline to highly multiplexed spatial transcriptomics data.
 
-In FISH-quant v1~\cite{mueller_fish-quant_2013} more than 20 features are implemented in MATLAB.
-They are extensively evaluated in a recent publication~\cite{samacoits_computational_2018} with simulated localization patterns.
-Compared to previous features developed in the literature~\cite{battich_image-based_2013}, they return a better performance to classify \ac{RNA} localization patterns.
+The features I present in this chapter extends previous work in our groups, implemented in MATLAB~\cite{mueller_fish-quant_2013, samacoits_computational_2018}, where more than 20 features were proposed to analyze mRNA localization patterns. 
+% implemented in MATLAB.
+% They are extensively evaluated in a recent publication~\cite{samacoits_computational_2018} with simulated localization patterns.
+Compared to previous feature sets~\cite{battich_image-based_2013}, they led to better performance in \ac{RNA} pattern classification, as shown by simulations.  
 A first set of features includes distance features between \ac{RNA} spots and cell or nucleus.
 A second set of features involved the Ripley K-function~\cite{ripley2005spatial}:
 
@@ -284,80 +302,131 @@ A second set of features involved the Ripley K-function~\cite{ripley2005spatial}
 \end{equation}
 
 \noindent
-With $N_i$ Npi (r) the number of \ac{RNA}s in a circle of radius $r$ centered on the $i^{th}$ \ac{RNA} and $\lambda$ the total density of \ac{RNA}s in the cell.
+With $N_i(r)$ the number of \ac{RNA}s in a circle of radius $r$ centered on the $i^{th}$ \ac{RNA} and $\lambda$ the total density of \ac{RNA}s in the cell.
 It quantifies the aggregation or dispersion of mRNAs.
 Several features are designed from these values, exploiting their maximum or their correlation with the radius $r$.
 However, Ripley features are sensitive to boundary effects (\ac{RNA}s close to a membrane have a limited neighborhood) and require to be correctly normalized.
-A third set of features is based on morphological operations, like opening, to identify cell extensions.
+A third set of features is based on assessing \ac{RNA} density measured in subcellular regions, defined by morphological operators. 
 Lastly, dispersion and polarization indices are implemented.
-Some of my own hand-crafted features are implementations or improvements of this work.
+%Some of my own hand-crafted features are implementations or improvements of this work.
 
-\subsection{Expert features}
+\subsection{Handcrafted features for the quantitative description of RNA localization patterns}
 \label{subsec:expert_features}
 
-A large part of hand-crafted features I implemented in \emph{bigfish.classification} were initially designed for our own studies~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}.
-These features capture more specific information about \ac{RNA} localization, beyond surface areas (\emph{cell\_area} and \emph{nuc\_area}) or expression levels (\emph{nb\_rna}).
+Here, I present the features that I have implemented in \emph{bigfish.classification}. 
+Many of these features were designed for our own studies~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}, but are sufficiently generic to be of general utility. 
+
+These features capture more specific information about \ac{RNA} localization, beyond surface areas (\emph{cell\_area} and \emph{nuc\_area}) or expression levels (\emph{nb\_rna}). 
+\tw{I do not understand what you mean by "beyond surface areas". Surface areas are not RNA related features, no?}
+
+One of the important aspects is the normalization of these features. Indeed, many features are per definition highly dependent on the expression level or the cellular morphology. Here, the objective is to define features that characterize preferential localization of \ac{RNA}, independently from expression levels. 
 
 \subsubsection{Distance features}
 
-I first reuse and adapt some distance features already implemented in FISH-quant v1 and presented in a recent paper~\cite{samacoits_computational_2018}.
-Distances from cell or nuclear membranes are computed in 2D as I only use 2D segmentation results so far.
-However, such features could be easily extended with 3D segmentation masks.
-I compute the average distance between detected \ac{RNA}s and cell membrane \emph{index\_mean\_distance\_cell} such that:
+%I first use and adapt some distance features already implemented in FISH-quant v1~\cite{samacoits_computational_2018}.
+%Distances from cell or nuclear membranes are computed in 2D as I only use 2D segmentation results so far.
+%However, such features could be easily extended with 3D segmentation masks.
+
+
+
+In order to capture preferential localization with respect to the cell membrane, we define \emph{index\_mean\_distance\_cell}: 
+
+%I compute the average distance between detected \ac{RNA}s and cell membrane \emph{index\_mean\_distance\_cell} such that:
 
 \begin{equation}
 	{\displaystyle \operatorname{index\_mean\_distance\_cell} = \frac{\overline{d_{cell}(x_i, y_i)}}{\lambda_{cell}}}
 \end{equation}
 
 \noindent
-With $d_{cell}(x_i, y_i)$ the euclidean distance to the cell membrane for the rna $i$ and $\lambda_{cell}$ the expected average distance under uniform \ac{RNA} distribution.
-A previous study~\cite{battich_control_2015} used the square root of cell area to normalize its distance features.
-However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in terms of cell morphology.
-For this reason I approximate $\lambda_{cell}$ as the average value of the 2D distance map from the cell membrane.
-Similarly, I compute the normalized average distance of \ac{RNA}s to the nucleus: \emph{index\_mean\_distance\_nuc}.
+With $d_{cell}(x_i, y_i)$ the euclidean distance to the cell membrane for the \ac{RNA} $i$ and $\lambda_{cell}$ the expected average distance under uniform \ac{RNA} distribution. $\lambda_{cell}$ is calculated efficiently as the average value of the 2D distance map from the cell membrane. The normalization with respect to $\lambda_{cell}$ makes the feature robust with respect to different cell morphologies~\cite{samacoits_computational_2018}: we measure how much we deviate from a uniform distribution, given the cell morphology and the expression level. 
+
+%A previous study~\cite{battich_control_2015} used the square root of cell area to normalize its distance features.
+%However, as noticed by~\cite{samacoits_computational_2018}, it does not take into account a potential heterogeneity in terms of cell morphology.
+
+%$\lambda_{cell}$ is calculated efficiently as the average value of the 2D distance map from the cell membrane.
+Similarly, we compute the normalized average distance of \ac{RNA}s to the nucleus: \emph{index\_mean\_distance\_nuc}.
 Alternative computation with the median function is available for these two features too.
 
-Unlike FISH-quant v1, I do not compute distances to cell or nucleus centroids, nor quantiles of the \ac{RNA} distance distribution.
-These features might appear redundant to quantify distance information.
+In the current version, segmentations are provided in 2D (and consequently, the distances are also defined in 2D).
 
-\subsubsection{Morphological features}
+\tw{I do not think that it is useful to say what you have removed w.r.t. previous versions.}
+%Unlike FISH-quant v1, I do not compute distances to cell or nucleus centroids, nor quantiles of the \ac{RNA} distance distribution.
+%These features might appear redundant to quantify distance information.
 
-A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
-I already count the number of transcripts detected inside the nucleus.
-Specifically, the proportion of \ac{RNA}s within the nucleus (\emph{proportion\_rna\_in\_nuc}) is a good enough indicator to identify the intranuclear pattern.
+\subsubsection{Compartment density features}
 
-\begin{figure}[]
+\tw{Clearly, this is not "morphology feature". But it could be "spatial histogram features". "Compartment density features" may be better ... up to you!}
+\tw{And you need to better structure your text.}
+
+The idea of this feature family is to partition the cellular region into several subregions and to evaluate the \ac{RNA} density in these regions. This corresponds to spatial histograms of \ac{RNA} distribution. These features come in two variants: 
+\begin{enumerate}
+\item \emph{propotion} is the proportion of RNAs inside the region with respect to the total number of RNAs in the cell. 
+\item \emph{index} is the ratio between measured and expected RNAs inside the region.
+\end{enumerate}
+
+The choice of the partition then conditions the kind of patterns that will can be differentiated with the feature family. First, as already indicated above, we defined as a coarse partition the nuclear and cytoplasmic region and calculate the proportion of \ac{RNA}s within the nucleus (\emph{proportion\_rna\_in\_nuc}). 
+
+Second, we defined regions according to distance intervals to the nucleus and the cell membrane respectively. 
+Region $R_i$ is thus defined as:
+\begin{equation}
+    R_i = \{ x \, \, | \, \, d_{compartment}(x) \in  [\tau_i, \tau_{i+1}] \}
+\end{equation}where $x$ is a point in the image plane, and "compartment" can mean the nucleus or cytoplasmic membrane. 
+We count the number of \ac{RNA} falling in $R_i$ and calculate the proportion and the index. 
+
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter4/plot_topography}
     \caption[Proportion of mRNAs in several subcellular regions]{Proportion of mRNAs at various distances from cell and nuclear membranes.
-	Dataset and annotated patterns from~\cite{CHOUAIB_2020}.
-	\textit{Colored areas} represent the 95\% confidence interval}
+    Dataset and annotated patterns from~\cite{CHOUAIB_2020}.
+    \textit{Colored areas} represent the 95\% confidence interval}
     \label{fig:features_topography}
 \end{figure}
 
-Still I can go further to partition cell regions.
-I define a list of features to measure the distribution of \ac{RNA}s within different cell regions.
-Regions of interest are delimited with concentric circles from cell or nuclear membranes, with an interval distance of 500nm each.
-More precisely, area between 0 and 3000nm from the cell membrane is divided in six concentric regions.
-In each region I compute \ac{RNA} proportion (\emph{proportion\_rna\_cell\_radius\_1000\_1500} for the proportion between 1000nm and 1500nm from the cell membrane) or I count the number of \ac{RNA}s I detect, normalized by the expected number of \ac{RNA}s under random distribution (\emph{index\_rna\_cell\_radius\_1000\_1500}).
-I also define 5 more regions around the nuclear membrane between 500nm and 3000nm.
-Another region is defined along the nuclear membrane, including detected \ac{RNA}s inside or outside the nucleus, but within 500nm from its membrane.
-Likewise, proportion (\emph{proportion\_rna\_nuc\_radius\_500\_1000}) and normalized \ac{RNA} count (\emph{index\_rna\_nuc\_radius\_500\_1000}) are computed for all regions around the nuclear membrane.
-When I manually annotate real cells and identify different localization pattern I can measure how discriminative these features can be.
-In Figure~\ref{fig:features_topography} we observe average \ac{RNA} proportion for the different regions I described.
-The 95\% confidence interval is also reported in the plot.
-Logically, nuclear edge and perinuclear patterns present a higher proportion of \ac{RNA}s along the nuclear membrane.
-On the opposite, cells with a protrusion pattern have a higher \ac{RNA} density along the cell membrane.
+In our studies, we defined regions with respect to their distance to the nucleus, where the interval boundaries were $\tau in \{-500, 500, 1000, 1500, 2000\}$ (in nm) and where $d_{nucleus}<0$ refers to points inside the nucleus. 
+Furthermore, we defined regions with respect to their distance to the cytplasmic membranes, using the interval boundaries $\tau in \{0, 5000, 1000, 1500, 2000\}$ (in nm), 
 
-I focus on a last relevant region in a cell: protrusions.
-To design features related to cell extension I first need to define such extension.
-Like~\cite{samacoits_computational_2018} I define this region as the lost area after applying a morphological opening (an erosion followed by a dilation) to the cell mask.
-For this operation I use a disk with 3000nm radius as a structuring element.
-I then compute the proportion of \ac{RNA}s (\emph{proportion\_rna\_protrusion}) or the normalized \ac{RNA} count (\emph{index\_rna\_protrusion}) in protrusion.
+In summary, we thus have:
+\begin{itemize} 
+    \item \emph{proportion\_rna\_nuc\_radius\_$\tau_i$\_$\tau_{i+1}$}
+    \item \emph{index\_rna\_nuc\_radius\_$\tau_i$\_$\tau_{i+1}$}
+    \item \emph{proportion\_rna\_cell\_radius\_$\tau_i$\_$\tau_{i+1}$}
+    \item \emph{index\_rna\_cell\_radius\_$\tau_i$\_$\tau_{i+1}$}
+\end{itemize}
+
+
+% A second set of features is related to the localization of \ac{RNA} in specific cell compartments.
+% I already count the number of transcripts detected inside the nucleus.
+% Specifically, the proportion of \ac{RNA}s within the nucleus (\emph{proportion\_rna\_in\_nuc}) is a good enough indicator to identify the intranuclear pattern.
+
+% Still I can go further to partition cell regions.
+% I define a list of features to measure the distribution of \ac{RNA}s within different cell regions.
+% Regions of interest are delimited with concentric circles from cell or nuclear membranes, with an interval distance of 500nm each.
+% More precisely, area between 0 and 3000nm from the cell membrane is divided in six concentric regions.
+% In each region I compute \ac{RNA} proportion (\emph{proportion\_rna\_cell\_radius\_1000\_1500} for the proportion between 1000nm and 1500nm from the cell membrane) or I count the number of \ac{RNA}s I detect, normalized by the expected number of \ac{RNA}s under random distribution (\emph{index\_rna\_cell\_radius\_1000\_1500}).
+% I also define 5 more regions around the nuclear membrane between 500nm and 3000nm.
+% Another region is defined along the nuclear membrane, including detected \ac{RNA}s inside or outside the nucleus, but within 500nm from its membrane.
+% Likewise, proportion (\emph{proportion\_rna\_nuc\_radius\_500\_1000}) and normalized \ac{RNA} count (\emph{index\_rna\_nuc\_radius\_500\_1000}) are computed for all regions around the nuclear membrane.
+
+%When I manually annotate real cells and identify different localization pattern I can measure how discriminative these features can be.
+In order to investigate the discriminative power of these features, we visualized the average \ac{RNA} proportion for the different regions in Figure~\ref{fig:features_topography} and the corresponding 95\% confidence interval
+for different patterns. These patterns will be introduced in detail in chapter \ref{ch:chapter5}. In brief, \emph{intranuclear} refers to an accumulation of \ac{RNA} inside the nucleus, \emph{nuclear edge} to an accumulation in proximity of the nuclear envelope, \emph{perinuclear} to a preferred  localization close to the nucleus but less pronounced than \emph{nuclear edge}, \emph{protrusion} to an accumulation in cell extensions, \emph{foci} to \ac{RNA} clusters and \emph{random} to the absence of all the other patterns. 
+% we observe average \ac{RNA} proportion for the different regions I described.
+%The 95\% confidence interval is also reported in the plot.
+As expected, nuclear edge and perinuclear patterns present a higher proportion of \ac{RNA}s along the nuclear membrane.
+On the opposite, cells with a protrusion pattern have a higher \ac{RNA} density along the cell membrane. 
+
+
+Sometimes, it can also make sense to probe for the presence of RNAs in specific regions that are not necessarily present in all cells. In order to quantify the RNA presence in protrusions for instance, we build the partition by a morphological top-hat: $f-\gamma_B f$, where $\gamma_B$ is the morphological opening with a structuring Element $B$. This operation extracts the parts of the cytoplasm that cannot contain the structuring element. Here, we use a disk with radius $300 nm$.   
+
+% I focus on a last relevant region in a cell: protrusions.
+% To design features related to cell extension I first need to define such extension.
+% Like~\cite{samacoits_computational_2018} I define this region as the lost area after applying a morphological opening (an erosion followed by a dilation) to the cell mask.
+% For this operation I use a disk with 3000nm radius as a structuring element.
+% I then compute the proportion of \ac{RNA}s (\emph{proportion\_rna\_protrusion}) or the normalized \ac{RNA} count (\emph{index\_rna\_protrusion}) in protrusion.
 
 \subsubsection{Dispersion features}
 
-I implement three features described and tested in a recent paper~\cite{stueland_rdi_2019} to quantify \ac{RNA} polarization and dispersion within the cell.
+I implemented three features described and tested in a recent paper~\cite{stueland_rdi_2019} to quantify \ac{RNA} polarization and dispersion within the cell.
 
 Polarization index is computed by comparing \ac{RNA} point cloud centroid and cell centroid:
 
@@ -371,7 +440,7 @@ The radius of gyration $Rg_{cell}$ normalizes the index for different cell sizes
 It is defined as the root-mean-squared distance between every cell pixel and the cell centroid.
 The higher, the more polarized \ac{RNA}s are.
 
-Dispersion index measures the dispersion of the \ac{RNA} point cloud.
+The dispersion index measures the dispersion of the \ac{RNA} point cloud.
 In addition to the extracted coordinates, its computation also implies pixel intensities from the original \ac{smFISH} image:
 
 \begin{equation}
@@ -380,12 +449,13 @@ In addition to the extracted coordinates, its computation also implies pixel int
 
 \noindent
 With $r_i$ and $r_j$ the euclidean distance of \ac{RNA} $i$ and cell pixel $j$ to the \ac{RNA} centroid respectively, $I_i$ the pixel intensity of \ac{RNA} $i$ and $I_j$ the pixel intensity of cell pixel $j$.
+\tw{Would be better to use $d_i$ and $d_j$ (to be coherent with the formulas above). }
 Pixel intensity of transcripts distant from the \ac{RNA} centroid are overweighted.
 As the index is normalized considering every pixel $j$ from the cell mask, it tends to 1 when \ac{RNA} point cloud is uniformly distributed.
 A diffuse point cloud has a value greater than 1.
 On the opposite, if \ac{RNA}s are concentrated anywhere in the cell, index value is lower than 1.
 
-Peripheral distribution index measures how close the \ac{RNA}s localize to the cell periphery (\emph{index\_peripheral\_distribution}).
+The peripheral distribution index measures how close the \ac{RNA}s localize to the cell periphery (\emph{index\_peripheral\_distribution}).
 Its computation is similar to the dispersion index, but the \ac{RNA} centroid is replaced by the nucleus centroid in the equation.
 A completely dispersed point cloud still has a value of 1, but it increases if \ac{RNA}s move toward the cell periphery, with a concentrated or diffused pattern.
 Again, an aggregation of transcripts around the nucleus centroid (often close to the cell centroid too) decreases index value.
@@ -400,9 +470,9 @@ Again, an aggregation of transcripts around the nucleus centroid (often close to
 	\end{center}
 \end{wrapfigure}
 
-If I detect additional object and extract new coordinates besides individual and clustered \ac{RNA}s, more specific features can be designed.
-For example, these objects can be cell organelles labelled during the experimentation.
-I design such features with the centrosomes to further study \ac{RNA} localization related to the \ac{MTOC}~\cite{safieddine_choreography_2021}.
+The nuclear and cytoplasmic membranes are major landmarks of the cell, but in more specific screens, it might be interesting to assess the distance distributions with respect to other compartments in the cell, if such compartments are labeled in the experiments.
+For instance, I have worked on a screen, where we wanted to study \ac{RNA} localization related to the Microtubule Organizing Centers \ac{MTOC}~\cite{safieddine_choreography_2021}, which I detail in chapter \ref{ch:chapter5}, where centrosomes were fluorescently labeled.
+%I design such features with the centrosomes to further study \ac{RNA} localization related to the \ac{MTOC}~\cite{safieddine_choreography_2021}.
 
 A first obvious feature is the average (or median) distance between \ac{RNA}s and the closest detected centrosomes (up to two centrosomes can be detected in the cell): \emph{index\_mean\_distance\_centrosome}.
 Similarly to the distance features I compute with the cell or nuclear membranes, I compute the expected distance under uniform \ac{RNA} distribution for normalization.
@@ -412,16 +482,18 @@ In my case I manually choose a radius of 2000nm around centrosomes to define suc
 I can then compute normalized \ac{RNA} count (\emph{index\_rna\_centrosome}) or \ac{RNA} proportion (\emph{proportion\_rna\_centrosome}) in these regions.
 
 Lastly, I derived a feature from the dispersion index described above.
-I define a centrosomal dispersion index to quantify \ac{RNA} dispersion around centrosomes: \emph{index\_centrosome\_dispersion}.
-I design it like the dispersion index, but instead of \ac{RNA} centroid, I use the closest centrosome coordinates to compute the euclidean distance.
+I define a centrosomal dispersion index to quantify \ac{RNA} dispersion around centrosomes: \emph{index\_centrosome\_dispersion}. The feature is designed like the 
+dispersion index, but instead of \ac{RNA} centroid, I use the closest centrosome coordinates to compute the euclidean distance.
 The lower, the closer \ac{RNA}s localized to the centrosomes.
 
 \subsubsection{Cluster features}
 
-Concerning cluster localization patterns, I observed that my clustering method (see subsection~\ref{subsec:dense_decomposition}) already captures good enough information.
-More specifically, number of detected clusters (\emph{nb\_foci}) or \ac{RNA} proportion inside these clusters (\emph{proportion\_rna\_in\_foci}) are relevant features to identify transcripts with a tendency for clustering.
-As a consequence, and unlike~\cite{samacoits_computational_2018}, I do not implement diverse features based on the famous Ripley's K-function.
-This would require tuning a lot more parameters than just reusing the detected number of clusters.\\
+In addition, to the distances to landmarks, it is often useful to also analyze inter-point distances. In particular, small clusters of \ac{RNA}s are of biological interest. For this, we decided to rather represent these clusters by detection (see subsection~\ref{subsec:dense_decomposition}) and not by generic inter-point features, such as those based on the Ripley's K-function. 
+%Concerning cluster localization patterns, I observed that my clustering method (see subsection~\ref{subsec:dense_decomposition}) already captures good enough information.
+More specifically, number of detected clusters (\emph{nb\_foci}) or \ac{RNA} proportion inside these clusters (\emph{proportion\_rna\_in\_foci}) are relevant features to identify transcripts with a tendency for clustering.\\
+%As a consequence, and unlike~\cite{samacoits_computational_2018}, I do not implement diverse features based on the famous Ripley's K-function.
+%This would require tuning a lot more parameters than just reusing the detected number of clusters.
+
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -451,24 +523,24 @@ features, features_names = classification.compute_features(
 \label{sec:learned_features}
 
 A second approach to analyze \ac{RNA} localization patterns is to learn features.
-To this end I design and train a deep learning model, PointFISH, on a simulated pretext task~\cite{pointfish_2022}.
-I then reuse the internal representation learned by the model as a point cloud embedding to discriminate \ac{RNA} localization patterns.
-The later is evaluated on an experimental dataset.
+To this end I designed and trained a deep learning model, PointFISH, on a simulated pretext task~\cite{pointfish_2022}.
+I then reused the internal representation learned by the model as a point cloud embedding to discriminate \ac{RNA} localization patterns.
+The later was evaluated on an experimental dataset.
 
 \subsection{Related work}
 \label{subsec:related_work_learned_features}
 
 \subsubsection{Learning features and embeddings}
 
-A neural network learns representations that I can use for transfer learning.
-One advantage is to pretrained relevant representations on a first task with a large and general annotated dataset, before addressing a more difficult or specific task with sometimes a limited dataset available.
+A neural network learns representations that can be used for transfer learning.
+One advantage is to pre-train relevant representations on a first task with a large and general annotated dataset, before addressing a more difficult or specific task with sometimes a limited dataset available.
 Such model can be used as a feature extractor by computing features from one of its intermediate layers.
 Computer vision community progressively replaces hand-crafted features~\cite{Lowe_1999,Bay_2006} by deep learning features to analyze images.
-Best convolutional neural networks pretrained on large and general classification challenges~\cite{He_2016_CVPR,Szegedy_2016_CVPR,Tan_2019,Huang_2017_CVPR} are used as backbone or feature extractor for more complex task like face recognition, detection or segmentation.
-NLP community follows this trend as well with a heavy use of word embeddings~\cite{Mikolov_2013,Joulin_2016} or the more recent transformers models.
+The best convolutional neural networks pretrained on large and general classification challenges~\cite{He_2016_CVPR,Szegedy_2016_CVPR,Tan_2019,Huang_2017_CVPR} are used as backbone or feature extractor for more complex task like face recognition, detection or segmentation.
+NLP community follows this trend as well with a heavy use of word embeddings~\cite{Mikolov_2013,Joulin_2016} or the more recent transformer models.
 As a last example, with graph computation, node2vec~\cite{Grover_2016} learns ''task-independent representations'' for nodes in networks.
 
-Such embedding has also the advantage to be a continuous and numerical representation.
+Such embeddings have also the advantage to be a continuous and numerical representation.
 This is especially useful when dealing with a non-structured data like text or graph.
 With spage2vec~\cite{Partel_2021}, authors learn a low dimensional embedding of local spatial gene expression (expressed as graphs).
 Eventually, they identify meaningful gene expression signatures by computing this embedding for tissue datasets.
@@ -477,7 +549,7 @@ Eventually, they identify meaningful gene expression signatures by computing thi
 
 Because I analyze smFISH images, a first intuition would be to build a convolutional neural network to directly classify localization patterns from the fluorescent image.
 This approach is actually already in place for protein localization.
-Unlike RNA, proteins are usually studied with fluorescent protein, like \ac{GFP} markers, and are difficult to resolve individually.
+Unlike RNA, proteins are usually studied with fluorescent protein, like \ac{GFP} markers, and are in general impossible to resolve individually (except by using super-resolution microscopy, a technique that is not used in HCS today).
 In this case, they appear as a gradient of intensity in the fluorescent image and thus protein localization has often been approached like texture classification problem.
 First studies~\cite{boland_automated_1998} for example compute a set of feature from the microscopy image before training a classifier.
 With recent successes of deep learning, protein localization is now tackled with convolutional neural network, but still framed as a texture classification problem.
@@ -503,18 +575,16 @@ I postulate that learning to classify RNA localization patterns directly from de
 A point cloud has an unordered and irregular structure.
 Projecting the coordinates into images or voxels~\cite{Maturana_2015} transforms the problem as an easier vision challenge, but it comes along with some input degradations.
 It dramatically increases the memory needed to process the sample and loses relevant spatial information.
-In case of \ac{RNA} point cloud, I have already explored this approach by using convolutional neural network on a binary image of the point cloud~\cite{dubois_deep_2019}.
-It makes the recognition of 3D localization patterns harder~\cite{dubois_deep_2019}.
-A more detailed description of the method is available in appendix~\ref{ch:convolutional_features}.
+In case of \ac{RNA} point cloud, I have contributed to a study, where we explored this approach by using convolutional neural network on a binary image of the point cloud~\cite{dubois_deep_2019}. Qualitative analysis of the clustering results indicated that the method does capture relevant signal, but it still cumbersome to first detect individual \ac{RNA}s, to represent them in a binary image, which is then processed with a CNN~\cite{dubois_deep_2019} (a more detailed description of the method is available in appendix~\ref{ch:convolutional_features}). 
 
 A recent paper~\cite{khater_caveolae_2019} proposes to train a machine learning pipeline to discriminate caveolae clusters from scaffolds clusters.
 These cell structures can be recognized through the detection of caveolin-1 proteins and the shape of the resulting point clouds acquired from \ac{SMLM} techniques.
-Authors compare three pipelines to address the problem: a random forest classifier trained on hand-crafted features, a convolutional neural network applied on the point cloud image and more importantly a PointNet fed directly with point cloud.
+The authors compare three pipelines to address the problem: a random forest classifier trained on hand-crafted features, a convolutional neural network applied on the point cloud image and more importantly a PointNet fed directly with point cloud.
 Albeit legitimate, the PointNet method is less successful for this task than the two others pipelines.
-Possibly, this model is too naive.
+%Possibly, this model is too naive.
 
 PointNet~\cite{Qi_2017_CVPR} is a seminal work that leads the way for innovative models to address shape classification.
-It directly processes point clouds with share MLPs and a max pooling layer, making the network invariant to input permutation.
+It directly processes point clouds with shared MLPs and a max pooling layer, making the network invariant to input permutation.
 However, the pooling step is the only way for the model to share information between close points, which ultimately limits its performance.
 Yet, recent research dramatically improves point cloud modelling and especially the capture of local information.
 
@@ -529,11 +599,12 @@ Last but not least, PointMLP~\cite{ma2022rethinking} proposes a simple but still
 \subsection{Problem statement}
 \label{subsec:problem_statement}
 
-I want to train a model, where I can provide directly the point cloud coordinates as an input and compute a continuous vector representation.
+The objective is to train a model, that takes as input directly the point cloud coordinates as an input and compute a continuous vector representation.% suitable for downstream classification tasks.
 This representation can then be used for classification of different \ac{RNA} localization patterns.
-Such a deep learning model might require a large volume of annotated data to reach a satisfying performance.
-To generate such a large data sets, I used simulated data to train my point cloud model and then use it as a trained feature extractor.
-Eventually I evaluate these learned features on a experimental dataset.
+Such a deep learning model might require a large volume of annotated data to reach satisfying performance.
+Manual annotation of \ac{RNA} localization patterns is complex and time consuming. For rare patterns, it might even be impossible to find cells in sufficient numbers. 
+For this reason, I turned to simulation to build a large training set, from which I can train a point cloud neural network, providing a feature vector that describes \ac{RNA} spatial distributions.  
+Finally, I evaluate these learned features on a experimental dataset.
 
 \begin{figure}[]
 	\centering
@@ -558,23 +629,27 @@ Eventually I evaluate these learned features on a experimental dataset.
 To build my simulated dataset, I use methods implemented in \emph{simfish}.
 My package exploits a template of 318 real cells to simulate realistic point clouds.
 They were originally extracted for FISH-quant v1~\cite{samacoits_computational_2018} to simulate realistic cell and nucleus shapes.
-I have the 3D segmentation masks for the cell and the nucleus.
-In addition, I have manual annotations about potential protrusions, in case I want to simulate this specific pattern.
-Several improvements are brought by \emph{simfish}:
+The 3D segmentation masks for the cell and the nucleus were extracted from smFISH experiments against GAPDH, an abundant house-keeping gene localizing in the cytoplasm. 
+With respect to the previous version ~\cite{samacoits_computational_2018}, I made the following improvements:
+%tential protrusions, in case I want to simulate this specific pattern.
+%Several improvements are brought by \emph{simfish}:
 \begin{itemize}
 	\setlength\itemsep{0.1em}
-	\item I migrate to Python and do not rely on a proprietary framework anymore.
-	\item I accelerate the simulation process.
-	\item I extend the number of localization patterns available.
-	\item I make simulations more consistent in terms of pattern strength.
+	\item Migration to Python and removal of any proprietary dependencies.
+	\item Significant acceleration of the simulation process.
+	\item Extension of available localization patterns.
+	\item Redefinition of pattern strength to make simulations more consistent.
 \end{itemize}
 
 Simulation's outcome includes the cell mask and its membrane coordinates (in 2D), the nucleus mask and its membrane coordinates (in 2D) and the \ac{RNA} coordinates (in 3D).
 To match with the rest of the \emph{bigfish} pipeline, I voluntarily return 2D membrane coordinates.
-A first parameter to set is the number of \ac{RNA}s $n$ I want to simulate.
-To modulate the pattern strength, I set the proportion of \ac{RNA}s $p$ with a biased localization I want.
-For example to simulate pattern with a moderate strength, I can simulate between 30\% and 50\% of the \ac{RNA} with the targeted localization bias, and the rest uniformly across the cell.
-Lastly, I choose a pattern to simulate.
+
+For the simulation, we have to set 3 parameters: (1) the number $n$ of \ac{RNA}s, (2) the pattern strength $p$ referring to the proportion of \ac{RNA}s that localize according to the simulated pattern, where $(1-p) \times n$ \ac{RNA}s are placed uniformly across the cell or cytoplasm and (3) the localization pattern for the $n_{pattern} = p \times n$ \ac{RNA}s. 
+
+%A first parameter to set is the number of \ac{RNA}s $n$ I want to simulate.
+%To modulate the pattern strength, I set the proportion of \ac{RNA}s $p$ with a biased localization I want.
+%For example to simulate patterns with a moderate strength, I can simulate between 30\% and 50\% of the \ac{RNA} with the targeted localization bias, and the rest uniformly across the cell.
+%Lastly, I choose a pattern to simulate.
 
 \begin{figure}[]
 	\centering
@@ -596,15 +671,15 @@ Lastly, I choose a pattern to simulate.
 
 The 9 patterns currently available are: random, foci, intranuclear, extranuclear, nuclear edge, perinuclear, cell edge, pericellular and protrusion.
 Random pattern is the default pattern where \ac{RNA}s are simulated uniformly within the cell.
-Foci pattern consists in a random number of \ac{RNA} clusters localizing outside the nucleus.
-More precisely, I compute the total number of clustered \ac{RNA}s as $n_{pattern} = n \times p$.
+The foci pattern consists in a random number of \ac{RNA} clusters localizing outside the nucleus.
+%More precisely, I compute the total number of clustered \ac{RNA}s as $n_{pattern} = n \times p$.
 I draw the expected number of \ac{RNA}s $\lambda$ per cluster from a uniform distribution between 5 and 21 \ac{RNA}s.
 The number of clusters itself results from $n_{cluster}= \frac{n_{pattern}}{\lambda}$.
 For each cluster, a distinct number of \ac{RNA}s is drawn again with a Poisson distribution of mean $\lambda$.
 Clusters are then localized outside the nucleus and remaining \ac{RNA}s uniformly in the cell.
-In Figure~\ref{fig:foci_panel} we can observe foci simulations with an increasing pattern strength (from 10\% to 90\% of clustered \ac{RNA}s)
+In Figure~\ref{fig:foci_panel} we can observe foci simulations with an increasing pattern strength (from 10\% to 90\% of clustered \ac{RNA}s).
 
-Other patterns are simulated with a common scheme.
+Other patterns are simulated with a similar scheme.
 In a first step I generate a probability map to bias the localization of $n_{pattern}$ \ac{RNA}s.
 In a second step I complete the point cloud with random \ac{RNA}s until I reach the expected number of transcripts.
 Intranuclear pattern has a uniform probability map inside the nucleus and zeros outside.
@@ -612,12 +687,13 @@ Extranuclear pattern is the exact opposite, with nonzero probabilities outside t
 Nuclear edge and cell edge have nonzero probabilities along the nuclear and cell membranes.
 Similarly, perinuclear and pericellular are patterns where \ac{RNA}s are polarized towards nuclear and cell membranes.
 Perinuclear probability map is build from the cell distance map.
-I contrast the euclidean distance by computing its quadratic values.
+The euclidean distance is contrasted by computing its quadratic values.
 The same operation is performed to build the pericellular probability map, using the nucleus distance map.
 As a result, for pericellular pattern, \ac{RNA}s have a higher probability to localize in regions distant from nucleus.
-Protrusion pattern has a uniform probability map within the annotated protrusion regions and zeros everywhere else.
+The protrusion pattern has a uniform probability map within the annotated protrusion regions and zeros everywhere else.
 In Figure~\ref{fig:perinuclear_panel} different perinuclear simulations can be observed as an example.
 In addition, an overview of every simulated pattern is available in appendix~\ref{sec:appendix_simulations_pattern}.\\
+
 
 \begin{minipage}{0.9\textwidth}
 \begin{lstlisting}[language=Python]
@@ -663,8 +739,8 @@ With random simulations the pattern strength has no effect.
 I split my dataset between train, validation and test, with 60\%, 20\% and 20\% respectively.
 In order to avoid data leakage, I make sure that simulations from the same cell template cannot be assigned to different splits.
 Finally, point clouds are augmented with random rotation along the up-axis, centered and normalized into the unit sphere.
-In order to test how my trained features generalize to unknown localization patterns, I did not simulate \ac{RNA} localization in protrusions, while these localization class is present in the experimental dataset.
-It also prevent my model from training on a too specific pattern.
+In order to test how the trained features generalize to unknown localization patterns, I did not simulate \ac{RNA} localization in protrusions, while these localization class is present in the experimental dataset.
+%It also prevent my model from training on a too specific pattern.
 
 \subsubsection{Experimental dataset}
 
@@ -709,21 +785,32 @@ I use these annotations as a ground truth for validation.
 
 \subsubsection{Input preparation}
 
-Besides the original \ac{RNA} point cloud, I can use an optional second input vector with my model.
-Let $X \in \mathbb{R}^{N \times 3}$ be the original input point cloud with $N$ the number of \ac{RNA}s.
-I define my second input vector as $\tilde{X} \in \mathbb{R}^{N \times d}$ with $d \in \{1, 2, 3, 4, 5\}$.
-The latter is composed of three contextual inputs.
-First I can integrate morphological information by merging \ac{RNA} point cloud with 2D coordinates from the cell and the nucleus membranes.
-Such coordinates are localized to the average height of the \ac{RNA} point cloud (0 if it is centered).
-This morphological input substantially increases the size of the original point cloud, because I subsample 300 nodes from the cell membrane and 100 nodes from the nucleus one.
-I also define an extra boolean vector to indicate the cell nodes and a second one to label the nucleus nodes.
-By construction, each \ac{RNA} in the point cloud has then two \emph{False} values.
-I end up with $X \in \mathbb{R}^{\tilde{N} \times 3}$ (with $\tilde{N} = N + 300 + 100$) and $\tilde{X} \in \{0, 1\}^{\tilde{N} \times 2}$ as inputs.
-Second, I can compute the distance from cell and nucleus for every \ac{RNA} node.
-This adds an extra input $\tilde{X} \in \mathbb{R}^{N \times 2}$.
-Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not.
-It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ to indicate if a RNA belongs to a RNA cluster of not.
-Depending on whether or not I choose to add the morphological, the clustering or the distance information, I can exploit up to 5 additional dimensions of input.
+\tw{After re-reading this, I found it a bit confusing. Please check if my version is entirely correct.}
+
+% old version: 
+% Besides the original \ac{RNA} point cloud, I can use an optional second input vector with my model.
+% Let $X \in \mathbb{R}^{N \times 3}$ be the original input point cloud with $N$ the number of \ac{RNA}s.
+% I define my second input vector as $\tilde{X} \in \mathbb{R}^{N \times d}$ with $d \in \{1, 2, 3, 4, 5\}$.
+% The latter is composed of three contextual inputs.
+% First I can integrate morphological information by merging \ac{RNA} point cloud with 2D coordinates from the cell and the nucleus membranes.
+% Such coordinates are localized to the average height of the \ac{RNA} point cloud (0 if it is centered).
+% This morphological input substantially increases the size of the original point cloud, because I subsample 300 nodes from the cell membrane and 100 nodes from the nucleus one.
+% I also define an extra boolean vector to indicate the cell nodes and a second one to label the nucleus nodes.
+% By construction, each \ac{RNA} in the point cloud has then two \emph{False} values.
+% I end up with $X \in \mathbb{R}^{\tilde{N} \times 3}$ (with $\tilde{N} = N + 300 + 100$) and $\tilde{X} \in \{0, 1\}^{\tilde{N} \times 2}$ as inputs.
+% Second, I can compute the distance from cell and nucleus for every \ac{RNA} node.
+% This adds an extra input $\tilde{X} \in \mathbb{R}^{N \times 2}$.
+% Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not.
+% It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ to indicate if a RNA belongs to a RNA cluster of not.
+% Depending on whether or not I choose to add the morphological, the clustering or the distance information, I can exploit up to 5 additional dimensions of input.
+
+The original \ac{RNA} point cloud $X \in \mathbb{R}^{N \times 3}$ can be extended in two ways. First, we can add 2D coordinates from the cell and the nucleus membranes. As they only exist in 2D, the z-coordinate is chosen arbitrarily to the average height of the \ac{RNA} point cloud (0 if it is centered). Here, we sampled 300 and 100 points from the cytoplasmic and nuclear membrane, respectively. Also, we have to make sure that the network can distinguish between the different roles of spatial coordinates of the \ac{RNA}s and the spatial coordinates of nuclear and cytoplasmic membrane. For this, we add two extra boolean variables for each position (\ac{RNA} and membrane points), indicating their origin: \ac{RNA} points are caracterized by $(0,0)$, nuclear membrane points by $(1,0)$ and cytoplasmic membrane by $(0,1)$. 
+Second, I can compute the distance from cell and nucleus for every \ac{RNA} node. 
+%This adds an extra input $\tilde{X} \in \mathbb{R}^{N \times 2}$.
+Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not, represented by an additional boolean variable. 
+%It gives us a boolean $\tilde{X} \in \{0, 1\}^{N \times 1}$ to indicate if a RNA belongs to a RNA cluster of not.
+If morphological, clustering and distance information are used, our input matrix is thus $\tilde{X} \in \mathbb{R}^{N \times d}$, where $\tilde{N} = N + 300 + 100$ and $d=8$ (3 point coordinates, 2 coordinates to indicate the spot type, 2 coordinates to indicate distance to nuclear and cytoplasmic membrane and 1 to indicate whether the spot belongs to an \ac{RNA} cluster). 
+
 
 \subsubsection{Model architecture}
 
@@ -749,14 +836,14 @@ Three sets of point-wise features are computed for each datapoint, with shared l
 Relative weights between datapoints $\gamma(\phi(x_i) - \psi(x_j))$ are computed with the subtraction relation (instead of dot product as in the seminal attention paper~\cite{NIPS2017_3f5ee243}) and a MLP $\gamma$.
 These attention weights are then normalized by softmax operation $\rho$.
 Eventually, datapoint's feature $y_i$ is computed as weighted sum of neighbors value $\alpha(x_j)$, weighted by attention.
-With the position encoding added to both the attention weights and the feature value, the entire layer can be summarized such that:
+With the position encoding added to both the attention weights and the feature value, the entire layer can be summarized as:
 
 \begin{equation}
 	{\displaystyle y_i = \sum_{x_j \in X(i)} \rho(\gamma(\phi(x_i) - \psi(x_j) + \delta_{ij})) \odot (\alpha(x_j) + \delta_{ij})}
 \end{equation}
 
 For a multi-head attention layer, process is repeated in parallel with independent layers, before a last linear projection merges multi-head outputs.
-A shortcut connexion and a layer normalization~\cite{ba2016layer} define the final output of my multi-head attention layer.
+A shortcut connection and a layer normalization~\cite{ba2016layer} define the final output of my multi-head attention layer.
 
 \paragraph{Alignment Module}
 
@@ -786,19 +873,19 @@ My best model exploits cluster and distance information in addition to \ac{RNA} 
 
 \subsubsection{Training and evaluation on simulated patterns}
 
-I train PointFISH on the simulated dataset.
-My implementation is based on TensorFlow~\cite{tensorflow_2015}.
+PointFISH is trained on the simulated dataset.
+The implementation is based on TensorFlow~\cite{tensorflow_2015}.
 I use Adam optimizer~\cite{Diederik_2015} with a learning rate from 0.001 to 0.00001 and an exponential decay (decay rate of 0.5 every 20,000 steps).
 Model is trained for a maximum of 150 epochs, with a batch size of 32, but early stopping criterion is implemented if validation loss does not decrease after 10 consecutive epochs.
 Usually model converges after 50 epochs.
 I apply a 10\% dropout for the last layer and classifications are evaluated with a categorical cross entropy loss.
-Even if localization patterns are not necessarily exclusive, for the simulations I trained the model to predict only one pattern per cell.
+Even if localization patterns are not necessarily mutually exclusive, for the simulations I trained the model to predict only one pattern per cell.
 For this reason, I did not simulate mixed patterns and assume it could help the model to learn disentangled representations.
 Training takes 6 to 8 hours to converge with a Tesla P100 GPU.
 
 A first evaluation can be performed on the simulated test dataset.
 Because each pattern is equally generated, a simple accuracy metric is enough.
-On experimental dataset, imbalanced between localization patterns implies a more robust metric like F1-score.
+For the experimental dataset, imbalanced between localization patterns implies a more robust metric like F1-score.
 With my best PointFISH models, I obtain a general F1-score of 95\% over the different patterns (see confusion matrix~\ref{fig:confusion_matrix}).
 
 \begin{figure}[]
@@ -821,7 +908,7 @@ Among the 810 annotated cells, those with a unique pattern are colored according
 The rest of the dataset remains gray.
 Overall, PointFISH embedding discriminates well the different localization patterns.
 Intranuclear, nuclear edge and perinuclear cells form distinct clusters, despite their spatial overlap, as well as protrusions.
-Cells with foci can be found in a separated clusters as well, but also mix with nuclear and perinuclear patterns.
+Cells with foci can be found in a separated cluster, but also mix with nuclear and perinuclear patterns.
 This confusion is not surprising as a large number of cells in the dataset present a nuclear-related foci pattern: cells have \ac{RNA}s clustered in foci, which in turn are close to the nuclear envelope, in which case the cell would be labeled with both patterns.
 
 \begin{figure}[]
@@ -905,8 +992,8 @@ I compare the use of \ac{RNA} point cloud only as input or the inclusion of cont
 In Table~\ref{table:extra_inputs}, this design logically returns the lowest F1-score.
 Three additional inputs are available: \ac{RNA} distance from cell and nucleus (\emph{distance}), \ac{RNA} clustering flag (\emph{cluster}) and the integration of cell and nucleus membrane coordinates (\emph{morphology}).
 Best performances are obtained with, at least, distance and cluster information.
-Cell and nucleus coordinates do not increase significantly the classification and dramatically increase the computation time of the model (I need to process a larger point cloud).
-In particular, cluster information greatly improves foci pattern recognition while distances boost others localization patterns.
+Cell and nucleus coordinates do not increase significantly the classification. The reason is probably that the distance feature already represents the relevant information and adding membrane coordinates does thus not improve performance anymore. However, inclusion of membrane points dramatically increases the computation time of the model (as a larger point cloud has to be processed). 
+Cluster information greatly improves foci pattern recognition while distances boost others localization patterns; both observations are expected.
 
 \paragraph{Alignment module and Point-wise block}
 
@@ -921,7 +1008,7 @@ As expected, EdgeConv blocks convey a better information than PointNet by exploi
 Yet, they do not match the performance of multi-head attention layer.
 
 Concerning these layers, I evaluate how the number of parallel heads can influence the performance of PointFISH.
-By default, I use 3 parallel attention layers to let the model specialized its attentions vectors, but I also test 1, 6 and 9 parallel heads.
+By default, I use 3 parallel attention layers to let the model specialize its attentions vectors, but I also test 1, 6 and 9 parallel heads.
 In Table~\ref{table:ablation} we only observe a slight benefit between the original point transformer layer~\cite{Zhao_2021_ICCV} (without one attention layer) and its augmented implementation.
 
 % multiscale
@@ -936,7 +1023,7 @@ In a MLP block, I use ReLU activation and layer normalization, but also increase
 Before the pooling layer, the first MLP block includes 4 layers with an increasing depth (128, 256, 512 and 1024).
 After the pooling layer, the second MLP block includes 2 layers with a decreasing depth (512 and 256).
 Similarly, to return 128, 64 or 32 long embeddings, I implement 6 (128, 256, 512, pooling, 256 and 128), 5 (128, 256, pooling, 128 and 64) or 4 final layers (128, pooling, 64 and 32).
-We observe in Table~\ref{table:ablation} a fall in performance for the lowest dimensional embedding (64 and 32).
+We observe in Table~\ref{table:ablation} a drop in performance for the lowest dimensional embedding (64 and 32).
 This hyperparameter is also critical to design lighter models, with a division by 4 in terms of trainable parameters between a 256 and a 128 long embedding.
 
 \begin{table}[]

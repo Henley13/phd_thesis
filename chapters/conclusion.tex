@@ -6,39 +6,40 @@
 \minitoc
 \newpage
 
-The initial objectives defined for my PhD were to build, scale up and apply a pipeline to analyze and quantify \ac{RNA} localization patterns from \ac{smFISH} images.
-Overall, these different objectives have been achieved, in terms of methods, tools and biological applications.
+The objective of my PhD thesis was to design methods and software for the large-scale analysis and quantification of \ac{RNA} localization patterns from \ac{smFISH} images and to apply these methods to large-scale screens. 
+%Overall, these different objectives have been achieved, in terms of methods, tools and biological applications.
 This provides new opportunities to explore more advanced algorithms, incorporate new input modalities, or answer more challenging questions.
 
 \section{Results of the thesis}
 \label{sec:conclusion_thesis}
 
 In \textbf{Chapter~\ref{ch:chapter1}}, I present FISH-quant v2, the general framework implemented and released during my PhD~\cite{Imbert_fq_2022}.
-It is a user-friendly, open-source and Python based tool that improves the initial MATLAB version of FISH-quant.
-It provides modules for the most common operations needed for a \ac{smFISH} analysis.
-Spot detection is scalable.
-Cell and nuclei segmentation includes pre-trained deep learning models.
-Feature engineering is simplified by the selection and the implementation of proven spatial features.
-Modules are interchangeable and flexible.
-They can be combined to design a custom and complete pipeline or run independently.
-It includes \emph{bigfish}, a general Python package for the analysis, a \ac{GUI}, \emph{simfish}, a Python package for simulations, as well as documentation and interactive examples.
+It is a user-friendly, open-source and Python-based tool that builds on and extends the initial MATLAB version of FISH-quant providing modules for the most common operations needed for a \ac{smFISH} analysis. 
+FISH-quant v2 features a fully automatic spot detection and pre-trained deep learning models for cell and nuclei segmentation and a set of hand-crafted features designed to quantitatively describe the spatial distribution of \ac{RNA} inside cells. 
+% Spot detection is scalable.
+% Cell and nuclei segmentation includes pre-trained deep learning models.
+% Feature engineering is simplified by the selection and the implementation of proven spatial features.
+The software architecture is highly modular and flexible, allowing the design of customized workflows. 
+%Modules are interchangeable and flexible.
+%They can be combined to design a custom and complete pipeline or run independently.
+FISH-quant v2 includes \emph{bigfish}, a general Python package for the analysis, a \ac{GUI}, the module \emph{simfish}, a Python package for simulations, as well as documentation and interactive examples.
 In addition, the protocol and the analysis pipeline we have performed for different applications are described in a recent publication~\cite{safieddine_ht_smfish_2022}.
 
 In \textbf{Chapter~\ref{ch:chapter2}}, I present detection methods integrated in FISH-quant v2.
-The main improvement concerns the spot detection itself with the implementation of a heuristic to threshold the detected spots without any manual intervention.
+An important improvement concerns the spot detection itself with the implementation of a heuristic to threshold the detected spots without any manual intervention.
 This enables a large scale application of our methods.
-Solutions to decompose regions with cluttered spots, detect clusters or spot colocalization are also described.
-Finally, I explain how to simulate spots images in order to assess the detection performance under different noise conditions.
+Furthermore, I describe solutions to decompose regions with cluttered spots, detect clusters or analyze spot colocalization.
+Finally, I explain how spot images are simulated in FISH-quant v2. Simulation plays a key role for the performance assessment of spot detection under different noise conditions.
 
 In \textbf{Chapter~\ref{ch:chapter3}}, I present methods integrated in FISH-quant v2 to segment nuclei and cells.
 It includes in-house deep learning models trained on various fluorescence microscopy images.
 Most importantly, the ability to use external frameworks and models is facilitated with postprocessing methods to format and refine segmentation masks.
-In addition, I describe joint work to help segmentation models perform well with less annotated data by exploiting in silico techniques~\cite{Bonte_2022}.
+In addition, I describe contributions to other projects aiming at overcoming the need for massive image annotation for image segmentation, for instance by the use of in silico labeling for pre-training~\cite{Bonte_2022}.
 
 In \textbf{Chapter~\ref{ch:chapter4}}, I present my different contributions to analyze \ac{RNA} distribution.
 First, previous detection and segmentation results are summarized in a homogeneous coordinate representation of each identified cell.
-Second, a set of relevant spatial features are implemented in FISH-quant v2, based on the extracted coordinates.
-It facilitates the frequent feature engineering stage of any analysis pipeline and the subsequent statistical computation.
+Second, I present a set of features describing the spatial distribution of spots, which I implemented in FISH-quant v2, based on the extracted coordinates. This feature set is building on and extending features that have been previously used in our research group. 
+%It facilitates the frequent feature engineering stage of any analysis pipeline and the subsequent statistical computation.
 Third, I present alternative approaches to classify \ac{RNA} localization patterns, either with \ac{CNN}~\cite{dubois_deep_2019} or point cloud models~\cite{pointfish_2022}.
 These alternatives also leverage a simulation framework that generates localization patterns at will and available in FISH-quant v2.
 
@@ -54,30 +55,74 @@ They reveal regulation mechanisms more complex than expected with various spatia
 \section{Perspectives on the future of smFISH analysis}
 \label{sec:conclusion_future}
 
+% better images --> easier task
 Since the first design of \ac{smFISH} in the late 1990s, fluorescent microscopy techniques have dramatically improved.
 Fluorophores are cheaper or brighter, or both.
 The hybridization protocols are standardized and thus more reproducible.
 The fluorescent images have a higher \ac{SNR} and this trend is likely to continue.
 Therefore, in future experimental studies, the detection and segmentation steps could be facilitated.
 
-Conversely, a second trend could enrich the final analysis and bring new challenges.
-Recent experimental protocols enable the visualization of multiple elements simultaneously, at the single molecule level.
-Multiplexing and sequential hybridization can target thousands of transcripts.
-Polysome imaging enables dual-imaging experiments and would allow us to better investigate the role of \ac{RNA} in translational regulation.
-Lastly, live cell imaging introduces a temporal dimension to modelize.
+% learning from simulations --> domain adaptation
+\paragraph{Improving localization features}
+In chapter \ref{ch:chapter4}, I have presented PointFISH, a neural network architecture that can directly process point clouds. This network was trained on simulated data. There is a number of possible improvements: first, we could improve the simulations themselves, for instance by investigating a larger diversity of patterns. An in-depth study of the relation between pattern strength and generalization capacity of the trained network would also be an interesting perspective. Furthermore, training on simulated data always represents the problem that the data distribution we have trained on does usually not match the distribution of real data. For this reason, the use of domain-adaptation might be a promising strategy to investigate. Finally, the use of self-supervised learning might also be an interesting alternative to training on simulations. 
 
-Such novelties would require the adaptation of future computational frameworks.
-Overall, machine learning approaches should keep disseminating in bioinformatics.
-Computer vision methods to identify and extract relevant information from bioimages would need to increase their robustness and scalability to match advances in experimental protocols.
-This can take the form of few successful general models or the release of a zoo of specialized approaches, adapted to a diversity of bioimages.
-In the same time, computational frameworks should offer more refine and complex features or representation of the transcriptome.
-The progressive release of large and diversified datasets, with different cell lines and modalities of acquisitions, would also improve the training and evaluation of computational methods.
-However, with deep learning methods, beyond the volume of data, the real bottleneck is often the availability of a ground truth.
-Like with medical images, bioimages require manual annotations from biomedical experts and can be difficult to obtain.
-To alleviate this limitation, future models could leverage or deploy the current research about self-supervised or weakly supervised training, as well as active learning frameworks.
+% more compartments labeled
+% in silico labeling
+\paragraph{Reference markers}
+The analysis of \ac{RNA} localization requires the segmentation of the cell boundary and ideally of structures inside the cell. The insights that can be gained from smFISH studies very much depend on the choice of the marked structures, as we have seen in chapter \ref{ch:chapter5}. An important extension is therefore the use of in silico labeling techniques. This would allow for instance to segment certain structures without the use of fluorescent labels, which in turn frees these channels to mark other structures. Such a strategy thus has the potential to enrich the description of the spatial RNA distribution by adding more reference structures. 
 
-New experimental and computation methods will probably enable a more efficient exploration of the transcriptome and a better understanding of the gene expression process.
-Pipelines should be adapted from cultivated cell lines to actual tissues, from fundamental biological research to medical applications.
+% cell stratification
+\paragraph{Analysis of localization heterogeneity}
+Another question that has not yet been addressed in detail is the explanation of localization heterogeneity. Indeed, we have seen in chapter \ref{ch:chapter5}, that for a given RNA not all cells show the same localization pattern, and that only a fraction of RNA molecules has preferential localization. It is not well understood where these differences come from. One possible explanation might be the cell cycle phase. It will therefore be interesting to assess the cell cycle phase, ideally by in silico labeling from phase contrast images or dedicated fluorescent markers, in order to stratify cells and to investigate which of the patterns are cell cycle dependent. On a larger perspective, other cell properties could be correlated to the observed patterns. For this reason, one important aspect to be investigated in the future will be to relate the localization information to other cellular properties.
+
+% more channels
+\paragraph{Analyzing transcriptomic profiles}
+The most important trend today is the advent of experimental techniques such as MERFISH and seqFISH, that allow the imaging of tens or hundreds of RNAs in the same cells. From a computational point of view, the algorithmic steps (cell and nucleus segmentation, spot detection, etc.) still remain the same, but they have to be complemented by the joint analysis of different RNA channels. In most studies, these data are used to map each cell to a cell type or cell state, that is defined by the transcriptomic profile. If used in cell culture, this means that each cell is then equipped with an expression vector of multiple RNAs, the resulting cell type or state, the localization features for each of these RNAs and the morphological properties of the cell. The biggest challenge in these data is to deal with these high dimensional input data, to identify relationships between the input variables and to synthesize this extremely rich information to representations that can be interpreted biologically. FISH-quant v.2 offers solutions to some of these tasks, by providing tools for the basic image analysis and the analysis of localization features, but it is clear that we will need important extensions to tackle these additional challenges. 
+
+% tissue
+\paragraph{From cell culture to tissue}
+While there are studies employing these transcriptomic techniques in cell culture, the most widely used application scenario concerns the study of tissue architecture. While in principle, the overall algorithmic steps remain similar, segmentation can be a bottleneck, as segmentation is much more difficult in tissue than in cell culture. Moreover, the degree of difficulty is very variable depending on the tissue type. Also spot detection can be complicated by the presence of auto-fluorescence, possibly requiring more refinement steps. Finally, the main task of such data is also different, because the RNA channels are mostly used for cell type calling. An important challenge is also to describe the spatial distribution of cells in the tissue. For this, there might be some methodological overlap with the analysis of subcellular localization patterns, but there are also important differences. Most importantly, spatial transcriptomics at cellular resolution is an expensive technique, and purely data-driven approaches might therefore be limited by the low number of data points. 
+
+% segmentation
+\paragraph{Data repositories and challenges}
+On a more general perspective, bioimage analysis will continue to be driven by the generation of massive annotated datasets, and challenges. In the past, such challenges played an important role for the design and benchmarking of segmentation networks, such as Stardist, Nucleaizer and Cellpose. For protein localization patterns, the availability of large scale annotated data has also been instrumental. For these reasons, it would be very interesting to organize a challenge in the field of RNA detection and classification of localization patterns. Our simulation framework could play an important role for this: computational challenges often contain one sub-task related to simulated image data. 
+
+
+
+% , which can be used for cell stratification, 
+
+% , which can then again be used for cell stratification, potentially providing explanations of localization heterogeneity. Multi-channel data can also be used for co-localization analyses at a large scale. 
+
+% % tissue
+
+
+% % an atlas of all localization patterns
+
+
+% % time-lapse
+
+
+
+% Conversely, a second trend could enrich the final analysis and also come with new computational challenges.
+% Recent experimental protocols enable the visualization of multiple elements simultaneously, at the single molecule level.
+
+% % Recent experimental protocols enable the visualization of multiple elements simultaneously, at the single molecule level.
+% % Multiplexing and sequential hybridization can target thousands of transcripts.
+% % Polysome imaging enables dual-imaging experiments and would allow us to better investigate the role of \ac{RNA} in translational regulation.
+% % Lastly, live cell imaging introduces a temporal dimension to modelize.
+
+% Such novelties would require the adaptation of future computational frameworks.
+% Overall, machine learning approaches should keep disseminating in bioinformatics.
+% Computer vision methods to identify and extract relevant information from bioimages would need to increase their robustness and scalability to match advances in experimental protocols.
+% This can take the form of few successful general models or the release of a zoo of specialized approaches, adapted to a diversity of bioimages.
+% In the same time, computational frameworks should offer more refine and complex features or representation of the transcriptome.
+% The progressive release of large and diversified datasets, with different cell lines and modalities of acquisitions, would also improve the training and evaluation of computational methods.
+% However, with deep learning methods, beyond the volume of data, the real bottleneck is often the availability of a ground truth.
+% Like with medical images, bioimages require manual annotations from biomedical experts and can be difficult to obtain.
+% To alleviate this limitation, future models could leverage or deploy the current research about self-supervised or weakly supervised training, as well as active learning frameworks.
+
+Altogether, new experimental methods, accompanied by computational methods will enable a more efficient exploration of the transcriptome and a better understanding of the mechanism and function of RNA localization and the spatial regulation of gene expression.
+%Pipelines should be adapted from cultivated cell lines to actual tissues, from fundamental biological research to medical applications.
 Obviously, there is still a lot of work to achieve for future researchers and I hope that my contribution with this thesis will be useful to the community.
 
 \section{Publications}
