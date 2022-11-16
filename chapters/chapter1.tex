@@ -104,7 +104,7 @@ To address this, I designed a Python-based version of FISH-quant to fulfill the 
 Contrary to the first version of FISH-quant in Matlab, I address and improve on each of the specifications mentioned in section~\ref{subsec:pipeline_stages}.
 The switch to Python allows me to develop a flexible, free and fully open-source software.
 FISH-quant v2 enjoys a better integration to other open source tools and frameworks, from data analysis to web-based user interaction.
-Importantly, FISH-quant v2 facilitates the use of machine learning or deep learning algorithms with the import of dedicated packages, such as scikit-learn~\cite{pedregosa11a_scikitlearn} or TensorFlow~\cite{tensorflow_2015}.
+Importantly, FISH-quant v2 facilitates the use of machine learning or deep learning algorithms with the import of dedicated packages, such as scikit-learn~\cite{scikit-learn} or TensorFlow~\cite{tensorflow_2015}.
 I also improve the scalability and the modularity of the package: the software has now been applied to several High Content Screening projects~\cite{CHOUAIB_2020,safieddine_choreography_2021,pichon_kinesin_2021}.
 Lastly, by using ImJoy~\cite{ouyang_imjoy_2019}, a recently developed data analysis framework, we provide browser-based \ac{GUI} for both launching image analysis and downstream analysis of the results, and the computation can be performed locally or seamlessly scale to powerful remote computing servers.
 
@@ -135,7 +135,7 @@ Third, a Python package (\emph{simfish}) allows the simulation of different subc
 Fourth, ImJoy plugins~\cite{ouyang_imjoy_2019} provide a \ac{GUI} for the most commonly used workflows, and an interactive tutorial that can also run directly without local installation.
 Lastly, a landing page\footnote{\url{https://fish-quant.github.io/}} centralizes implemented tools and directs new users to the most relevant resource for their analysis needs.
 
-Dependencies for the Python packages are limited to standard Python scientific libraries: scientific computing (numpy~\cite{2020NumPy}, SciPy~\cite{2020SciPy}), data wrangling (pandas~\cite{mckinney_pandas_2010}), image analysis (scikit-image~\cite{walt_scikit-image_2014}), visualization (matplotlib~\cite{hunter_matplotlib_2007}), parallel computing (joblib\footnote{\url{https://github.com/joblib/joblib}})and machine learning (scikit-learn~\cite{pedregosa11a_scikitlearn}, TensorFlow~\cite{tensorflow_2015}).
+Dependencies for the Python packages are limited to standard Python scientific libraries: scientific computing (numpy~\cite{2020NumPy}, SciPy~\cite{2020SciPy}), data wrangling (pandas~\cite{mckinney_pandas_2010}), image analysis (scikit-image~\cite{walt_scikit-image_2014}), visualization (matplotlib~\cite{hunter_matplotlib_2007}), parallel computing (joblib\footnote{\url{https://github.com/joblib/joblib}})and machine learning (scikit-learn~\cite{scikit-learn}, TensorFlow~\cite{tensorflow_2015}).
 The GitHub repositories are using continuous integration providing increased robustness of the released code, through unitary testing, version control and automatically generated up-to-date documentation.
 Finally, packages are hosted under a BSD 3-Clause License.
 

@@ -148,13 +148,13 @@ In bioimage analysis, in particular for High Content Screening, there is an abun
 They can be roughly categorized into shape features and texture features.
 Examples include Haralick features~\cite{Haralick1973}, statistical geometric features~\cite{Walker1996}, local binary patterns~\cite{ahonen_2006}, moment based features~\cite{Reeve1992} and morphological granulometries~\cite{Serra1983}, to name a few.
 
-These features have been used to classify cells according to their protein localization patterns~\cite{Boland1998, Glory2007}, or their phenotypes~\cite{Wang2008, Jones2009, Walter2010} or classify directly full images with entire cell populations~\cite{Uhlmann2016}.
+These features have been used to classify cells according to their protein localization patterns~\cite{boland_automated_1998, Glory2007}, or their phenotypes~\cite{Wang2008, Jones2009, Walter2010} or classify directly full images with entire cell populations~\cite{Uhlmann2016}.
 
 Importantly, such feature families are readily available in standard open-source software for computational phenotyping, such as CellProfiler~\cite{Carpenter2006, Jones2008, mcquin_cellprofiler_2018}, CellCognition~\cite{held_cellcognition_2010}, Mahotas~\cite{mahotas_2013} and ilastik~\cite{berg_ilastik_2019}.
 
 Most of these hand-crafted features come from the computer vision literature: they are pretty generic with limited biological interpretability.
 Furthermore, they are designed to quantitatively describe object shapes and textures, rather than directly representing spatial distributions of biomolecules.
-Of note, this also holds for protein localization screens~\cite{Glory2007, Ouyang2019b}.
+Of note, this also holds for protein localization screens~\cite{Glory2007, ouyang_analysis_2019}.
 This is due to the fact that with traditional microscopy, individual proteins cannot be resolved.
 In addition, proteins can be abundant and often concentrate on specific structures.
 As a consequence, the protein signal cannot be decomposed into single points, and it is therefore logical to describe their spatial distribution by texture features.
@@ -391,7 +391,7 @@ A neural network learns representations that can be used for transfer learning.
 One advantage is to pre-train relevant representations on a first task with a large and general annotated dataset, before addressing a more difficult or specific task with sometimes a limited dataset available.
 Such model can be used as a feature extractor by computing features from one of its intermediate layers.
 Computer vision community progressively replaces hand-crafted features~\cite{Lowe_1999,Bay_2006} by deep learning features to analyze images.
-The best convolutional neural networks pretrained on large and general classification challenges~\cite{He_2016_CVPR,Szegedy_2016_CVPR,Tan_2019,Huang_2017_CVPR} are used as backbone or feature extractor for more complex task like face recognition, detection or segmentation.
+The best convolutional neural networks pretrained on large and general classification challenges~\cite{He_2016, Szegedy_2016_CVPR, Tan_2019, Huang_2017_CVPR} are used as backbone or feature extractor for more complex task like face recognition, detection or segmentation.
 NLP community follows this trend as well with a heavy use of word embeddings~\cite{Mikolov_2013,Joulin_2016} or the more recent transformer models.
 As a last example, with graph computation, node2vec~\cite{Grover_2016} learns ''task-independent representations'' for nodes in networks.
 

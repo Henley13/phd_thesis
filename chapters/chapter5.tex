@@ -116,7 +116,7 @@ Nuclear segmentation was performed from the DAPI channel and cellular segmentati
 Segmentation was performed in 2D for both nuclei and cells, thus 3D images are projected in two dimensions using their maximal local focus values~\cite{tsanov_smifish_2016}.
 
 Nuclei were segmented with NucleAIzer~\cite{hollandi_nucleaizer_2020}, a deep neural network pipeline trained with the annotations from the Data Science Bowl 2018 challenge\footnote{\url{https://www.kaggle.com/c/data-science-bowl-2018}}.
-This pipeline is based on a Mask R-CNN architecture~\cite{He_2017_ICCV}, with optionally a fine-tuning of the segmented boundaries with a U-Net model~\cite{Ronneberger_unet}.
+This pipeline is based on a Mask R-CNN architecture~\cite{He_2017_ICCV}, with optionally a fine-tuning of the segmented boundaries with a U-Net model~\cite{Ronneberger_2015}.
 After a first round of segmentation, some nuclei were missing, so I removed the segmented nuclei from the DAPI channel and re-analyzed the image with the remaining nuclei again with NucleAIzer.
 Removing the segmented nuclei from the original image implied the morphological reconstruction technique described in Chapter~\ref{ch:chapter3}.
 This technique is now implemented in FISH-quant.
@@ -553,7 +553,7 @@ This worked robustly, and allowed for an automated centrosome detection (Figure~
 \subsubsection{Cell and nucleus segmentation}
 
 Nucleus and cell segmentation was performed with a pretrained Cellpose model~\cite{stringer_cellpose_2021} from the 2D DAPI and CellMask\textsuperscript{\texttrademark} channels, respectively .
-CellPose is based on a modified U-Net architecture~\cite{Ronneberger_unet} and trained on a large and diverse dataset.
+CellPose is based on a modified U-Net architecture~\cite{Ronneberger_2015} and trained on a large and diverse dataset.
 The performance of a deep learning model like Cellpose makes the segmentation step scalable with little or no manual intervention.
 I found that Cellpose is quite sensitive to the set average size of the segmented structure.
 For our data, I used an average diameter of 14.4$\mu$m  for nuclei, 22.7$\mu$m for cells.
@@ -565,7 +565,7 @@ This resulted in 54,263 individual cells which were used for further analysis.
 \subsubsection{Centrosomal features and cell cycle classification}
 
 I adapted the spatial features developed for~\cite{CHOUAIB_2020} to characterize a centrosomal \ac{RNA} localization at the single-cell level.
-In particular, I defined the centrosomal region as a disk with an empirically set radius of 2000nm around the detected \ac{Centrosomes}.
+In particular, I defined the centrosomal region as a disk with an empirically set radius of 2000nm around the detected centrosomes.
 From there, I  computed any potential accumulation of \ac{RNA}s within centrosome's neighborhood, normalized by the expression level observed for each cell.
 An example of such accumulation can be seen in Figure~\ref{fig:centrosomes}.
 A complete list of the different implemented features is described in Section~\ref{subsec:expert_features} and illustrated in Figure~\ref{fig:centrosome_features}.
