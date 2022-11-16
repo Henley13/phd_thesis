@@ -179,14 +179,15 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 \section{Imaging RNAs}
 \label{sec:fish}
 
-Our interest about \ac{RNA} localization requires advanced experimental protocol to analyze the \ac{RNA} subcellular distribution.
-Traditional techniques are based on biochemical bulk-measurements, like microarrays~\cite{Schena_1995} or qRT-PCR~\cite{bustin_absolute_2000}.
-They cannot operate at the single cell level and make the study of a spatial distribution within the cell impossible.
-However, technical improvements are progressively addressing these limitations, for example with single cells \ac{RNA} sequencing~\cite{Hedlund_2018} or fluorescent in situ \ac{RNA} sequencing (FISSEQ)~\cite{Church_2014}.
+%Our interest about \ac{RNA} localization requires advanced experimental protocol to analyze the \ac{RNA} subcellular distribution.
+Traditional techniques to study gene expression are based on biochemical bulk-measurements, like microarrays~\cite{Schena_1995} or qRT-PCR~\cite{bustin_absolute_2000}. They aim at identifying and quantifying the presence of \ac{RNA}s in a sample. These methods could not operate at the single cell level and did therefore not allow to assess expression heterogeneity between cells. Subsequent developments in next generation sequencing (NGS) allowed to address this limitation, by the advent
+%and make the study of a spatial distribution within the cell impossible.
+%However, technical improvements are progressively addressing these limitations, 
+of single cell \ac{RNA} sequencing~\cite{Hedlund_2018} or fluorescent in situ \ac{RNA} sequencing (FISSEQ)~\cite{Church_2014}.
 
-An alternative option is to rely on images, which naturally provide the spatial insights and, with sufficient resolution, enable single cell analysis.
-In addition, experiments should be scalable.
-The design of large screens enables a systemic study of complex mechanisms and to cope with gene expression stochasticity, as well as heterogeneous \ac{RNA} distribution.
+An alternative option is to rely on images, which naturally provide insights regarding the spatial distribution of \ac{RNA}s and, with sufficient resolution, enable single cell analysis. Coupled with techniques from High Content Screening --- a largely automatized experimental setup --- this technique can be applied at a large scale, probing thousands of \ac{RNA}s with respect to their spatial localization. 
+%In addition, experiments should be scalable.
+%The design of such large screens enables a systematic study of complex mechanisms and to cope with gene expression stochasticity, as well as heterogeneous \ac{RNA} distribution.
 
 \begin{figure}[]
     \centering
@@ -200,7 +201,8 @@ The design of large screens enables a systemic study of complex mechanisms and t
 \label{subsec:intro_smfish}
 
 Notably, \ac{smFISH} technique~\cite{Femino_1998}, is the first to reach single molecule resolution in fixed cells.
-It uses multiple fluorescent oligonucleotides (or probes) to target and hybridize a transcript.
+It uses multiple fluorescent oligonucleotides (or probes) that hybridize to the target RNA. 
+%to target and hybridize a transcript.
 Importantly, this technique preserves the cell environment, and thus enriches the contextual information available in the images.
 However, probes need to be specifically designed against the transcript of interest, making this solution costly to scale.
 A \ac{smFISH} experiment includes four steps:
@@ -234,12 +236,17 @@ This design with indirect labeling presents a higher flexibility and saves cost.
 %Indeed, the fluorescent oligonucleotide can be generic while several specialized primary probes can target the \ac{RNA} molecule.
 %Such indirect labeling techniques is also observed with more complex designs.
 
-\subsection{Scaling up FISH}
+\subsection{Large-scale FISH studies}
 \label{subsec:intro_scale_fish}
 
-\begin{center}
-	\textit{(To be completed)}
-\end{center}
+FISH is an experimental technique compatible with large-scale studies. The first large scale screen was performed in Drosophila embryos~\cite{lecuyer_global_2007} and revealed a surprising number of mRNAs that have preferential localization during embryogenesis ($71\%$ out of more than 3000 genes tested). 
+
+A large-scale screen in mammalian cell lines was proposed a few years later~\cite{Battich2013,Battich2015}, assessing the transcriptional noise and their relationship to cellular phenotypes, as well as sub-cellular localization of m\ac{RNA}s for a large number of genes ($N=1000$). 
+
+One of the limitations of smFISH with respect to single cell RNAseq is that we probe the localization and expression of transcripts one RNA at a time. More recent developments relying on sequential hybridization steps and barcoding RNAs, allow now the joint analysis of hundreds of \ac{RNA}s in the same cells~\cite{lubeck_single_cell_2014, Chen_2015, eng_seqfish_2019, fazalAtlasSubcellularRNA2019}. These techniques were not available in practice at the time of the start of this PhD thesis, but in principle, they represent a very interesting alternative to High Content Screening. 
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -251,10 +258,10 @@ This design with indirect labeling presents a higher flexibility and saves cost.
 %\newacro{SeqFISH}{Sequential FISH}
 %\newacro{MERFISH}{Multiplexed Error-Robust FISH}
 
-~\cite{lecuyer_global_2007} % first large screen
-~\cite{Chen_2015} % MERFISH
-~\cite{lubeck_single_cell_2014} % SeqFISH
-~\cite{eng_seqfish_2019} % SeqFISH+
+% ~\cite{lecuyer_global_2007} % first large screen
+% ~\cite{Chen_2015} % MERFISH
+% ~\cite{lubeck_single_cell_2014} % SeqFISH
+% ~\cite{eng_seqfish_2019} % SeqFISH+
 
 % Nevertheless, these techniques are witnessing rapid improvements in specificity, robustness, multiplexity, and background suppression. (Adham)
 
