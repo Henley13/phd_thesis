@@ -10,7 +10,7 @@
 
 My PhD thesis is devoted to the computational analysis of \ac{FISH} images in order to study subcellular localization of \ac{RNA}.
 In this introduction, I will start by briefly presenting the fundamentals on gene expression and the role of \ac{RNA} localization therein.
-Then, I will present the experimental protocols that allows us to visualize and analyse \ac{RNA} molecules as well as the machine learning methods I used.
+Then, I will present the experimental protocols that allows us to visualize and analyse \ac{RNA} molecules as well as the Machine Learning methods I used.
 I will finish this introduction with an overview of my thesis objectives, a list of the contributions I made and a summary of this manuscript to guide the reader.
 
 \section{Gene expression}
@@ -228,7 +228,7 @@ This design with indirect labeling presents a higher flexibility and saves cost.
 FISH is an experimental technique compatible with large-scale studies.
 The first large scale screen focusing on RNA localization was performed in Drosophila embryos~\cite{lecuyer_global_2007} and revealed a surprising number of \ac{mRNA}s that have preferential localization during embryogenesis ($71\%$ out of more than 3000 genes tested). 
 
-A large-scale screen in mammalian cell lines was proposed a few years later~\cite{battich_image-based_2013, battich_control_2015}, assessing the transcriptional noise and their relationship to cellular phenotypes, as well as subcellular localization of \ac{mRNA}s for a large number of genes ($N = 1000$). 
+A large-scale screen in mammalian cell lines was proposed a few years later~\cite{battich_image-based_2013, battich_control_2015}, assessing the transcriptional noise and their relationship to cellular phenotypes, as well as subcellular localization of \ac{mRNA}s for a large number of genes ($N = 1000$).
 
 Our collaborators also adapted our \ac{smiFISH} protocol to 96-well plates, permitting robotized experiments and automated imaging to study hundreds of \ac{RNA} species~\cite{tsanov_smifish_2016, safieddine_choreography_2021}.
 
@@ -242,39 +242,33 @@ These techniques were not available in practice at the time of the data collecti
 \subsection{Working with bioimages}
 \label{subsec:intro_bioimages}
 
-Over the past decades, a number of technological breakthroughs and new experimental techniques have transformed biology in depth. The availability of large, systematically acquired datasets allow today to perform integrated systems-level analyses. 
-%Recent developments in life sciences and technological breakthroughs greatly
+Over the past decades, a number of technological breakthroughs and new experimental techniques have transformed biology in depth.
+The availability of large, systematically acquired datasets allow today to perform integrated systems-level analyses.
 This transformation also significantly increases the importance of data collection and maintenance, as well as robust quantitative approaches allowing to extract valuable insights from these datasets.
-%A typical example is the Human Genome Project~\cite{lander_initial_2001} that aims to decipher human genome by the use of novel sequencing techniques.
-%Data collection and maintenance, as well as development of methods to extract valuable insights from it, is transforming biology in depth.
 
 In bioimaging specifically, current experimental platforms allow us to perform a large number of experiments under varied conditions and highly informative content.
 These techniques are referred as High Content Screening and pave the way for a systematic analysis of living systems.
 Finally, the increasing degree of automation of experimental protocols justifies the development of bioimage informatics as a discipline in its own right to assist biologists.
 
-The use of images in biology brings several advantages: (1) images are informative about morphological phenotypes, (2)
-they preserve the spatial dimension of the living system studied, as well as the temporal dimension in the case of repeated image acquisitions in live imaging experiments and (3) they allow to access different scales of organization, from the molecular scale to the tissue architecture.  
-%Last but not least, an analysis can be performed at different scales, from the molecule to the whole organ, through the tissues.
+The use of images in biology brings several advantages: (1) images are informative about morphological phenotypes, (2) they preserve the spatial dimension of the living system studied, as well as the temporal dimension in the case of repeated image acquisitions in live imaging experiments and (3) they allow to access different scales of organization, from the molecular scale to the tissue architecture.
 
-%Overall, the tasks addressed with these bioimages can be
-Bioimage Informatics deals with all computational aspects of images in the life sciences. There is a large variety of different tasks, such as image restoration, denoising, segmentation, tracking, registration and recognition of specific phenotypes. Usually, image datasets are characterized by an important variability: 
-% In general, the tasks performed with these bioimages can be as varied as the visualization of a living system, the reconstruction of microscopy images, its denoising or the recognition of specific phenotypes.
-% One word to summarize bioimages would be \emph{heterogeneity}.
-living systems can be imaged at different scales, with different modalities of acquisition and evolving technology.
+Bioimage Informatics deals with all computational aspects of images in the life sciences.
+There is a large variety of different tasks, such as image restoration, denoising, segmentation, tracking, registration and recognition of specific phenotypes.
+Usually, image datasets are characterized by an important variability: living systems can be imaged at different scales, with different modalities of acquisition and evolving technology.
 In addition, the fluorescent markers used in microscopy or the question investigated by researcher may differ, making images of the same object from two different studies not necessarily compatible.
-As a consequence, the field often requires tailored solutions to the problem at hand. However, there can also be for some projects a common algorithmic backbone, that just needs to be adapted to new projects. 
-%the subsequent computational analysis should be adapted for one set of images to another.
+As a consequence, the field often requires tailored solutions to the problem at hand.
+However, there can also be for some projects a common algorithmic backbone, that just needs to be adapted to new projects.
 
-\subsection{Machine learning for bioimages}
+\subsection{Machine Learning for bioimages}
 \label{subsec:intro_ml_tools}
 
-\subsubsection{A machine learning boom}
+\subsubsection{A Machine Learning boom}
 
-The recent years have seen a renewed interest for machine learning research, the cornerstone of current artificial intelligence era, driven by successful applications in vision, language understanding, speech recognition, etc\dots
-This term of machine learning was coined to describe the set of techniques and models that make automatic decision based on patterns \emph{learned} and found in data.
+The recent years have seen a renewed interest for Machine Learning research, the cornerstone of current artificial intelligence era, driven by successful applications in vision, language understanding, speech recognition, etc\dots
+This term of Machine Learning was coined to describe the set of techniques and models that make automatic decision based on patterns \emph{learned} and found in data.
 For some specific tasks (like image classification) these algorithms have reached human-like capabilities.
 For other fields, the gap between computer and human performances keeps decreasing.
-In computer vision, the success of machine learning models makes their use legitimate for bioimage informatics applications.\\
+In computer vision, the success of Machine Learning models makes their use legitimate for bioimage informatics applications.\\
 
 \noindent
 Overall, three ingredients make these successes possible:
@@ -286,13 +280,13 @@ Overall, three ingredients make these successes possible:
 \end{enumerate}
 
 \noindent
-While new developments certainly are important for the performance of Machine Learning, it must be noted that many of the principles in Machine learning and Deep Learning in particular (a family of machine learning models based on artificial neural networks) have been studied and developed for decades (see~\cite{Bishop_2006, hastie_elements_2009} for a review of different machine learning methods).
-Convolutional Neural Networks, which are the most widely used neural networks in Computer Vision, were developed more than 25 years ago~\cite{LeCun1998}, but became the state-of-the-art method only after 2012~\cite{alexnet_2012}, when they won a classification challenge on a large dataset of natural images~\cite{Deng_2009}. 
-In biomedical community, machine learning techniques are disseminating and address more challenges every year (see~\cite{jumper_highly_2021} for an example with the protein folding problem).
+While new developments certainly are important for the performance of Machine Learning, it must be noted that many of the principles in Machine Learning and Deep Learning in particular (a family of Machine Learning models based on artificial neural networks) have been studied and developed for decades (see~\cite{Bishop_2006, hastie_elements_2009} for a review of different Machine Learning methods).
+Convolutional Neural Networks, which are the most widely used neural networks in Computer Vision, were developed more than 25 years ago~\cite{LeCun1998}, but became the state-of-the-art method only after 2012~\cite{alexnet_2012}, when they won a classification challenge on a large dataset of natural images~\cite{Deng_2009}.
+In biomedical community, Machine Learning techniques are disseminating and address more challenges every year (see~\cite{jumper_highly_2021} for an example with the protein folding problem).
 
 \subsubsection{Neural networks as the next generation tool}
 
-In case of deep learning, model architectures are based on neural networks with successive layers of artificial neurons.
+In case of Deep Learning, model architectures are based on neural networks with successive layers of artificial neurons.
 Each neuron is defined by a set of weights and perform a linear combination of the input signal with its weights, followed by a potential non linear transformation (usually a \emph{maxout}, \emph{sigmoid} or \emph{tanh} function).
 A complete network usually combines these layers of neurons with normalization steps.
 It can be seen as a parametrized model, whose weights need to be optimized to minimize for a specific task.
@@ -304,26 +298,26 @@ After several iterations, the loss and the gradient should decrease, and the net
 The weights are ultimately frozen and the model is trained.
 
 Such architecture is highly flexible and different variants have been developed~\cite{lecun_deep_2015}.
-For a general introduction to deep learning techniques, one can refer to~\cite{Goodfellow_2016}.
+For a general introduction to Deep Learning techniques, one can refer to~\cite{Goodfellow_2016}.
 
 \subsubsection{Limitations and caveats}
 
-Beyond the great performances returned by machine learning models, a number of limitations and caveats should be considered.
+Beyond the great performances returned by Machine Learning models, a number of limitations and caveats should be considered.
 
 First, they require annotated datasets to train and evaluate the models.
 Compared to natural images, this ground truth is particularly costly to obtained with biomedical images as it often involves the assignation of experts (medical doctor or biologists) to a time-consuming, repetitive and annoying task.
 As a consequence, datasets available for a given biomedical problem are often too small, highly diversified or released without any useful manual annotations.
 
-Second, machine learning algorithms require robust evaluation protocols, strong benchmarks and a rigorous choice of evaluation metrics\footnote{One can see~\cite{varoquaux_machine_2022} for a description of these evaluation caveats when machine learning models are applied to medical images.}.
+Second, Machine Learning algorithms require robust evaluation protocols, strong benchmarks and a rigorous choice of evaluation metrics\footnote{One can see~\cite{varoquaux_machine_2022} for a description of these evaluation caveats when Machine Learning models are applied to medical images.}.
 It is necessary to prevent data leakage and firmly separate the training set from the test set in our dataset, otherwise models overfit to the training samples and generalize poorly to unknown data.
 If the test set is not representative of the data distribution, or too small, the evaluation will be biased and hardly reproducible~\cite{Varoquaux_cv_2018}.
 Obviously, all these limitations are worsened by the inherent heterogeneity of bioimages and the difficulty to assemble manual annotations.
-Working with machine learning models, one needs strong and diversified baselines that reflect the state-of-the-art of performances, as well as the right choice of metrics to benchmark the developed methods with respect to approaches published in the literature.
+Working with Machine Learning models, one needs strong and diversified baselines that reflect the state-of-the-art of performances, as well as the right choice of metrics to benchmark the developed methods with respect to approaches published in the literature.
 
 Third, flexibility of some models comes at a price: a sensitivity to the selected hyperparameters, which makes the evaluation all the more important.
 
-Last but not least, most of the deep learning models appear like a black box solution with an internal process that cannot be easily or directly interpreted.
-While this problem is more critical for direct medical applications than biological ones, it requires an important pedagogical effort to diffuse deep learning techniques to the rest of the scientific community.
+Last but not least, most of the Deep Learning models appear like a black box solution with an internal process that cannot be easily or directly interpreted.
+While this problem is more critical for direct medical applications than biological ones, it requires an important pedagogical effort to diffuse Deep Learning techniques to the rest of the scientific community.
 
 \section{Goals and contributions}
 \label{sec:contributions}
@@ -373,18 +367,13 @@ While this problem is more critical for direct medical applications than biologi
 My PhD had three main objectives:
 
 \begin{enumerate}
-\item Development of a full workflow for the analysis of smFISH images, containing state-of-the-art methods for image segmentation (nucleus and cytoplasm), a robust method for RNA detection applicable to large-scale screens and classification of RNA localization patterns. 
-\item Implementation of the methods in a python based open source tool, usable by the scientific community. 
-\item Application of the developed methods and tools to real experimental datasets in ongoing screens on subcellular RNA localization.
+	\setlength\itemsep{0.1em}
+	\item Development of a full workflow for the analysis of \ac{smFISH} images, containing state-of-the-art methods for image segmentation (nucleus and cytoplasm), a robust method for \ac{RNA} detection applicable to large-scale screens and classification of \ac{RNA} localization patterns.
+	\item Implementation of the methods in a python based open source tool, usable by the scientific community.
+	\item Application of the developed methods and tools to real experimental datasets in ongoing screens on subcellular \ac{RNA} localization.
 \end{enumerate}
 
-% At the beginning of my PhD, three main goals were defined with my supervisors.
-% The first one was the development and the implementation of a complete pipeline to process \ac{smFISH} images and return valuable insights about \ac{RNA} localization.
-% In particular, it was expected to integrate and adapt the latest successful developments in computer vision.
 Figure~\ref{fig:intro_localization_patterns} illustrates the gap that needs to be bridged between the input images and an adequate representation of the \ac{RNA} localization, making their quantitative analysis possible.
-% The second goal was the identification of bottlenecks that would prevent scaling the analysis to thousands images, in high content screening assays.
-% Such bottlenecks should be minimized or solved during the thesis to be able to scale any computational analysis based on \ac{smFISH} experiments.
-% Lastly, this complete framework would be applied to real experimental datasets in ongoing biological studies.
 
 \subsection{Contributions}
 \label{subsec:intro_contributions}
@@ -398,7 +387,7 @@ My PhD results in three major contributions.
 	\item My first and main contribution is FISH-quant V2.
 	This online framework gathers Python packages and a \ac{GUI} to process \ac{FISH} images, build robust analysis pipelines and perform simulations.
 	\item My second contribution is an alternative method to compute relevant features in order to discriminate \ac{RNA} localization patterns.
-	This method implied the development of PointFISH, a dedicated deep learning model operating directly on point clouds.
+	This method implied the development of PointFISH, a dedicated Deep Learning model operating directly on point clouds.
 	\item My third contribution was the participation in biological studies, where I could apply the computational methods and tools I had developed.
 	These studies leveraged high content screening assays and \ac{smFISH} techniques to perform a systemic analysis of \ac{RNA} localization and investigate local translation.
 \end{itemize}
@@ -427,7 +416,7 @@ I describe detection algorithms and their extensions available in FISH-quant.
 In the end, the set of all \ac{RNA} molecules is reduced to a point cloud with spatial coordinates.
 
 In \textbf{Chapter~\ref{ch:chapter3}}, I review and describe algorithms for nucleus and cell segmentation.
-Most of them are deep learning models, trained on vast datasets of annotated images.
+Most of them are Deep Learning models, trained on vast datasets of annotated images.
 Beside my own implemented methods, I also present refinement techniques to improve and format segmentation masks.
 Two other projects for which I contributed (including one published) are also discussed at the end of the chapter.
 They aim at improving the efficiency and consistency of segmentation on specific aspects.
@@ -439,11 +428,11 @@ I present two different methods of feature engineering.
 The first method consists in manually designing features to characterize specific localization patterns.
 I then list and describe every hand-crafted feature implemented in FISH-quant.
 The second (published) method consists in learning features.
-They are extracted from a deep learning model fed with the \ac{RNA} point cloud as input and trained on a simulated pretext task.
+They are extracted from a Deep Learning model fed with the \ac{RNA} point cloud as input and trained on a simulated pretext task.
 
 In \textbf{Chapter~\ref{ch:chapter5}}, I present several applications of my quantitative pipeline.
 These applications come from three publications where we study different \ac{RNA} localization patterns.
 I designed a classification pipeline to recognize a variety of localization patterns.
-An additional series of experiments which I computationally analyzed, led to the discovery of translation factories, a novel mechanism for the spatial control of gene expression. 
+An additional series of experiments which I computationally analyzed, led to the discovery of translation factories, a novel mechanism for the spatial control of gene expression.
 In a different screen, I developed additional features to quantify a cell cycle dependent pattern, which is related to centrosomes.
 Finally, I also contributed to a study focused on the protrusion pattern, where \ac{RNA} localize in cell extensions.
