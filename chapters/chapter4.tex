@@ -809,7 +809,7 @@ I perform several ablation studies to evaluate the impact of different component
 In the point cloud literature, papers often propose new modules to improve network's performances, but they implement them in slightly different architectures.
 Heterogeneity in terms of normalization, latent dimensions or layer size complicate comparisons between techniques.
 In order to isolate the importance of each element, I use a template architecture as illustrated in Figure~\ref{fig:PointFISH_architecture}.
-Instead of comparing PointFISH with DGCNN, I compare PointFISH with an equivalent networks where attention layers are replaced by EdgeConv~\cite{Wang_2019}.
+Instead of comparing PointFISH with DGCNN, I compare PointFISH with an equivalent network where attention layers are replaced by EdgeConv~\cite{Wang_2019}.
 The rest of the network remains strictly identical.
 
 \paragraph{Additional input}
@@ -908,35 +908,40 @@ This hyperparameter is also critical to design lighter models, with a division b
 \subsection{Discussion}
 \label{subsec:discussion}
 
-Being able to directly process list of points provides the community with a tool to integrate large datasets obtained with very different techniques on different model systems.
+Being able to directly process list of points provides the community with a tool to integrate large datasets obtained with different techniques on different model systems.
 While the actual image data might look strikingly different between such projects, they can all be summarized by segmentation masks of nuclei and cytoplasm, and a list of coordinates of \ac{RNA} locations.
-Besides being a straightforward approach, having methods that act directly on point clouds is also a strategic advantage.
+Having methods that act directly on point clouds is therefore a strategic advantage for data integration.
 
-The idea of training on simulated data provides us the opportunity to query datasets with respect to new localization patterns that have not yet been observed, and for which I do not have real examples so far.
-In addition, this strategy allows us to control for potential confounders, such as cell morphology, or number of \ac{RNA}s.
+The idea of training on simulated data provides us the opportunity to query datasets with respect to new localization patterns that have not yet been observed, and for which we do not have real examples so far.
+In addition, this strategy allows us to control for potential confounders, such as cell morphology, or number of \ac{RNA}s, because we control the composition of the training data and can therefore remove statistical biases a priori. 
 
-I finally provide a generic method that can leverage these simulations, without the tedious process of handcrafting new features.
-It is not necessary that the simulated patterns are optimized as to resemble real data.
-They rather serve as a pretext task.
+Finally, I provide a generic method that can leverage these simulations to find a suitable representation, without the tedious process of handcrafting new features.
+It is not necessary that the simulated patterns are optimized as to resemble real data: they rather serve as a pretext task.
 If a network is capable of distinguishing the simulated patterns, chances are high that the corresponding representation is also informative for slightly or entirely different patterns.
 Likewise, representations trained on ImageNet can be used for tumor detection in pathology images.
 I show this by omitting the protrusion pattern from the simulation.
-Indeed, in Figure~\ref{fig:umap_real}, the protrusion patterns live in a particular region of the feature space, without specific training.
+Indeed, in Figure~\ref{fig:umap_real}, the protrusion patterns live in a particular region of the feature space, without specific training. There is however a drop in classification accuracy for the omitted class. We therefore see that if a class was not specifically simulated, the representation is less optimized with respect to the recognition of that class. On the other hand, the classification accuracy remains high even for the omitted class. 
 
 % reference ImageNet
 % reference tumor detection in pathology images
 
-As a future work, a first valuable task would be the development or the sourcing of annotated datasets with various cell lines and imaging conditions.
-The difficulty of gathering experimental training datasets can be overcome by simulations.
-However, I still need to extend my evaluation across different benchmarks to assess the robustness of a point cloud model.
-Among the examples of interest, recent publications~\cite{savulescu_interrogating_2021,mah_bento_2022} evaluate their methods on their own datasets, which include \ac{RNA} localization annotations.
-Second, a better engineering of PointFISH could make contextual inputs irrelevant and only base predictions on the point cloud coordinates.
-A third potential improvement concerns the segmentation.
-I exploit so far a 2D segmentation because it is the more frequent usecase and the task for which I have a large number of trained models available.
-Yet, a 3D segmentation mask would allow a more complete 3D point cloud mixing \ac{RNA} and cell datapoints.
+%As a future work, a first valuable task would be the development or the sourcing of annotated datasets with various cell lines and imaging conditions.
+As a future work, a first valuable task would be the generation of datasets for validation across cell lines and imaging conditions in order to validate the robustness of a point cloud model. An interesting starting point might be the dataset released in ~\cite{savulescu_interrogating_2021,mah_bento_2022}. 
+
+A second interesting perspective would be to explicitly address the domain shift between simulated and real data. Indeed, training a model on simulated data might seem counter-intuitive, as we know that the simulated data follows a different distribution as compared to real data. Here we argue that the simulations do not necessarily have to reflect the reality in order to lead to powerful simulations; similar to lessons learned from self-supervised learning, where perturbations also do not need to represent real-world alterations. Nevertheless it would be interesting to see whether explicit domain adaptation is capable of improving the downstream classification performance. 
+% evelop more insights regarding the use of simulated data for training purpose. 
+% development or the sourcing of annotated datasets with various cell lines and imaging conditions.
+% The difficulty of gathering experimental training datasets can be overcome by simulations.
+% However, I still need to extend my evaluation across different benchmarks to assess the robustness of a point cloud model.
+% Among the examples of interest, recent publications~\cite{savulescu_interrogating_2021,mah_bento_2022} evaluate their methods on their own datasets, which include \ac{RNA} localization annotations.
+% Second, a better engineering of PointFISH could make contextual inputs irrelevant and only base predictions on the point cloud coordinates.
+
+Another potential improvement concerns the segmentation.
+I exploit so far a 2D segmentation because it is the more frequent use-case and the task for which I have a large number of trained models available.
+Yet, a 3D segmentation mask would allow a more comprehensive 3D point cloud mixing of \ac{RNA} and cell datapoints.
 This could also dramatically improve pattern representation.
-Last but not least, training a point cloud model with a self-supervised training procedure would result in task-independent representations.
-This could eventually help to generalize over unknown localization patterns.
+Last but not least, training a point cloud model with a self-supervised training procedure would result in task-independent representations and could therefore be an interesting alternative to our simulations. 
+%This could eventually help to generalize over unknown localization patterns.
 
 \section{Conclusion}
 \label{sec:analysis_conclusion}
