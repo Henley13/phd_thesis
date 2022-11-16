@@ -394,7 +394,7 @@ This could be the same \ac{RNA} detected with two different fluorescent probes o
 As an example, in the Figure~\ref{fig:elbow_colocalization}, I detect colocalized spots between a sample of spots detected with pixel accuracy and the same sample with subpixel accuracy.
 
 My implementation is based on the methods published by~\cite{CORNES_2022}.
-First I compute the euclidean distance matrix between the two sets of spot coordinates, then I solve a linear sum assignment problem~\cite{crouse_linear_assignment_2016, 2020SciPy-NMeth}.
+First I compute the euclidean distance matrix between the two sets of spot coordinates, then I solve a linear sum assignment problem~\cite{crouse_linear_assignment_2016, 2020SciPy}.
 I obtain a matching between the two sets of spots, that minimizes the overall euclidean distance between assigned pairs.
 Finally, I only keep pairs with a distance below a specific threshold.
 The Figure~\ref{fig:elbow_colocalization} illustrates the impact of the threshold parameter on the number of colocalized spots.

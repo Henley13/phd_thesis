@@ -8,26 +8,21 @@
 \minitoc
 \newpage
 
-My PhD thesis is devoted to the computational analysis of FISH images in order to study sub-cellular localization of ribonucleic acids (\ac{RNA}). In this introduction, I will start by briefly presenting the fundamentals on gene expression and the role of RNA localization therein. 
-% present the biological context of my PhD thesis, namely 
-% the gene expression process in order to describe the biological context where \ac{RNA} localization happens.
+My PhD thesis is devoted to the computational analysis of \ac{FISH} images in order to study subcellular localization of \ac{RNA}.
+In this introduction, I will start by briefly presenting the fundamentals on gene expression and the role of \ac{RNA} localization therein.
 Then, I will present the experimental protocols that allows us to visualize and analyse \ac{RNA} molecules as well as the machine learning methods I used.
 I will finish this introduction with an overview of my thesis objectives, a list of the contributions I made and a summary of this manuscript to guide the reader.
 
 \section{Gene expression}
 \label{sec:gene_expression}
 
-Cells are the basic unit of all living organisms. They display an astonishing diversity in virtually all relevant aspects, and even cells belonging to the same organism are very different in terms of appearance and specific function they fulfill. Yet, all cells belonging to the same organism share the same code, i.e. the same set of instructions, stored in the DNA. The DNA corresponds to a long sequence of nucleotides, where the information on the living system is stored in form of a sequence of a 4-letter alphabet. Genes are chunks of these long sequences that contain the blueprint for functional molecules. The diversity of cells in terms of appearance and function is implemented by the production of different sets of these functional molecules. This process is called gene expression.  
-
-% Yet, a diversity of cell types exists, performing different actions.
-% Some of those are common among all cells (cell division for example), but others can be very specific.
-% Most of the time, different cell-types perform diverse actions through a different set of functional molecules.
-% In order to implement these different cellular processes and to fulfill the variety of diverse functions, a cell gets its instructions from the \ac{DNA}.
-% The latter contains all the cell's genetic information and it is common for all cells of the same organism.
-% A \ac{DNA} strand presents a succession of genes, defined as long sequences of nucleotides.
-% They are organics molecules composed of a five-carbon sugar, a phosphate group and one of the four nucleobases: Adenine, Cytosine, Guanine and Thymine.
-% Together, these nucleobases form a genetic alphabet of 4 letters (A, C, G and  T).
-% Each gene encodes the blueprint of a functional molecule with a specific sequence of nucleobases.
+Cells are the basic unit of all living organisms.
+They display an astonishing diversity in virtually all relevant aspects, and even cells belonging to the same organism are very different in terms of appearance and specific function they fulfill.
+Yet, all cells belonging to the same organism share the same code, i.e.\space the same set of instructions, stored in the \ac{DNA}.
+The \ac{DNA} corresponds to a long sequence of nucleotides, where the information on the living system is stored in form of a sequence of a 4-letter alphabet.
+Genes are chunks of these long sequences that contain the blueprint for functional molecules.
+The diversity of cells in terms of appearance and function is implemented by the production of different sets of these functional molecules.
+This process is called gene expression.
 
 Gene expression is the process by which genetic information is transformed into functional products.
 \ac{RNA} molecules, or transcripts, are essential for this process.
@@ -37,17 +32,14 @@ It also drives cells differentiation, allows them to run their basic functions, 
 On the contrary, its deregulation can lead to various diseases.
 This explains the interest of the scientific community to study and decode gene expression processes.
 
-In the living world, cells can be divided in two categories: prokaryotic cells and eukaryotic cells.
-The prokaryotic cells, which do not have a nucleus and typically form a unicellular organism, and the eukaryotic cells, with a well-organized nucleus.
+In the living world, cells can be divided in two categories: prokaryotic cells, which do not have a nucleus and typically form a unicellular organism, and eukaryotic cells, with a well-organized nucleus.
 An eukaryote (a living organism with eukaryotic cells) is usually composed of cells with a higher level of compartmentalization through membrane-bound organelles.
 The nucleus is the place where most of the \ac{DNA} is stored.
-%The nucleus is obviously the most important of these organelles, with the \ac{DNA} inside.
 The rest of the organelles are located in the cytoplasm, such as the mitochondria, the lysosomes, or the Golgi apparatus (see Figure~\ref{fig:eukaryotic_cell}).
 
-For an eukaryote cell, the expression of a gene includes two main steps: the transcription of a \ac{DNA} sequence into a \ac{RNA} (in the nucleus) and the translation of a \ac{RNA} into a protein.
+For an eukaryotic cell, the expression of a gene includes two main steps: the transcription of a \ac{DNA} sequence into a \ac{RNA} (in the nucleus) and the translation of a \ac{RNA} into a protein.
 Between these two major steps, there is a phase of maturation for the transcript, before a potential export outside the nucleus and a transport somewhere in the cytoplasm.
-A cell can regulate either the transcription or the translation step to control the production of its functional molecules and thereby the biological process to which the proteins or \ac{RNA} contribute
-%\footnote{For a complete and general introduction about cellular biology, an interested reader could see~\cite{alberts_molecular_2017}.}.
+A cell can regulate either the transcription or the translation step to control the production of its functional molecules and thereby the biological process to which the proteins or \ac{RNA} contribute.
 
 \begin{figure}[]
     \centering
@@ -62,13 +54,12 @@ A cell can regulate either the transcription or the translation step to control 
 \subsubsection{The primary transcripts}
 
 This step consists in copying a gene (a sequence of nucleotides along the \ac{DNA} strands) into another biomolecule also composed of nucleotides: a \ac{RNA}.
-While the \ac{DNA} is located within the nucleus, the \ac{RNA} can leave the nucleus by the nuclear pores. \ac{RNA} can fulfill a number of different functions in the cell. We distinguish two broad categories: messenger \ac{RNA} (mRNA) contain the blueprint for a protein that is synthesized outside the nucleus, while non-coding \ac{RNA} are not translated into a protein.
-%can convey the blueprint of the future protein outside.
-%In many cases, \ac{RNA} can be non-coding (they do not lead to the synthesis of a protein) and fulfill a variety of functions itself, for instance the regulation of gene expression.
+While the \ac{DNA} is located within the nucleus, the \ac{RNA} can leave the nucleus by the nuclear pores.
+\ac{RNA} can fulfill a number of different functions in the cell.
+We distinguish two broad categories: \ac{mRNA} contain the blueprint for a protein that is synthesized outside the nucleus, while non-coding \ac{RNA} are not translated into a protein.
 In a \ac{RNA}, the nucleotide Uracil (U) replaces the Thymine (T) and a ribose sugar serves as backbone instead of a desoxyribose sugar.
 While both \ac{DNA} and \ac{RNA} contain genetic information, \ac{RNA} is a shorter single-stranded molecule, compared to the double-stranded \ac{DNA}, and is therefore less stable.
-\\
-%However, they both have two distinctive untranslated regions at their ends: 5'UTR and 3'UTR (corresponding to the number of carbon atoms in their sugar backbone extremities).\\
+\ac{RNA} molecule also has two distinctive untranslated regions at its ends: 5'UTR and 3'UTR (corresponding to the number of carbon atoms in its sugar backbone extremities).\\
 
 \noindent
 Transcription proceeds as follows:
@@ -161,7 +152,7 @@ By transporting one \ac{mRNA} molecule and promoting a local translation, severa
 It saves the transport of a large amount of proteins~\cite{Medioni_2012}.
 It also enables the cell to quickly react to external stimuli.
 This mechanism could be critical to modulate the synaptic plasticity in neuron cells for example~\cite{jung_axonal_2012}.
-Also, \ac{RNA} localization provides a mechanism to bring interaction partners in close proximity. 
+Also, \ac{RNA} localization provides a mechanism to bring interaction partners in close proximity.
 More generally, \ac{mRNA} localization will increase the cell compartmentalization and enable a higher flexibility and ''fine-tuning of gene expression in both space and time''~\cite{Medioni_2012}.
 
 % mention Weeks et al. (1985) as first publication about RNA localization
@@ -179,15 +170,13 @@ The ribosome sequentially chains the amino acids, which then fold into a functio
 \section{Imaging RNAs}
 \label{sec:fish}
 
-%Our interest about \ac{RNA} localization requires advanced experimental protocol to analyze the \ac{RNA} subcellular distribution.
-Traditional techniques to study gene expression are based on biochemical bulk-measurements, like microarrays~\cite{Schena_1995} or qRT-PCR~\cite{bustin_absolute_2000}. They aim at identifying and quantifying the presence of \ac{RNA}s in a sample. These methods could not operate at the single cell level and did therefore not allow to assess expression heterogeneity between cells. Subsequent developments in next generation sequencing (NGS) allowed to address this limitation, by the advent
-%and make the study of a spatial distribution within the cell impossible.
-%However, technical improvements are progressively addressing these limitations, 
-of single cell \ac{RNA} sequencing~\cite{Hedlund_2018} or fluorescent in situ \ac{RNA} sequencing (FISSEQ)~\cite{Church_2014}.
+Traditional techniques to study gene expression are based on biochemical bulk-measurements, like microarrays~\cite{Schena_1995} or qRT-PCR~\cite{bustin_absolute_2000}.
+They aim at identifying and quantifying the presence of \ac{RNA}s in a sample.
+These methods could not operate at the single cell level and did therefore not allow to assess expression heterogeneity between cells.
+Subsequent developments in next generation sequencing (NGS) allowed to address this limitation, by the advent of single cell \ac{RNA} sequencing~\cite{Hedlund_2018} or fluorescent in situ \ac{RNA} sequencing (FISSEQ)~\cite{Church_2014}.
 
-An alternative option is to rely on images, which naturally provide insights regarding the spatial distribution of \ac{RNA}s and, with sufficient resolution, enable single cell analysis. Coupled with techniques from High Content Screening --- a largely automatized experimental setup --- this technique can be applied at a large scale, probing thousands of \ac{RNA}s with respect to their spatial localization. 
-%In addition, experiments should be scalable.
-%The design of such large screens enables a systematic study of complex mechanisms and to cope with gene expression stochasticity, as well as heterogeneous \ac{RNA} distribution.
+An alternative option is to rely on images, which naturally provide insights regarding the spatial distribution of \ac{RNA}s and, with sufficient resolution, enable single cell analysis.
+Coupled with techniques from High Content Screening --- a largely automatized experimental setup --- this approach can be applied at a large scale, probing thousands of \ac{RNA}s with respect to their spatial localization.
 
 \begin{figure}[]
     \centering
@@ -201,8 +190,7 @@ An alternative option is to rely on images, which naturally provide insights reg
 \label{subsec:intro_smfish}
 
 Notably, \ac{smFISH} technique~\cite{Femino_1998}, is the first to reach single molecule resolution in fixed cells.
-It uses multiple fluorescent oligonucleotides (or probes) that hybridize to the target RNA. 
-%to target and hybridize a transcript.
+It uses multiple fluorescent oligonucleotides (or probes) that hybridize to the target RNA.
 Importantly, this technique preserves the cell environment, and thus enriches the contextual information available in the images.
 However, probes need to be specifically designed against the transcript of interest, making this solution costly to scale.
 A \ac{smFISH} experiment includes four steps:
@@ -233,40 +221,20 @@ This technique increases the \ac{SNR} and ensures that the \ac{RNA} signal is br
 In~\cite{tsanov_smifish_2016}, a cheaper and simpler version of \ac{smFISH} is presented: \ac{smiFISH}.
 The fluorescent probe is built through a pre-hybridization step that matches a primary (unlabeled) probe with a secondary fluorescent oligonucleotide (see Figure~\ref{fig:smiFISH}).
 This design with indirect labeling presents a higher flexibility and saves cost.
-%Indeed, the fluorescent oligonucleotide can be generic while several specialized primary probes can target the \ac{RNA} molecule.
-%Such indirect labeling techniques is also observed with more complex designs.
 
 \subsection{Large-scale FISH studies}
 \label{subsec:intro_scale_fish}
 
-FISH is an experimental technique compatible with large-scale studies. The first large scale screen focusing on RNA localization was performed in Drosophila embryos~\cite{lecuyer_global_2007} and revealed a surprising number of mRNAs that have preferential localization during embryogenesis ($71\%$ out of more than 3000 genes tested). 
-A large-scale screen in mammalian cell lines was proposed a few years later~\cite{Battich2013,Battich2015}, assessing the transcriptional noise and their relationship to cellular phenotypes, as well as sub-cellular localization of m\ac{RNA}s for a large number of genes ($N=1000$). 
+FISH is an experimental technique compatible with large-scale studies.
+The first large scale screen focusing on RNA localization was performed in Drosophila embryos~\cite{lecuyer_global_2007} and revealed a surprising number of \ac{mRNA}s that have preferential localization during embryogenesis ($71\%$ out of more than 3000 genes tested). 
 
-Our collaborators also adapted our smiFISH protocol to 96-well plates, permitting robotized experiments and automated imaging to study hundreds of RNA species~\cite{tsanov_smifish_2016, safieddine_choreography_2021}.
+A large-scale screen in mammalian cell lines was proposed a few years later~\cite{battich_image-based_2013, battich_control_2015}, assessing the transcriptional noise and their relationship to cellular phenotypes, as well as subcellular localization of \ac{mRNA}s for a large number of genes ($N = 1000$). 
 
-One of the limitations of these smFISH approaches with respect to single cell RNAseq is that they only visualize the localization and expression of transcripts one RNA species at a time. More recent developments relying on sequential hybridization steps and barcoding RNAs, allow now the joint analysis of hundreds of \ac{RNA}s in the same cells~\cite{lubeck_single_cell_2014, Chen_2015, eng_seqfish_2019, fazalAtlasSubcellularRNA2019}. These techniques were not available in practice at the time of the data collection for this PhD thesis, but in principle, they represent a very interesting alternative to High Content Screening.
+Our collaborators also adapted our \ac{smiFISH} protocol to 96-well plates, permitting robotized experiments and automated imaging to study hundreds of \ac{RNA} species~\cite{tsanov_smifish_2016, safieddine_choreography_2021}.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%- large scale screen (lecuyer)
-%- Merfish
-%- seqfish
-%- seqfish+
-
-%\newacro{SeqFISH}{Sequential FISH}
-%\newacro{MERFISH}{Multiplexed Error-Robust FISH}
-
-% ~\cite{lecuyer_global_2007} % first large screen
-% ~\cite{Chen_2015} % MERFISH
-% ~\cite{lubeck_single_cell_2014} % SeqFISH
-% ~\cite{eng_seqfish_2019} % SeqFISH+
-
-% Nevertheless, these techniques are witnessing rapid improvements in specificity, robustness, multiplexity, and background suppression. (Adham)
-
-% The first high-throughput mRNA localization screen was done in Drosophila embryos using whole mount FISH (LÈcuyer et al., 2007).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+One of the limitations of these \ac{smFISH} approaches with respect to single cell RNAseq is that they only visualize the localization and expression of transcripts one \ac{RNA} species at a time.
+More recent developments relying on sequential hybridization steps and barcoding \ac{RNA}s, allow now the joint analysis of hundreds of \ac{RNA}s in the same cells~\cite{lubeck_single_cell_2014, Chen_2015, eng_seqfish_2019, fazalAtlasSubcellularRNA2019}.
+These techniques were not available in practice at the time of the data collection for this PhD thesis, but in principle, they represent a very interesting alternative to High Content Screening.
 
 \section{Measuring images: from pixels to numbers}
 \label{sec:computation_biology}
@@ -318,12 +286,8 @@ Overall, three ingredients make these successes possible:
 \end{enumerate}
 
 \noindent
-While new developments certainly are important for the performance of Machine Learning, it must be noted that many 
-%The first ingredient is not necessarily new.
-of the principles in Machine learning and Deep Learning in particular (a family of machine learning models based on artificial neural networks) have been studied and developed for decades (see~\cite{Bishop_2006, Tibshirani_2009} for a review of different machine learning methods).
-Convolutional Neural Networks, which are the most widely used neural networks in Computer Vision, were developed more 25 years ago~\cite{LeCun1998}, but became the state-of-the-art method only after 2012~\cite{alexnet_2012}, when they won a classification challenge on a large dataset of natural images~\cite{Deng_2009}. 
-%As a symbol, the release of a large dataset with manual annotations for natural image classification problem~\cite{Deng_2009}, followed by a breakthrough performance with a \ac{CNN}~\cite{alexnet_2012}, marks the beginning of a new era for deep learning.
-%Obviously, the impact of these models has been consequent for every computational field.
+While new developments certainly are important for the performance of Machine Learning, it must be noted that many of the principles in Machine learning and Deep Learning in particular (a family of machine learning models based on artificial neural networks) have been studied and developed for decades (see~\cite{Bishop_2006, hastie_elements_2009} for a review of different machine learning methods).
+Convolutional Neural Networks, which are the most widely used neural networks in Computer Vision, were developed more than 25 years ago~\cite{LeCun1998}, but became the state-of-the-art method only after 2012~\cite{alexnet_2012}, when they won a classification challenge on a large dataset of natural images~\cite{Deng_2009}. 
 In biomedical community, machine learning techniques are disseminating and address more challenges every year (see~\cite{jumper_highly_2021} for an example with the protein folding problem).
 
 \subsubsection{Neural networks as the next generation tool}
@@ -479,10 +443,7 @@ They are extracted from a deep learning model fed with the \ac{RNA} point cloud 
 
 In \textbf{Chapter~\ref{ch:chapter5}}, I present several applications of my quantitative pipeline.
 These applications come from three publications where we study different \ac{RNA} localization patterns.
-% My analyses support and validate biological insights claimed in these studies about \ac{RNA} localization.
 I designed a classification pipeline to recognize a variety of localization patterns.
 An additional series of experiments which I computationally analyzed, led to the discovery of translation factories, a novel mechanism for the spatial control of gene expression. 
-% I evaluate the impact of translation inhibitors on \ac{RNA} localization, which provides us with further insight into the role of 
-% and help identifying a singular translation-dependent pattern.
 In a different screen, I developed additional features to quantify a cell cycle dependent pattern, which is related to centrosomes.
-Finally, I also contributed to a study focused on the protrusion pattern, where RNA localize in cell extensions.
+Finally, I also contributed to a study focused on the protrusion pattern, where \ac{RNA} localize in cell extensions.
