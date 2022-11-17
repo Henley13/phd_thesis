@@ -27,7 +27,7 @@ This approach is described in the paper:
 \section{From images to coordinates}
 \label{sec:image_coordinates}
 
-The segmentation and detection methods presented in chapters~\ref{ch:chapter2} and~\ref{ch:chapter3} provide us with a list of detected objects (e.g.~\ac{RNA} and clusters) and segmentation masks (e.g.~nucleus and cytoplasmic region), as illustrated in Figure ~\ref{fig:cell_extracted_0}.
+The segmentation and detection methods presented in chapters~\ref{ch:chapter2} and~\ref{ch:chapter3} provide us with a list of detected objects (e.g.~\ac{RNA} and clusters) and segmentation masks (e.g.~nucleus and cytoplasmic region), as illustrated in Figure~\ref{fig:cell_extracted_0}.
 Here, the coordinates of the detected objects and segmentation masks are extracted and form the input data for which we will seek a quantitative description, amenable to machine learning.
 
 We recall from the previous chapter that \emph{bigfish} proposes 2D and 3D detection, but only 2D segmentation.
@@ -523,7 +523,7 @@ The 9 patterns currently available are: random, foci, intranuclear, extranuclear
 Random pattern is the default pattern where \ac{RNA}s are simulated uniformly within the cell.
 The foci pattern consists in a random number of \ac{RNA} clusters localizing outside the nucleus.
 I draw the expected number of \ac{RNA}s $\lambda$ per cluster from a uniform distribution between 5 and 21 \ac{RNA}s.
-The number of clusters itself results from $n_{cluster}= \frac{n_{pattern}}{\lambda}$.
+The number of clusters itself results from $n_{cluster} = \frac{n_{pattern}}{\lambda}$.
 For each cluster, a distinct number of \ac{RNA}s is drawn again with a Poisson distribution of mean $\lambda$.
 Clusters are then localized outside the nucleus and remaining \ac{RNA}s uniformly in the cell.
 In Figure~\ref{fig:foci_panel} we can observe foci simulations with an increasing pattern strength (from 10\% to 90\% of clustered \ac{RNA}s).
@@ -657,7 +657,7 @@ Also, we have to make sure that the network can distinguish between the differen
 For this, we add two extra boolean variables for each position (\ac{RNA} and membrane points), indicating their origin: \ac{RNA} points are characterized by $(0,0)$, nuclear membrane points by $(1,0)$ and cytoplasmic membrane by $(0,1)$.
 Second, I can compute the distance from cell and nucleus for every \ac{RNA} node.
 Third, I can leverage the cluster detection algorithm from \emph{bigfish} in order to label each \ac{RNA} node as clustered or not, represented by an additional boolean variable.
-If morphological, distance and clustering information are used, our input matrix is thus $\tilde{X} \in \mathbb{R}^{N \times d}$, where $\tilde{N} = N + 300 + 100$ and $d=8$ (3D spatial coordinates, 2 dimensions to indicate the spot type, 2 dimensions to indicate distance to nuclear and cytoplasmic membrane and 1 dimension to indicate whether the spot belongs to an \ac{RNA} cluster).
+If morphological, distance and clustering information are used, our input matrix is thus $\tilde{X} \in \mathbb{R}^{N \times d}$, where $\tilde{N} = N + 300 + 100$ and $d = 8$ (3D spatial coordinates, 2 dimensions to indicate the spot type, 2 dimensions to indicate distance to nuclear and cytoplasmic membrane and 1 dimension to indicate whether the spot belongs to an \ac{RNA} cluster).
 
 \subsubsection{Model architecture}
 
@@ -842,7 +842,7 @@ Best performances are obtained with, at least, distance and cluster information.
 Cell and nucleus coordinates do not increase significantly the classification performance.
 The reason is probably that the distance feature already represents the relevant information and adding membrane coordinates does thus not improve performance anymore.
 However, inclusion of membrane points dramatically increases the computation time of the model (as a larger point cloud has to be processed).
-Cluster information greatly improves foci pattern recognition while distances boost others localization patterns; both observations are expected.
+Cluster information greatly improves foci pattern recognition while distances boost others localization patterns;~both observations are expected.
 
 \paragraph{Alignment module and Point-wise block}
 
@@ -913,35 +913,31 @@ While the actual image data might look strikingly different between such project
 Having methods that act directly on point clouds is therefore a strategic advantage for data integration.
 
 The idea of training on simulated data provides us the opportunity to query datasets with respect to new localization patterns that have not yet been observed, and for which we do not have real examples so far.
-In addition, this strategy allows us to control for potential confounders, such as cell morphology, or number of \ac{RNA}s, because we control the composition of the training data and can therefore remove statistical biases a priori. 
+In addition, this strategy allows us to control for potential confounders, such as cell morphology, or number of \ac{RNA}s, because we control the composition of the training data and can therefore remove statistical biases a priori.
 
 Finally, I provide a generic method that can leverage these simulations to find a suitable representation, without the tedious process of handcrafting new features.
 It is not necessary that the simulated patterns are optimized as to resemble real data: they rather serve as a pretext task.
 If a network is capable of distinguishing the simulated patterns, chances are high that the corresponding representation is also informative for slightly or entirely different patterns.
 Likewise, representations trained on ImageNet can be used for tumor detection in pathology images.
 I show this by omitting the protrusion pattern from the simulation.
-Indeed, in Figure~\ref{fig:umap_real}, the protrusion patterns live in a particular region of the feature space, without specific training. There is however a drop in classification accuracy for the omitted class. We therefore see that if a class was not specifically simulated, the representation is less optimized with respect to the recognition of that class. On the other hand, the classification accuracy remains high even for the omitted class. 
+Indeed, in Figure~\ref{fig:umap_real}, the protrusion patterns live in a particular region of the feature space, without specific training.
+There is however a drop in classification accuracy for the omitted class.
+We therefore see that if a class was not specifically simulated, the representation is less optimized with respect to the recognition of that class.
+On the other hand, the classification accuracy remains high even for the omitted class.
 
-% reference ImageNet
-% reference tumor detection in pathology images
+As a future work, a first valuable task would be the generation of datasets for validation across cell lines and imaging conditions in order to validate the robustness of a point cloud model.
+An interesting starting point might be the dataset released in~\cite{savulescu_interrogating_2021, mah_bento_2022}.
 
-%As a future work, a first valuable task would be the development or the sourcing of annotated datasets with various cell lines and imaging conditions.
-As a future work, a first valuable task would be the generation of datasets for validation across cell lines and imaging conditions in order to validate the robustness of a point cloud model. An interesting starting point might be the dataset released in ~\cite{savulescu_interrogating_2021,mah_bento_2022}. 
-
-A second interesting perspective would be to explicitly address the domain shift between simulated and real data. Indeed, training a model on simulated data might seem counter-intuitive, as we know that the simulated data follows a different distribution as compared to real data. Here we argue that the simulations do not necessarily have to reflect the reality in order to lead to powerful simulations; similar to lessons learned from self-supervised learning, where perturbations also do not need to represent real-world alterations. Nevertheless it would be interesting to see whether explicit domain adaptation is capable of improving the downstream classification performance. 
-% evelop more insights regarding the use of simulated data for training purpose. 
-% development or the sourcing of annotated datasets with various cell lines and imaging conditions.
-% The difficulty of gathering experimental training datasets can be overcome by simulations.
-% However, I still need to extend my evaluation across different benchmarks to assess the robustness of a point cloud model.
-% Among the examples of interest, recent publications~\cite{savulescu_interrogating_2021,mah_bento_2022} evaluate their methods on their own datasets, which include \ac{RNA} localization annotations.
-% Second, a better engineering of PointFISH could make contextual inputs irrelevant and only base predictions on the point cloud coordinates.
+A second interesting perspective would be to explicitly address the domain shift between simulated and real data.
+Indeed, training a model on simulated data might seem counter-intuitive, as we know that the simulated data follows a different distribution as compared to real data.
+Here we argue that the simulations do not necessarily have to reflect the reality in order to lead to powerful simulations;~similar to lessons learned from self-supervised learning, where perturbations also do not need to represent real-world alterations.
+Nevertheless it would be interesting to see whether explicit domain adaptation is capable of improving the downstream classification performance.
 
 Another potential improvement concerns the segmentation.
 I exploit so far a 2D segmentation because it is the more frequent use-case and the task for which I have a large number of trained models available.
 Yet, a 3D segmentation mask would allow a more comprehensive 3D point cloud mixing of \ac{RNA} and cell datapoints.
 This could also dramatically improve pattern representation.
 Last but not least, training a point cloud model with a self-supervised training procedure would result in task-independent representations and could therefore be an interesting alternative to our simulations. 
-%This could eventually help to generalize over unknown localization patterns.
 
 \section{Conclusion}
 \label{sec:analysis_conclusion}
@@ -953,7 +949,3 @@ Lastly, in the third section, I propose to directly process the extracted point 
 For this, I leverage coordinates of simulated localization patterns to train a specifically designed neural network taking as input a list of points and associated features that greatly enhance generalization capabilities.
 Recent advances in point cloud analysis through deep learning models allows us to build a flexible and scalable pipeline that fits with \ac{RNA} point cloud specificity.
 I show that this method is on par with carefully designed, handcrafted feature sets.
-
-% learned features from convnet
-% from features engineering to simulation engineering
-% limitations
