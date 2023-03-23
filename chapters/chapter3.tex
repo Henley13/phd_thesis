@@ -217,7 +217,7 @@ In \emph{bigfish}, I have implemented simple thresholding techniques, and a simp
 \subsubsection{A 3-class deep learning model}
 
 The model is described in~\cite{Imbert_fq_2022}.
-It uses an encoder-decoder architecture like U-Net~\cite{Ronneberger_unet}, with 4 downsampling stages.
+It uses an encoder-decoder architecture like U-Net~\cite{Ronneberger_2015}, with 4 downsampling stages.
 In total, the spatial resolution of the input image is divided by 16 at the bottom of the model.
 For each stage, I implement residual blocks, mimicking Cellpose model~\cite{stringer_cellpose_2021}.
 Lastly, the upsampling stage is implemented following deconvolution techniques from~\cite{odena2016deconvolution} to prevent any checkerboard artifacts.
