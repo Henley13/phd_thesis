@@ -5,6 +5,8 @@
 \chapter{Spatial Feature Engineering}
 \label{ch:chapter4}
 
+\input{./chapters/abstract/chapter4.tex}
+\newpage
 \minitoc
 \newpage
 
@@ -945,7 +947,7 @@ Last but not least, training a point cloud model with a self-supervised training
 I first present the coordinate representation of the cell, from which I base my feature engineering and my statistical analysis.
 On the top of existing solutions to extract \ac{RNA} spots and cell morphology coordinates, I then list the different hand-crafted features I designed to quantify and classify \ac{RNA} localization patterns.
 These features are implemented in \emph{bigfish.classification}.
-Lastly, in the third section, I propose to directly process the extracted point clouds, without the need to design handcrafted features.
+Lastly, in the third section, I propose to directly process the extracted point clouds, without the need to design hand-crafted features.
 For this, I leverage coordinates of simulated localization patterns to train a specifically designed neural network taking as input a list of points and associated features that greatly enhance generalization capabilities.
 Recent advances in point cloud analysis through deep learning models allows us to build a flexible and scalable pipeline that fits with \ac{RNA} point cloud specificity.
-I show that this method is on par with carefully designed, handcrafted feature sets.
+I show that this method is on par with carefully designed, hand-crafted feature sets.
